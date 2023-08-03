@@ -1,7 +1,5 @@
-// Importar las dependencias necesarias
 const mysql = require('mysql2/promise');
 
-// Conexión a la base de datos
 const pool = mysql.createPool({
   host: 'db.ctd.academy',
   port: 3306,
@@ -11,12 +9,15 @@ const pool = mysql.createPool({
 });
 
 // Método GET 
-export async function GET(request) {
+export async function GETALL(request) {
   try {
     const connection = await pool.getConnection();
-    const [autos] = await connection.query('SELECT * FROM autos');
-    connection.release();
-    return new Response(JSON.stringify(autos), { status: 200, headers: { 'Content-Type': 'application/json' } });
+    try {
+      const [autos] = await connection.query('SELECT * FROM autos');
+      return new Response(JSON.stringify(autos), { status: 200, headers: { 'Content-Type': 'application/json' } });
+    } finally {
+      connection.release();
+    }
   } catch (error) {
     console.error(error);
     return new Response(JSON.stringify({ mensaje: 'Error al obtener los autos' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
@@ -26,26 +27,28 @@ export async function GET(request) {
 export async function GET(request) {
   try {
     const connection = await pool.getConnection();
-    const { id } = request.params;
+    try {
+      const { id } = request.params;
 
-    if (!id) {
-      return new Response(JSON.stringify({ mensaje: 'Debes proporcionar el ID del auto a obtener' }), { status: 400, headers: { 'Content-Type': 'application/json' } });
+      if (!id) {
+        return new Response(JSON.stringify({ mensaje: 'Debes proporcionar el ID del auto a obtener' }), { status: 400, headers: { 'Content-Type': 'application/json' } });
+      }
+
+      const [autos] = await connection.query('SELECT * FROM autos WHERE id = ?', [id]);
+
+      if (autos.length === 0) {
+        return new Response(JSON.stringify({ mensaje: 'Auto no encontrado' }), { status: 404, headers: { 'Content-Type': 'application/json' } });
+      }
+
+      return new Response(JSON.stringify(autos[0]), { status: 200, headers: { 'Content-Type': 'application/json' } });
+    } finally {
+      connection.release();
     }
-
-    const [autos] = await connection.query('SELECT * FROM autos WHERE id = ?', [id]);
-    connection.release();
-
-    if (autos.length === 0) {
-      return new Response(JSON.stringify({ mensaje: 'Auto no encontrado' }), { status: 404, headers: { 'Content-Type': 'application/json' } });
-    }
-
-    return new Response(JSON.stringify(autos[0]), { status: 200, headers: { 'Content-Type': 'application/json' } });
   } catch (error) {
     console.error(error);
     return new Response(JSON.stringify({ mensaje: 'Error al obtener el auto' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
   }
 }
-
 
 // Método POST 
 export async function POST(request) {
@@ -58,9 +61,12 @@ export async function POST(request) {
     }
 
     const connection = await pool.getConnection();
-    await connection.query('INSERT INTO autos (marca, modelo, precio) VALUES (?, ?, ?)', [marca, modelo, precio]);
-    connection.release();
-    return new Response(JSON.stringify({ mensaje: 'Auto registrado exitosamente' }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+    try {
+      await connection.query('INSERT INTO autos (marca, modelo, precio) VALUES (?, ?, ?)', [marca, modelo, precio]);
+      return new Response(JSON.stringify({ mensaje: 'Auto registrado exitosamente' }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+    } finally {
+      connection.release();
+    }
   } catch (error) {
     console.error(error);
     return new Response(JSON.stringify({ Error: 'Error al registrar el auto' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
@@ -83,14 +89,17 @@ export async function PUT(request) {
     }
 
     const connection = await pool.getConnection();
-    const [result] = await connection.query('UPDATE autos SET marca = ?, modelo = ?, precio = ? WHERE id = ?', [marca, modelo, precio, id]);
-    connection.release();
+    try {
+      const [result] = await connection.query('UPDATE autos SET marca = ?, modelo = ?, precio = ? WHERE id = ?', [marca, modelo, precio, id]);
 
-    if (result.affectedRows === 0) {
-      return new Response(JSON.stringify({ Error: 'Auto no encontrado' }), { status: 404, headers: { 'Content-Type': 'application/json' } });
+      if (result.affectedRows === 0) {
+        return new Response(JSON.stringify({ Error: 'Auto no encontrado' }), { status: 404, headers: { 'Content-Type': 'application/json' } });
+      }
+
+      return new Response(JSON.stringify({ mensaje: 'Auto editado exitosamente' }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+    } finally {
+      connection.release();
     }
-
-    return new Response(JSON.stringify({ mensaje: 'Auto editado exitosamente' }), { status: 200, headers: { 'Content-Type': 'application/json' } });
   } catch (error) {
     console.error(error);
     return new Response(JSON.stringify({ Error: 'Error al editar el auto' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
@@ -107,14 +116,17 @@ export async function DELETE(request) {
     }
 
     const connection = await pool.getConnection();
-    const [result] = await connection.query('DELETE FROM autos WHERE id = ?', [id]);
-    connection.release();
+    try {
+      const [result] = await connection.query('DELETE FROM autos WHERE id = ?', [id]);
 
-    if (result.affectedRows === 0) {
-      return new Response(JSON.stringify({ mensaje: 'Auto no encontrado' }), { status: 404, headers: { 'Content-Type': 'application/json' } });
+      if (result.affectedRows === 0) {
+        return new Response(JSON.stringify({ mensaje: 'Auto no encontrado' }), { status: 404, headers: { 'Content-Type': 'application/json' } });
+      }
+
+      return new Response(JSON.stringify({ mensaje: 'Auto eliminado exitosamente' }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+    } finally {
+      connection.release();
     }
-
-    return new Response(JSON.stringify({ mensaje: 'Auto eliminado exitosamente' }), { status: 200, headers: { 'Content-Type': 'application/json' } });
   } catch (error) {
     console.error(error);
     return new Response(JSON.stringify({ Error: 'Error al eliminar el auto' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
