@@ -8,6 +8,31 @@ const pool = mysql.createPool({
   database: '0723TDPRON1C06LAED0222PT_GRUPO3',
 });
 
+
+// Método POST 
+export async function POST(request) {
+  try {
+    const body = await request.json();
+    const { marca, modelo, precio } = body;
+
+    if (!marca || !modelo || !precio) {
+      return new Response(JSON.stringify({ error: 'Debes proporcionar marca, modelo y precio para el auto' }), { status: 400, headers: { 'Content-Type': 'application/json' } });
+    }
+
+    const connection = await pool.getConnection();
+    try {
+      await connection.query('INSERT INTO autos (marca, modelo, precio) VALUES (?, ?, ?)', [marca, modelo, precio]);
+      return new Response(JSON.stringify({ mensaje: 'Auto registrado exitosamente' }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+    } finally {
+      connection.release();
+    }
+  } catch (error) {
+    console.error(error);
+    return new Response(JSON.stringify({ Error: 'Error al registrar el auto' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
+  }
+}
+
+
 // Método GET 
 export async function GETALL(request) {
   try {
@@ -50,28 +75,6 @@ export async function GET(request) {
   }
 }
 
-// Método POST 
-export async function POST(request) {
-  try {
-    const body = await request.json();
-    const { marca, modelo, precio } = body;
-
-    if (!marca || !modelo || !precio) {
-      return new Response(JSON.stringify({ error: 'Debes proporcionar marca, modelo y precio para el auto' }), { status: 400, headers: { 'Content-Type': 'application/json' } });
-    }
-
-    const connection = await pool.getConnection();
-    try {
-      await connection.query('INSERT INTO autos (marca, modelo, precio) VALUES (?, ?, ?)', [marca, modelo, precio]);
-      return new Response(JSON.stringify({ mensaje: 'Auto registrado exitosamente' }), { status: 200, headers: { 'Content-Type': 'application/json' } });
-    } finally {
-      connection.release();
-    }
-  } catch (error) {
-    console.error(error);
-    return new Response(JSON.stringify({ Error: 'Error al registrar el auto' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
-  }
-}
 
 // Método PUT 
 export async function PUT(request) {
