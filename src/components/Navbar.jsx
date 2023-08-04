@@ -22,12 +22,16 @@ export const Navbar = () => {
     isSideMenuOpen(!sideMenu);
 
     document.querySelector("body").classList.add("no-scroll");
+    document.querySelector("#home").classList.add("sidebar-open-background-behind");
+
   };
 
   const closeSidebar = () => {
     if (sideMenu == true) {
       isSideMenuOpen(false);
       document.querySelector("body").classList.remove("no-scroll");
+    document.querySelector("#home").classList.remove("sidebar-open-background-behind");
+
     }
     isSideMenuOpen(false);
   };
@@ -36,7 +40,7 @@ export const Navbar = () => {
     <div
       className={`fixed top-0 p-6 lg:px-12 ${
         sideMenu ? "border-[1px]-black border-b" : "shadow-sm"
-      } w-full bg-white`}
+      } w-full bg-white z-30 `}
     >
       <div className="flex items-center justify-between">
         {sideMenu ? (
@@ -56,7 +60,7 @@ export const Navbar = () => {
             </p>
           </Link>
         </div>
-        <ul className="hidden lg:flex items-center gap-12 font-primary">
+        <ul className="hidden lg:flex items-center gap-12 font-poppins">
           <li className="text-lg link-item">
             <Link href="rent">Rent</Link>
           </li>
@@ -71,7 +75,7 @@ export const Navbar = () => {
           </li>
         </ul>
 
-        <div className="lg:block hidden  font-secondary">
+        <div className="lg:block hidden  font-poppins">
           {user == false ? (
             <div className="flex items-center gap-8">
               <button className="p-6 py-3 rounded-md hover:bg-black bg-primary text-white transition-all duration-200 ease-in-out">
@@ -155,7 +159,7 @@ export const Navbar = () => {
         </ul>
 
         {user == false ? (
-          <div className="flex flex-wrap items-center justify-center gap-8 mt-4 mx-4">
+          <div className="flex flex-wrap items-center justify-center gap-8 mt-4 mx-4 font-poppins">
             <button
               onClick={closeSidebar}
               className="w-full p-6 py-3 rounded-md hover:bg-primary bg-black text-white  transition-all duration-200 ease-in-out"
@@ -170,7 +174,7 @@ export const Navbar = () => {
             </button>
           </div>
         ) : (
-          <div className="flex flex-wrap items-center justify-center gap-8 mt-4 mx-4">
+          <div className="flex flex-wrap items-center justify-center gap-8 mt-4 mx-4 font-poppins">
             <button
               onClick={closeSidebar}
               className=" w-full p-6 py-3 rounded-md hover:bg-primary bg-black text-white  transition-all duration-200 ease-in-out"

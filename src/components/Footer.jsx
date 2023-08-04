@@ -22,8 +22,8 @@ export const Footer = () => {
   const [showDropContact, setShowDropContact] = useState(false);
 
   return (
-    <div className="my-8">
-      <div className="block md:hidden">
+    <div className="my-8 font-poppins">
+      <div className="block md:hidden ">
         <footer>
           <ul>
             <li className="">

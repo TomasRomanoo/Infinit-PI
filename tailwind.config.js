@@ -8,9 +8,10 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        primary: ["Roboto"],
-        secondary: ["Nunito"],
+        roboto: ["Roboto"],
+        nunito: ["Nunito"],
         infinit: ["Anton"],
+        poppins: ["poppins"],
 
       },
       colors: {
