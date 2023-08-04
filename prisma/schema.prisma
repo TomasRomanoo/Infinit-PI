@@ -210,6 +210,7 @@ model vehicle {
   order_idorder                         Int
   order_payment_method_idpayment_method Int
   order_order_status_idorder_status     Int
+  name                                  String?                     @db.VarChar(45)
   reservation                           reservation[]
   brand                                 brand                       @relation(fields: [brand_idbrand], references: [idbrand], onDelete: NoAction, onUpdate: NoAction, map: "fk_vehicle_brand1")
   category                              category                    @relation(fields: [category_idcategory], references: [idcategory], onDelete: NoAction, onUpdate: NoAction, map: "fk_vehicle_category1")
