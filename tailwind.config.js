@@ -11,7 +11,7 @@ module.exports = {
         roboto: ["Roboto"],
         nunito: ["Nunito"],
         infinit: ["Anton"],
-        poppins: ["poppins"],
+        poppins: ["Poppins"],
 
       },
       colors: {

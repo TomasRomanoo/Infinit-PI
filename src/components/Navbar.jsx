@@ -22,16 +22,18 @@ export const Navbar = () => {
     isSideMenuOpen(!sideMenu);
 
     document.querySelector("body").classList.add("no-scroll");
-    document.querySelector("#home").classList.add("sidebar-open-background-behind");
-
+    document
+      .querySelector("#home")
+      .classList.add("sidebar-open-background-behind");
   };
 
   const closeSidebar = () => {
     if (sideMenu == true) {
       isSideMenuOpen(false);
       document.querySelector("body").classList.remove("no-scroll");
-    document.querySelector("#home").classList.remove("sidebar-open-background-behind");
-
+      document
+        .querySelector("#home")
+        .classList.remove("sidebar-open-background-behind");
     }
     isSideMenuOpen(false);
   };
@@ -54,7 +56,7 @@ export const Navbar = () => {
         )}
 
         <div className="sm:block hidden">
-          <Link href="">
+          <Link href="/">
             <p className="uppercase font-infinit tracking-widest text-2xl">
               Infinit
             </p>
@@ -62,37 +64,37 @@ export const Navbar = () => {
         </div>
         <ul className="hidden lg:flex items-center gap-12 font-poppins">
           <li className="text-lg link-item">
-            <Link href="rent">Rent</Link>
+            <Link href="/rent">Rent</Link>
           </li>
           <li className="text-lg link-item">
-            <Link href="fleet">Fleet</Link>
+            <Link href="/fleet">Fleet</Link>
           </li>
           <li className="text-lg link-item">
-            <Link href="services">Services</Link>
+            <Link href="/services">Services</Link>
           </li>
           <li className="text-lg link-item">
-            <Link href="about">About</Link>
+            <Link href="/about">About</Link>
           </li>
         </ul>
 
         <div className="lg:block hidden  font-poppins">
           {user == false ? (
             <div className="flex items-center gap-8">
-              <button className="p-6 py-3 rounded-md hover:bg-black bg-primary text-white transition-all duration-200 ease-in-out">
-                Join now
+              <button className="p-6 py-3 rounded-md bg-primary hover:bg-secondary shadow-lg text-white transition-all duration-200 ease-in-out">
+                <Link href={"/signup"}>Join now</Link>
               </button>
-              <button className="p-6 py-3 rounded-md hover:bg-primary bg-black text-white  transition-all duration-200 ease-in-out">
-                Sign in
+              <button className="p-6 py-3 rounded-md bg-primary hover:bg-secondary shadow-md text-white  transition-all duration-200 ease-in-out">
+               <Link href={"/login"}>Sign in</Link>
               </button>
             </div>
           ) : (
             <div className="flex items-center gap-8">
               <button className="p-6 py-3 rounded-md hover:bg-primary bg-black text-white  transition-all duration-200 ease-in-out">
-                Account
+                <Link href={"/account"}>Account</Link>
               </button>
               {user.role == "ADMIN" ? (
                 <button className="p-6 py-3 rounded-md hover:bg-primary bg-black text-white transition-all duration-200 ease-in-out">
-                  Dashboard
+                 <Link href={"/dashboard"}>Dashboard</Link>
                 </button>
               ) : null}
             </div>
@@ -100,7 +102,7 @@ export const Navbar = () => {
         </div>
 
         <div className="flex sm:hidden">
-          <Link href="">
+          <Link href="/">
             <p className="uppercase font-infinit tracking-widest text-2xl">
               Infinit
             </p>
@@ -118,7 +120,7 @@ export const Navbar = () => {
         <ul className="flex flex-col gap-8 font-secondary mt-4">
           <li className="font-bold p-4 w-full">
             <Link
-              href="rent"
+              href="/rent"
               className="flex items-center gap-4"
               onClick={closeSidebar}
             >
@@ -128,7 +130,7 @@ export const Navbar = () => {
           </li>
           <li className="font-bold p-4  w-full ">
             <Link
-              href="fleet"
+              href="/fleet"
               className="flex items-center gap-4 "
               onClick={closeSidebar}
             >
@@ -138,7 +140,7 @@ export const Navbar = () => {
           </li>
           <li className="font-bold p-4  w-full ">
             <Link
-              href="services"
+              href="/services"
               className="flex items-center gap-4"
               onClick={closeSidebar}
             >
@@ -148,7 +150,7 @@ export const Navbar = () => {
           </li>
           <li className="font-bold p-4  w-full ">
             <Link
-              href="services"
+              href="/services"
               className="flex items-center gap-4"
               onClick={closeSidebar}
             >
@@ -164,13 +166,13 @@ export const Navbar = () => {
               onClick={closeSidebar}
               className="w-full p-6 py-3 rounded-md hover:bg-primary bg-black text-white  transition-all duration-200 ease-in-out"
             >
-              <Link href="signup">Join now</Link>
+              <Link href="/signup">Join now</Link>
             </button>
             <button
               onClick={closeSidebar}
               className="w-full p-6 py-3 rounded-md hover:bg-primary bg-black text-white  transition-all duration-200 ease-in-out"
             >
-              <Link href="login">Sign in</Link>
+              <Link href="/login">Sign in</Link>
             </button>
           </div>
         ) : (
@@ -179,14 +181,14 @@ export const Navbar = () => {
               onClick={closeSidebar}
               className=" w-full p-6 py-3 rounded-md hover:bg-primary bg-black text-white  transition-all duration-200 ease-in-out"
             >
-              <Link href="account">Account</Link>
+              <Link href="/account">Account</Link>
             </button>
             {user.role == "ADMIN" ? (
               <button
                 onClick={closeSidebar}
                 className="w-full p-6 py-3 rounded-md hover:bg-primary bg-black text-white  transition-all duration-200 ease-in-out"
               >
-                Dashboard
+                <Link href={"/dashboard"}>Dashboard</Link>
               </button>
             ) : null}
           </div>

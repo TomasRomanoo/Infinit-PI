@@ -15,6 +15,7 @@ import swiperConfig from "../utils/swiperConfig.ts";
 export default function Home() {
   const vehicles = [
     {
+      name:`Honda Civic 2017`,
       brand: "Honda",
       model: "Civic",
       year: 2017,
@@ -176,6 +177,8 @@ export default function Home() {
     },
   ];
 
+
+
   return (
     <div id="home" className="mx-5 md:mx-20">
       <Hero />
@@ -243,7 +246,7 @@ const FleetCarousel = ({ vehicles }) => {
       <p className="font-poppins text-4xl mb-2 text-center">
         Take a look to our fleet
       </p>
-      <div className="grid grid-cols-1 md:grid-cols-2 grid-flow-row gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 grid-flow-row gap-12">
         {vehicles.map((vehicle, index) => {
           return (
             <>
