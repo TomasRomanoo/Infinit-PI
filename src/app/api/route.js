@@ -7,8 +7,8 @@ export async function POST(request) {
     const body = await request.json();
     const { marca, modelo, precio } = body;
 
-    if (!marca || !modelo || !precio) {
-      return new Response(JSON.stringify({ error: 'Debes proporcionar marca, modelo y precio para el auto' }), { status: 400, headers: { 'Content-Type': 'application/json' } });
+    if (!marca || !modelo || typeof precio !== 'number' || precio <= 0) {
+      return new Response(JSON.stringify({ error: 'Debes proporcionar marca, modelo y precio válido para el auto' }), { status: 400, headers: { 'Content-Type': 'application/json' } });
     }
 
     const auto = await prisma.auto.create({
@@ -74,8 +74,8 @@ export async function PUT(request) {
       return new Response(JSON.stringify({ mensaje: 'Debes proporcionar el ID del auto a editar' }), { status: 400, headers: { 'Content-Type': 'application/json' } });
     }
 
-    if (!marca || !modelo || !precio) {
-      return new Response(JSON.stringify({ error: 'Debes proporcionar marca, modelo y precio para el auto' }), { status: 400, headers: { 'Content-Type': 'application/json' } });
+    if (!marca || !modelo || typeof precio !== 'number' || precio <= 0) {
+      return new Response(JSON.stringify({ error: 'Debes proporcionar marca, modelo y precio válido para el auto' }), { status: 400, headers: { 'Content-Type': 'application/json' } });
     }
 
     const updatedAuto = await prisma.auto.update({
