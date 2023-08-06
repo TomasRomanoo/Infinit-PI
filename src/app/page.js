@@ -180,7 +180,7 @@ export default function Home() {
 
 
   return (
-    <div id="home" className="mx-5 md:mx-20">
+    <div id="" className="">
       <Hero />
       <FleetCarousel vehicles={vehicles} />
       <Footer />
