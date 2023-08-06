@@ -39,8 +39,8 @@ export async function POST(request) {
 
 // Método GETALL
 export async function GETALL(request) {
+  const cars = await prisma.vehicle.findMany();
   try {
-    const cars = await prisma.vehicle.findMany();
     return new Response(JSON.stringify(cars), { status: 200, headers: { 'Content-Type': 'application/json' } });
   } catch (error) {
     console.error(error);

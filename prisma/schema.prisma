@@ -61,6 +61,7 @@ model dealer {
   state              String               @db.VarChar(45)
   city               String               @db.VarChar(45)
   zip_code           String               @db.VarChar(45)
+  name               String               @db.VarChar(45)
   vehicle_has_dealer vehicle_has_dealer[]
 }
 
@@ -95,7 +96,6 @@ model order {
   reservation                     reservation           @relation(fields: [reservation_idreservation], references: [idreservation], onDelete: NoAction, onUpdate: NoAction, map: "fk_order_reservation1")
   user                            user                  @relation(fields: [user_iduser], references: [iduser], onDelete: NoAction, onUpdate: NoAction, map: "fk_order_user1")
   order_has_addon                 order_has_addon[]
-  vehicle                         vehicle[]
 
   @@id([idorder, payment_method_idpayment_method, order_status_idorder_status, user_iduser, reservation_idreservation])
   @@index([order_status_idorder_status], map: "fk_order_order_status1_idx")
@@ -103,7 +103,6 @@ model order {
   @@index([reservation_idreservation], map: "fk_order_reservation1_idx")
   @@index([user_iduser], map: "fk_order_user1_idx")
   @@unique([idorder])
-  @@unique([idorder, payment_method_idpayment_method, order_status_idorder_status])
 }
 
 model order_has_addon {
@@ -151,12 +150,11 @@ model reservation {
 }
 
 model review {
-  idreview      Int       @default(autoincrement())
+  idreview      Int    @default(autoincrement())
   qualification Float
-  review        String    @db.Text
+  review        String @db.Text
   user_iduser   Int
-  user          user      @relation(fields: [user_iduser], references: [iduser], onDelete: NoAction, onUpdate: NoAction, map: "fk_review_user1")
-  vehicle       vehicle[]
+  user          user   @relation(fields: [user_iduser], references: [iduser], onDelete: NoAction, onUpdate: NoAction, map: "fk_review_user1")
 
   @@id([idreview, user_iduser])
   @@index([user_iduser], map: "fk_review_user1_idx")
@@ -195,36 +193,27 @@ model user {
 }
 
 model vehicle {
-  idvehicle                             Int                         @default(autoincrement())
-  plate                                 String                      @db.VarChar(45)
-  model                                 String                      @db.VarChar(45)
-  detail                                String                      @db.Text
-  year                                  Int
-  price_per_day                         Float
-  long_description                      String                      @db.Text
-  short_description                     String                      @db.VarChar(45)
-  brand_idbrand                         Int
-  category_idcategory                   Int
-  review_idreview                       Int
-  review_user_iduser                    Int
-  order_idorder                         Int
-  order_payment_method_idpayment_method Int
-  order_order_status_idorder_status     Int
-  name                                  String?                     @db.VarChar(45)
-  reservation                           reservation[]
-  brand                                 brand                       @relation(fields: [brand_idbrand], references: [idbrand], onDelete: NoAction, onUpdate: NoAction, map: "fk_vehicle_brand1")
-  category                              category                    @relation(fields: [category_idcategory], references: [idcategory], onDelete: NoAction, onUpdate: NoAction, map: "fk_vehicle_category1")
-  order                                 order                       @relation(fields: [order_idorder, order_payment_method_idpayment_method, order_order_status_idorder_status], references: [idorder, payment_method_idpayment_method, order_status_idorder_status], onDelete: NoAction, onUpdate: NoAction, map: "fk_vehicle_order1")
-  review                                review                      @relation(fields: [review_idreview, review_user_iduser], references: [idreview, user_iduser], onDelete: NoAction, onUpdate: NoAction, map: "fk_vehicle_review1")
-  vehicle_has_dealer                    vehicle_has_dealer[]
-  vehicle_has_specification             vehicle_has_specification[]
-  vehicle_image                         vehicle_image[]
+  idvehicle                 Int                         @default(autoincrement())
+  plate                     String                      @unique(map: "plate_UNIQUE") @db.VarChar(45)
+  brandd                    String                      @db.VarChar(45)
+  model                     String                      @db.VarChar(45)
+  detail                    String                      @db.Text
+  year                      Int
+  price_per_day             Float
+  long_description          String                      @db.Text
+  brand_idbrand             Int
+  category_idcategory       Int
+  name                      String?                     @db.VarChar(45)
+  reservation               reservation[]
+  brand                     brand                       @relation(fields: [brand_idbrand], references: [idbrand], onDelete: NoAction, onUpdate: NoAction, map: "fk_vehicle_brand1")
+  category                  category                    @relation(fields: [category_idcategory], references: [idcategory], onDelete: NoAction, onUpdate: NoAction, map: "fk_vehicle_category1")
+  vehicle_has_dealer        vehicle_has_dealer[]
+  vehicle_has_specification vehicle_has_specification[]
+  vehicle_image             vehicle_image[]
 
-  @@id([idvehicle, brand_idbrand, category_idcategory, review_idreview, review_user_iduser, order_idorder, order_payment_method_idpayment_method, order_order_status_idorder_status])
+  @@id([idvehicle, brand_idbrand, category_idcategory])
   @@index([brand_idbrand], map: "fk_vehicle_brand1_idx")
   @@index([category_idcategory], map: "fk_vehicle_category1_idx")
-  @@index([order_idorder, order_payment_method_idpayment_method, order_order_status_idorder_status], map: "fk_vehicle_order1_idx")
-  @@index([review_idreview, review_user_iduser], map: "fk_vehicle_review1_idx")
   @@unique([idvehicle])
 }
 
