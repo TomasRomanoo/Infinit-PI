@@ -12,15 +12,19 @@ import Image from "next/image";
 
 import mock from "@/assets/images/mock.png";
 
+import { MdOutlineLocationOn, MdMyLocation } from "react-icons/md";
+import { BiDirections } from "react-icons/bi";
+import { BsCalendar3 } from "react-icons/bs";
+
+import Calendar from "react-calendar";
+
 const Detail = (vehicle) => {
   const router = useRouter();
 
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between">
-        <p className="text-2xl font-poppins font-semibold">
-          {vehicle.name}
-        </p>
+        <p className="text-2xl font-poppins font-semibold">{vehicle.name}</p>
         <button
           onClick={() => {
             router.back();
@@ -32,7 +36,7 @@ const Detail = (vehicle) => {
       </div>
 
       <div className="bg-white rounded-lg w-full h-full shadow-lg py-8 p-4 md:px-12 space-y-8">
-        <Hero vehicle={vehicle}/>
+        <Hero vehicle={vehicle} />
         <Gallery />
 
         <div className="flex flex-col items-start gap-6">
@@ -45,11 +49,91 @@ const Detail = (vehicle) => {
   );
 };
 
-const Hero = ({vehicle}) => {
+const Hero = ({ vehicle }) => {
+  const [value, onChange] = useState(new Date());
   return (
-    <div className="w-full p-6 bg-secondary flex items-center rounded-md shadow-md">
-      <p>{vehicle.price}/day</p>
-      <button className="bg-white px-4 py-2 rounded-lg">Book</button>
+    <div className="w-full p-6 bg-[#00243f] flex flex-col lg:flex-row items-center justify-around rounded-md shadow-md gap-4">
+      {/* Location */}
+      <div className="flex flex-col lg:flex-row items-center w-full ">
+        <div className="relative w-full">
+          <label className="absolute left-12 uppercase text-gray-400 top-2 text-[10px] tracking-widest w-full">
+            Origin
+          </label>
+          <button className="absolute top-5 left-3 group">
+            <MdMyLocation className="group-hover:text-purple-600" size={25} />
+          </button>
+          <input
+            type="text"
+            placeholder="Where are you from?"
+            className="rounded-l-md rounded-r-md w-full shadow-md rounded-b-none lg:rounded-b-md lg:rounded-r-none pl-12 text-sm  py-3 pt-6 border-r-[1px] border-gray-300 text-ellipsis font-semibold placeholder:font-normal placeholder:italic focus:outline-2 outline-blue-800 "
+          />
+        </div>
+
+        <div className="relative w-full">
+          <button className="hidden lg:block absolute top-3 -left-[18px] bg-white border-gray-200 border-2 rounded-md p-1">
+            <BiDirections size={25} />
+          </button>
+          <label className="absolute left-12 uppercase text-gray-400 top-2 text-[10px] tracking-widest  group-focus:top-12">
+            Destiny
+          </label>
+
+          <MdOutlineLocationOn
+            className="absolute top-5 left-3 lg:left-5"
+            size={25}
+          />
+
+          <input
+            type="text"
+            placeholder="Your destination?"
+            className="truncate w-full rounded-r-md shadow-md rounded-l-md lg:rounded-r-md  text-sm rounded-t-none lg:rounded-t-md pl-12 lg:pl-12 border-t-2 lg:border-t-0 border-gray-200 lg:rounded-l-none  py-3 pt-6 border-l-[1px] lg:border-gray-300  font-semibold placeholder:font-normal placeholder:italic focus:outline-2 outline-blue-800"
+          />
+        </div>
+      </div>
+
+      {/* Calendar */}
+
+      {/*      <div className="relative w-full">
+        <label className="absolute left-6 uppercase text-gray-400 top-2 text-[10px] tracking-widest">
+          LENGTH
+        </label>
+        <input
+          type="text"
+          placeholder="How many days?"
+          className="w-full rounded-md p-6 shadow-md   text-sm py-3 pt-6 border-r-[1px] border-gray-300 text-ellipsis font-semibold placeholder:font-normal placeholder:italic focus:outline-2 outline-blue-800"
+        />
+      </div> */}
+
+      <div className="flex flex-col lg:flex-row items-center w-full">
+        <div className="relative w-full">
+          <label className="absolute left-12 uppercase text-gray-400 top-2 text-[10px] tracking-widest">
+            DATES
+          </label>
+          <button className="absolute top-5 left-3 group">
+            <BsCalendar3 className="group-hover:text-purple-600" size={25} />
+          </button>
+          <input
+            type="date"
+            placeholder="Leaving"
+            className="rounded-l-md rounded-r-md w-full  rounded-b-none lg:rounded-b-md lg:rounded-r-none  pl-12 pr-2 py-3 pt-6 border-r-[1px] border-gray-300 text-ellipsis font-semibold placeholder:font-normal placeholder:italic focus:outline-2 outline-blue-800"
+          />
+        </div>
+
+        <div className="relative w-full">
+          <input
+            type="date"
+            placeholder="Arriving"
+            className="w-full rounded-r-md rounded-l-md lg:rounded-r-md  rounded-t-none lg:rounded-t-md pl-10 lg:pl-4 pr-2  border-t-2 lg:border-t-0 border-gray-200 lg:rounded-l-none  py-3 pt-6 border-l-[1px] lg:border-gray-300 text-ellipsis font-semibold placeholder:font-normal placeholder:italic focus:outline-2 outline-blue-800"
+          />
+        </div>
+      </div>
+
+      <div className="flex flex-col w-full lg:w-[20%]   lg:justify-center items-start font-bold text-white">
+        <label>Total</label>
+        <p>${vehicle.price}/day</p>
+      </div>
+      <button className="bg-white text-black font-bold py-4 rounded-lg w-full lg:w-[20%] hover:bg-gray-200 transition-all duration-200">
+        Continue
+      </button>
     </div>
   );
 };
