@@ -1,92 +1,65 @@
-const { PrismaClient } = require('@prisma/client');
+import { PrismaClient } from '@prisma/client';
+import { NextResponse } from 'next/server';
 const prisma = new PrismaClient();
+
 
 // Método POST
 export async function POST(request) {
+  console.log('La función POST ha sido llamada.');
   try {
     const body = await request.json();
-    const { plate, model, detail, year, price_per_day, long_description, short_description, brand_idbrand, category_idcategory, review_idreview, review_user_iduser, order_idorder, order_payment_method_idpayment_method, order_order_status_idorder_status } = body;
+    const { plate, brandd, model, detail, year, price_per_day ,long_description, brand, category} = body;
 
-    if (!plate || !model || typeof price_per_day !== 'number' || price_per_day <= 0) {
-      return new Response(JSON.stringify({ error: 'Debes proporcionar la placa, modelo y precio por día válido para el auto' }), { status: 400, headers: { 'Content-Type': 'application/json' } });
+    if (!plate || !model || !price_per_day  ||  price_per_day <= 0) {
+      return NextResponse.json({ error: 'Debes proporcionar la placa, modelo y un precio por día válido para el auto' }, { status: 400 });
     }
 
     const car = await prisma.vehicle.create({
       data: {
         plate,
+        brandd,
         model,
         detail,
         year,
         price_per_day,
         long_description,
-        short_description,
-        brand_idbrand,
-        category_idcategory,
-        review_idreview,
-        review_user_iduser,
-        order_idorder,
-        order_payment_method_idpayment_method,
-        order_order_status_idorder_status,
+        brand,
+        category
       },
     });
 
-    return new Response(JSON.stringify({ mensaje: 'Auto registrado exitosamente' }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+    return NextResponse.json({ mensaje: 'Auto registrado exitosamente' }, { status: 200 });
   } catch (error) {
     console.error(error);
-    return new Response(JSON.stringify({ Error: 'Error al registrar el auto' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
+    return NextResponse.json({ Error: 'Error al registrar el auto' }, { status: 500 });
   }
 }
 
 // Método GETALL
-export async function GETALL(request) {
-  const cars = await prisma.vehicle.findMany();
+export async function GET() {
   try {
-    return new Response(JSON.stringify(cars), { status: 200, headers: { 'Content-Type': 'application/json' } });
+    const cars = await prisma.vehicle.findMany();
+    return NextResponse.json(cars, { status: 200 });
   } catch (error) {
     console.error(error);
-    return new Response(JSON.stringify({ mensaje: 'Error al obtener los autos' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
+    return NextResponse.json({ mensaje: 'Error al obtener los autos' }, { status: 500 });
   }
 }
 
-// Método GET
-export async function GET(request) {
-  try {
-    const { id } = request.params;
-
-    if (!id) {
-      return new Response(JSON.stringify({ mensaje: 'Debes proporcionar el ID del auto a obtener' }), { status: 400, headers: { 'Content-Type': 'application/json' } });
-    }
-
-    const car = await prisma.vehicle.findUnique({
-      where: {
-        idvehicle: parseInt(id),
-      },
-    });
-
-    if (!car) {
-      return new Response(JSON.stringify({ mensaje: 'Auto no encontrado' }), { status: 404, headers: { 'Content-Type': 'application/json' } });
-    }
-
-    return new Response(JSON.stringify(car), { status: 200, headers: { 'Content-Type': 'application/json' } });
-  } catch (error) {
-    console.error(error);
-    return new Response(JSON.stringify({ mensaje: 'Error al obtener el auto' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
-  }
-}
 
 // Método PUT
 export async function PUT(request) {
   try {
     const { id } = request.params;
     const body = await request.json();
-    const { plate, model, detail, year, price_per_day, long_description, short_description, brand_idbrand, category_idcategory, review_idreview, review_user_iduser, order_idorder, order_payment_method_idpayment_method, order_order_status_idorder_status } = body;
+    const { plate, model, detail, year, price_per_day, long_description } = body;
 
     if (!id) {
-      return new Response(JSON.stringify({ mensaje: 'Debes proporcionar el ID del auto a editar' }), { status: 400, headers: { 'Content-Type': 'application/json' } });
+      return NextResponse.json({ mensaje: 'Debes proporcionar el ID del auto a editar' }, { status: 400 });
     }
 
-    if (!plate || !model || typeof price_per_day !== 'number' || price_per_day <= 0) {
-      return new Response(JSON.stringify({ error: 'Debes proporcionar la placa, modelo y precio por día válido para el auto' }), { status: 400, headers: { 'Content-Type': 'application/json' } });
+    if (!plate || !model  || price_per_day !== 'number' || price_per_day <= 0) {
+      return NextResponse.json({ error: 'Debes proporcionar la placa, modelo y precio por día válido para el auto' }, { status: 400 });
     }
 
     const updatedCar = await prisma.vehicle.update({
@@ -99,26 +72,18 @@ export async function PUT(request) {
         detail,
         year,
         price_per_day,
-        long_description,
-        short_description,
-        brand_idbrand,
-        category_idcategory,
-        review_idreview,
-        review_user_iduser,
-        order_idorder,
-        order_payment_method_idpayment_method,
-        order_order_status_idorder_status,
+        long_description
       },
     });
 
     if (!updatedCar) {
-      return new Response(JSON.stringify({ Error: 'Auto no encontrado' }), { status: 404, headers: { 'Content-Type': 'application/json' } });
+      return NextResponse.json({ Error: 'Auto no encontrado' }, { status: 404 });
     }
 
-    return new Response(JSON.stringify({ mensaje: 'Auto editado exitosamente' }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+    return NextResponse.json({ mensaje: 'Auto editado exitosamente' }, { status: 200 });
   } catch (error) {
     console.error(error);
-    return new Response(JSON.stringify({ Error: 'Error al editar el auto' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
+    return NextResponse.json({ Error: 'Error al editar el auto' }, { status: 500 });
   }
 }
 
@@ -128,7 +93,7 @@ export async function DELETE(request) {
     const { id } = request.params;
 
     if (!id) {
-      return new Response(JSON.stringify({ mensaje: 'Debes proporcionar el ID del auto a eliminar' }), { status: 400, headers: { 'Content-Type': 'application/json' } });
+      return NextResponse.json({ mensaje: 'Debes proporcionar el ID del auto a eliminar' }, { status: 400 });
     }
 
     const deletedCar = await prisma.vehicle.delete({
@@ -138,12 +103,12 @@ export async function DELETE(request) {
     });
 
     if (!deletedCar) {
-      return new Response(JSON.stringify({ mensaje: 'Auto no encontrado' }), { status: 404, headers: { 'Content-Type': 'application/json' } });
+      return NextResponse.json({ mensaje: 'Auto no encontrado' }, { status: 404 });
     }
 
-    return new Response(JSON.stringify({ mensaje: 'Auto eliminado exitosamente' }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+    return NextResponse.json({ mensaje: 'Auto eliminado exitosamente' }, { status: 200 });
   } catch (error) {
     console.error(error);
-    return new Response(JSON.stringify({ Error: 'Error al eliminar el auto' }), { status: 500, headers: { 'Content-Type': 'application/json' } });
+    return NextResponse.json({ Error: 'Error al eliminar el auto' }, { status: 500 });
   }
 }
