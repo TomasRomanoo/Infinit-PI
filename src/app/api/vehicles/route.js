@@ -4,11 +4,11 @@ const prisma = new PrismaClient();
 
 
 // Método POST
-export async function POST(request) {
+export async function POST() {
   console.log('La función POST ha sido llamada.');
   try {
     const body = await request.json();
-    const { plate, brandd, model, detail, year, price_per_day ,long_description, brand, category} = body;
+    const { plate, brand, model, detail, year, price_per_day ,long_description} = body;
 
     if (!plate || !model || !price_per_day  ||  price_per_day <= 0) {
       return NextResponse.json({ error: 'Debes proporcionar la placa, modelo y un precio por día válido para el auto' }, { status: 400 });
@@ -17,14 +17,12 @@ export async function POST(request) {
     const car = await prisma.vehicle.create({
       data: {
         plate,
-        brandd,
+        brand,
         model,
         detail,
         year,
         price_per_day,
         long_description,
-        brand,
-        category
       },
     });
 
@@ -48,67 +46,68 @@ export async function GET() {
 
 
 // Método PUT
-export async function PUT(request) {
-  try {
-    const { id } = request.params;
-    const body = await request.json();
-    const { plate, model, detail, year, price_per_day, long_description } = body;
+// export async function PUT(request) {
+//   try {
+//     const { id } = request.params;
+//     const body = await request.json();
+//     const { plate,brand, model, detail, year, price_per_day, long_description } = body;
 
-    if (!id) {
-      return NextResponse.json({ mensaje: 'Debes proporcionar el ID del auto a editar' }, { status: 400 });
-    }
+//     if (!id) {
+//       return NextResponse.json({ mensaje: 'Debes proporcionar el ID del auto a editar' }, { status: 400 });
+//     }
 
-    if (!plate || !model  || price_per_day !== 'number' || price_per_day <= 0) {
-      return NextResponse.json({ error: 'Debes proporcionar la placa, modelo y precio por día válido para el auto' }, { status: 400 });
-    }
+//     if (!plate || !model  || price_per_day !== 'number' || price_per_day <= 0) {
+//       return NextResponse.json({ error: 'Debes proporcionar la placa, modelo y precio por día válido para el auto' }, { status: 400 });
+//     }
 
-    const updatedCar = await prisma.vehicle.update({
-      where: {
-        idvehicle: parseInt(id),
-      },
-      data: {
-        plate,
-        model,
-        detail,
-        year,
-        price_per_day,
-        long_description
-      },
-    });
+//     const updatedCar = await prisma.vehicle.update({
+//       where: {
+//         idvehicle: parseInt(id),
+//       },
+//       data: {
+//         plate,
+//         brand,
+//         model,
+//         detail,
+//         year,
+//         price_per_day,
+//         long_description
+//       },
+//     });
 
-    if (!updatedCar) {
-      return NextResponse.json({ Error: 'Auto no encontrado' }, { status: 404 });
-    }
+//     if (!updatedCar) {
+//       return NextResponse.json({ Error: 'Auto no encontrado' }, { status: 404 });
+//     }
 
-    return NextResponse.json({ mensaje: 'Auto editado exitosamente' }, { status: 200 });
-  } catch (error) {
-    console.error(error);
-    return NextResponse.json({ Error: 'Error al editar el auto' }, { status: 500 });
-  }
-}
+//     return NextResponse.json({ mensaje: 'Auto editado exitosamente' }, { status: 200 });
+//   } catch (error) {
+//     console.error(error);
+//     return NextResponse.json({ Error: 'Error al editar el auto' }, { status: 500 });
+//   }
+// }
 
 // Método DELETE
-export async function DELETE(request) {
-  try {
-    const { id } = request.params;
+// export async function DELETE(request) {
+//   try {
+//     const { id } = request.params;
 
-    if (!id) {
-      return NextResponse.json({ mensaje: 'Debes proporcionar el ID del auto a eliminar' }, { status: 400 });
-    }
+//     if (!id) {
+//       return NextResponse.json({ mensaje: 'Debes proporcionar el ID del auto a eliminar' }, { status: 400 });
+//     }
 
-    const deletedCar = await prisma.vehicle.delete({
-      where: {
-        idvehicle: parseInt(id),
-      },
-    });
+//     const deletedCar = await prisma.vehicle.delete({
+//       where: {
+//         idvehicle: parseInt(id),
+//       },
+//     });
 
-    if (!deletedCar) {
-      return NextResponse.json({ mensaje: 'Auto no encontrado' }, { status: 404 });
-    }
+//     if (!deletedCar) {
+//       return NextResponse.json({ mensaje: 'Auto no encontrado' }, { status: 404 });
+//     }
 
-    return NextResponse.json({ mensaje: 'Auto eliminado exitosamente' }, { status: 200 });
-  } catch (error) {
-    console.error(error);
-    return NextResponse.json({ Error: 'Error al eliminar el auto' }, { status: 500 });
-  }
-}
+//     return NextResponse.json({ mensaje: 'Auto eliminado exitosamente' }, { status: 200 });
+//   } catch (error) {
+//     console.error(error);
+//     return NextResponse.json({ Error: 'Error al eliminar el auto' }, { status: 500 });
+//   }
+// }
