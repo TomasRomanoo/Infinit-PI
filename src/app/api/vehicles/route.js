@@ -4,7 +4,7 @@ const prisma = new PrismaClient();
 
 
 // Método POST
-export async function POST() {
+export async function POST(request) {
   console.log('La función POST ha sido llamada.');
   try {
     const body = await request.json();
