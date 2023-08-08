@@ -35,6 +35,24 @@
   opacity: 0.1;
 }
 
+.hide-mngmnt{
+  display: none;
+  transition: 0.5s;
+}
+
+.show-mngmnt{
+  display: flex;
+  position: absolute;
+  left: -50%;
+  z-index: 10;
+  margin-top: 10px;
+  opacity: 1;
+}
+
+.show-mngmnt-mobile{
+  display: flex;
+}
+
 .loading-screen {
   display: flex;
   flex-direction: column;
