@@ -1,7 +1,7 @@
 export const Form = () =>{
     return (
         <>
-            <h1 className=" m-5 text-6xl font-bold font-secondary text-center ">Rent your own car!</h1> 
+            <p className=" m-5 text-6xl font-bold font-secondary text-center ">Rent your own car!</p> 
             <form action="" class='flex items-center flex-col' >
 
                 <div class="flex flex-col md:flex-row">
@@ -61,7 +61,7 @@ export const Form = () =>{
                         <div class="m-3">
                             <label class="block text-sm font-medium leading-6 text-gray-900">Detail</label>
                             <div class="w-full max-w-sm mx-auto">
-                                <textarea class=" block w-full h-24 w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 transition ease-in-out duration-300" placeholder="Enter your car's detail here"></textarea>
+                                <textarea class=" block w-full h-24  rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 transition ease-in-out duration-300" placeholder="Enter your car's detail here"></textarea>
                             </div>
                         </div>
 
