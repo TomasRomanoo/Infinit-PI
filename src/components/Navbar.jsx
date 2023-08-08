@@ -154,10 +154,10 @@ export const Navbar = () => {
                       </div>
                       <Link href={"/dashboard"} onClick={managementClick}>
                         <div>
-                          <Link href="#" class="font-semibold text-gray-900">
+                          <button class="font-semibold text-gray-900">
                             Add Car
                             <span class="absolute inset-0"></span>
-                          </Link>
+                          </button>
                           <p class="mt-1 text-gray-600">
                             You can rent your car here{" "}
                           </p>
@@ -187,10 +187,10 @@ export const Navbar = () => {
                         </svg>
                       </div>
                       <div>
-                        <Link href="#" class="font-semibold text-gray-900">
+                        <button class="font-semibold text-gray-900">
                           Your rented cars
                           <span class="absolute inset-0"></span>
-                        </Link>
+                        </button>
                         <p class="mt-1 text-gray-600">
                           Here you can delete, modify and view analytics{" "}
                         </p>
@@ -329,8 +329,8 @@ export const Navbar = () => {
       </div>
 
       {/* MODAL FOR MOBILE ENGAGEMENT */}
-      <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity hide-mngmnt" id="modalBg"></div>
-      <div class="flex min-h-full justify-center items-center p-0 fixed inset-0 hide-mngmnt" id="modal">
+      <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity hide-mngmnt lg:hidden" id="modalBg"></div>
+      <div class="flex min-h-full justify-center items-center p-0 fixed inset-0 hide-mngmnt lg:hidden" id="modal">
           <div class="relative">
             <div class="w-screen max-w-md flex-auto overflow-hidden rounded-3xl bg-white text-sm leading-6 shadow-lg ring-1 ring-gray-900/5">
               <div class="p-4">
@@ -353,10 +353,10 @@ export const Navbar = () => {
                   </div>
                   <Link href={"/dashboard"} onClick={managementClickMobile}>
                     <div>
-                      <Link href="#" class="font-semibold text-gray-900">
+                      <div  class="font-semibold text-gray-900">
                         Add Car
-                        <span class="absolute inset-0"></span>
-                      </Link>
+                        
+                      </div>
                       <p class="mt-1 text-gray-600">
                         You can rent your car here{" "}
                       </p>
@@ -386,10 +386,9 @@ export const Navbar = () => {
                     </svg>
                   </div>
                   <div>
-                    <Link href="#" class="font-semibold text-gray-900">
+                    <div  class="font-semibold text-gray-900">
                       Your rented cars
-                      <span class="absolute inset-0"></span>
-                    </Link>
+                    </div>
                     <p class="mt-1 text-gray-600">
                       Here you can delete, modify and view analytics{" "}
                     </p>
