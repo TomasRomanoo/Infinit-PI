@@ -15,6 +15,7 @@ import mock from "@/assets/images/mock.png";
 import { MdOutlineLocationOn, MdMyLocation } from "react-icons/md";
 import { BiDirections } from "react-icons/bi";
 import { BsCalendar3 } from "react-icons/bs";
+import { AiOutlineClose } from "react-icons/ai";
 
 import Calendar from "react-calendar";
 
@@ -22,7 +23,7 @@ const Detail = (vehicle) => {
   const router = useRouter();
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4" id="detail">
       <div className="flex items-center justify-between">
         <p className="text-2xl font-poppins font-semibold">{vehicle.name}</p>
         <button
@@ -50,7 +51,6 @@ const Detail = (vehicle) => {
 };
 
 const Hero = ({ vehicle }) => {
-  const [value, onChange] = useState(new Date());
   return (
     <div className="w-full p-6 bg-[#00243f] flex flex-col lg:flex-row items-center justify-around rounded-md shadow-md gap-4">
       {/* Location */}
@@ -65,7 +65,7 @@ const Hero = ({ vehicle }) => {
           <input
             type="text"
             placeholder="Where are you from?"
-            className="rounded-l-md rounded-r-md w-full shadow-md rounded-b-none lg:rounded-b-md lg:rounded-r-none pl-12 text-sm  py-3 pt-6 border-r-[1px] border-gray-300 text-ellipsis font-semibold placeholder:font-normal placeholder:italic focus:outline-2 outline-blue-800 "
+            className=" rounded-tl-md rounded-tr-md w-full shadow-md rounded-b-none lg:rounded-r-none lg:rounded-l-md  pl-12 text-sm  py-3 pt-6 border-r-[1px] border-gray-300 text-ellipsis font-semibold placeholder:font-normal placeholder:italic focus:outline-2 outline-blue-800 "
           />
         </div>
 
@@ -85,23 +85,12 @@ const Hero = ({ vehicle }) => {
           <input
             type="text"
             placeholder="Your destination?"
-            className="truncate w-full rounded-r-md shadow-md rounded-l-md lg:rounded-r-md  text-sm rounded-t-none lg:rounded-t-md pl-12 lg:pl-12 border-t-2 lg:border-t-0 border-gray-200 lg:rounded-l-none  py-3 pt-6 border-l-[1px] lg:border-gray-300  font-semibold placeholder:font-normal placeholder:italic focus:outline-2 outline-blue-800"
+            className="truncate w-full rounded-r-md shadow-md lg:rounded-r-md rounded-l-md   text-sm rounded-t-none  pl-12 lg:pl-12 border-t-2 lg:border-t-0 border-gray-200 lg:rounded-l-none  py-3 pt-6 border-l-[1px] lg:border-gray-300  font-semibold placeholder:font-normal placeholder:italic focus:outline-2 outline-blue-800"
           />
         </div>
       </div>
 
       {/* Calendar */}
-
-      {/*      <div className="relative w-full">
-        <label className="absolute left-6 uppercase text-gray-400 top-2 text-[10px] tracking-widest">
-          LENGTH
-        </label>
-        <input
-          type="text"
-          placeholder="How many days?"
-          className="w-full rounded-md p-6 shadow-md   text-sm py-3 pt-6 border-r-[1px] border-gray-300 text-ellipsis font-semibold placeholder:font-normal placeholder:italic focus:outline-2 outline-blue-800"
-        />
-      </div> */}
 
       <div className="flex flex-col lg:flex-row items-center w-full">
         <div className="relative w-full">
@@ -113,24 +102,18 @@ const Hero = ({ vehicle }) => {
           </button>
           <input
             type="date"
-            placeholder="Leaving"
-            className="rounded-l-md rounded-r-md w-full  rounded-b-none lg:rounded-b-md lg:rounded-r-none  pl-12 pr-2 py-3 pt-6 border-r-[1px] border-gray-300 text-ellipsis font-semibold placeholder:font-normal placeholder:italic focus:outline-2 outline-blue-800"
+            className="rounded-tl-md rounded-tr-md w-full   lg:rounded-l-md lg:rounded-r-none  pl-12 pr-2 py-3 pt-6 border-r-[1px] border-gray-300 text-ellipsis font-semibold placeholder:font-normal placeholder:italic focus:outline-2 outline-blue-800"
           />
         </div>
 
         <div className="relative w-full">
           <input
             type="date"
-            placeholder="Arriving"
-            className="w-full rounded-r-md rounded-l-md lg:rounded-r-md  rounded-t-none lg:rounded-t-md pl-10 lg:pl-4 pr-2  border-t-2 lg:border-t-0 border-gray-200 lg:rounded-l-none  py-3 pt-6 border-l-[1px] lg:border-gray-300 text-ellipsis font-semibold placeholder:font-normal placeholder:italic focus:outline-2 outline-blue-800"
+            className="w-full rounded-r-md rounded-l-md  lg:rounded-r-md  rounded-t-none  pl-10 lg:pl-4 pr-2  border-t-2 lg:border-t-0 border-gray-200 lg:rounded-l-none  py-3 pt-6 border-l-[1px] lg:border-gray-300 text-ellipsis font-semibold placeholder:font-normal placeholder:italic focus:outline-2 outline-blue-800"
           />
         </div>
       </div>
 
-      <div className="flex flex-col w-full lg:w-[20%]   lg:justify-center items-start font-bold text-white">
-        <label>Total</label>
-        <p>${vehicle.price}/day</p>
-      </div>
       <button className="bg-white text-black font-bold py-4 rounded-lg w-full lg:w-[20%] hover:bg-gray-200 transition-all duration-200">
         Continue
       </button>
@@ -143,6 +126,10 @@ const Gallery = () => {
 
   const openGalleryModal = () => {
     isGalleryOpen(true);
+  };
+
+  const closeGalleryModal = () => {
+    isGalleryOpen(false);
   };
 
   const images = [
@@ -191,23 +178,41 @@ const Gallery = () => {
         </div>
       </div>
 
-      {gallery && <GalleryModal images={images} />}
+      {gallery && <GalleryModal images={images} close={closeGalleryModal} />}
     </div>
   );
 };
 
-const GalleryModal = ({ image_id, images }) => {
+const GalleryModal = ({ image_id, images, close }) => {
   return (
-    <div className=" w-full h-[500px] absolute top-0 left-0 z-10 bg-red-500">
-      <Swiper
-        spaceBetween={50}
-        slidesPerView={3}
-        onSlideChange={() => console.log("slide change")}
-        onSwiper={(swiper) => console.log(swiper)}
-        className="h-full w-full flex items-center justify-center"
-      >
-        <Image className="object-contain" src={images[0].url} />
-      </Swiper>
+    <div className=" w-full absolute top-0 left-0 z-10 bg-white p-4">
+      <div className="relative ">
+        <button
+          className="absolute z-30 right-0 group bg-white rounded-md m-4"
+          onClick={close}
+        >
+          <AiOutlineClose size={40} className="group-hover:text-red-600" />
+        </button>
+        <Swiper
+          slidesPerView={1}
+          spaceBetween={50}
+          className="flex justify-center items-center "
+          modules={[Navigation, Pagination]}
+          navigation
+          pagination={{ clickable: true }}
+        >
+          {images.map((image, index) => {
+            return (
+              <SwiperSlide
+                key={image.id}
+                className="flex justify-center items-center"
+              >
+                <Image className="object-contain " src={image.url} />
+              </SwiperSlide>
+            );
+          })}
+        </Swiper>
+      </div>
     </div>
   );
 };
