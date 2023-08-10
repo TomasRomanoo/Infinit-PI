@@ -1,25 +1,24 @@
 import { useSwiper } from "swiper/react";
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import {AiOutlineArrowLeft,AiOutlineArrowRight} from "react-icons/ai"
 export const SwiperNavButtons = () => {
   const swiper = useSwiper();
   return (
-    <div className="flex gap-6">
+    <div className="flex items-center gap-6 mt-10">
       <button
         onClick={() => {
           swiper.slidePrev();
         }}
-        className="text-white bg-tertiary hover:bg-primary transition-all duration-300 ease-in-out px-4 py-2 rounded-full"
+        className="text-primary bg-tertiary hover:bg-primary transition-all duration-300 ease-in-out px-4 py-2 rounded-full"
       >
-        <ArrowBackIcon/>
+        <AiOutlineArrowLeft size={30}/>
       </button>
       <button
         onClick={() => {
           swiper.slideNext();
         }}
-        className="text-whiteb bg-tertiary hover:bg-primary transition-all duration-300 ease-in-out px-4 py-2 rounded-full"
+        className="text-primary bg-tertiary hover:bg-primary hover:text-white transition-all duration-300 ease-in-out px-4 py-2 rounded-full"
       >
-        <ArrowForwardIcon/>
+        <AiOutlineArrowRight size={30}/>
       </button>
     </div>
   );
