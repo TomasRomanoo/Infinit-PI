@@ -6,6 +6,17 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
+.errInput{
+  --tw-ring-color: red;
+}
+
 .link-item {
   position: relative;
   transition: border-bottom 0.3s;
