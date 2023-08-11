@@ -38,7 +38,7 @@ export const Form = () =>{
             document.querySelector("#yearInput").classList.remove("errInput");
         }
 
-        if(year && year.length !== 0 && (year < 2023 || year > 1886)  && fields[5].state && fields[4].state && fields[3].state && fields[2].state && fields[1].state && fields[0].state){
+        if(year && year.length !== 0 && (year < 2023 && year > 1886)  && fields[5].state && fields[4].state && fields[3].state && fields[2].state && fields[1].state && fields[0].state){
             createPost()
         }
     };
@@ -198,7 +198,7 @@ export const Form = () =>{
                             <div>
                                 <label class="block">
                                     <span class="sr-only">Choose profile photo</span>
-                                    <input type="file" class=" text-xs block w-full  text-gray-500 pr-2
+                                    <input multiple type="file" class=" text-xs block w-full  text-gray-500 pr-2
                                     ring-2 ring-gray-300 ring-inset rounded-md
                                     file:mr-1 file:py-2 file:px-2
                                     file:rounded-md file:border-0
