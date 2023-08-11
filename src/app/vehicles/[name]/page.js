@@ -142,7 +142,7 @@ const Gallery = ({
 const GalleryModal = ({ selectedImageId, images, close }) => {
   return (
     <div
-      className=" w-[90%] absolute top-[40rem] lg:top-[25rem] left-[5%] z-10 bg-white md:p-6 border-8 border-primary rounded-md opacity-100"
+      className=" w-[90%] absolute top-[40rem] lg:top-[25rem] left-[5%] z-10 bg-white md:p-2 rounded-md opacity-100"
       id="gallery"
     >
       <div className="relative ">
