@@ -22,7 +22,7 @@ export const Footer = () => {
   const [showDropContact, setShowDropContact] = useState(false);
 
   return (
-    <div className="my-8 font-poppins">
+    <div className="my-16 font-poppins">
       <div className="block md:hidden ">
         <footer>
           <ul>
