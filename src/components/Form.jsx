@@ -1,4 +1,5 @@
-import { useState } from "react"
+import axios from "axios";
+import React, { useState } from "react"
 
 export const Form = () =>{
 
@@ -37,8 +38,30 @@ export const Form = () =>{
         }
     };
 
+    // const apiUrl = "http://localhost:3000/api/vehicles/"
 
+    // const handlerPost = () => {
+    //     React.useEffect(() => {
+    //         axios.get(`${apiUrl}`).then(response => {
+    //             setPost(response.data);
+    //         })
+    //     })
+        
+    // }
 
+    // function createPost() {
+    //     axios
+    //     .post(baseURL, {
+    //         title: "Hello World!",
+    //         body: "This is a new post.",
+    //     })
+    //     .then((response) => {
+    //         setPost(response.data);
+    //     });
+    //     if (!post) return "No post!"
+    // }
+
+//* Controled inputs states
     const [brand, setBrand] = useState('')
     const [model, setModel] = useState('')
     const [price, setPrice] = useState('')
@@ -47,7 +70,7 @@ export const Form = () =>{
     const [detail, setDetail] = useState('')
     const [description, setDescription] = useState('')
 
-
+//* Error States 
     const [brandErr, setBrandErr] = useState(false)
     const [modelErr, setModelErr] = useState(false)
     const [priceErr, setPriceErr] = useState(false)
@@ -127,7 +150,25 @@ export const Form = () =>{
                                 The price can't be blank
                             </span> : <></>}
                         </div>
+
+                        <hr class="mt-5 mb-5" />
+
+                        <div class="m-3">
+
+                            <label class="block mb-2 text-sm font-medium leading-6 text-gray-900">Upload multiple photos</label>
+                            <div>
+                                <input class=" block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 transition ease-in-out duration-300"  id="multiple_files" type="file" multiple />
+                            </div>
+                            {/* 
+                            {modelErr?                             
+                            <span class="flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1">
+                                The model can't be blank    
+                            </span> : <></>} */}
+                        </div>
+
                     </div>
+
+
                     
                     <div>
                         <div class="m-3">
