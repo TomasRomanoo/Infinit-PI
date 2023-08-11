@@ -74,7 +74,7 @@
 
 .spinner {
   border: 8px solid #f3f3f3;
-  border-top: 8px solid blue;
+  border-top: 8px solid #00243f;
   border-radius: 50%;
   width: 60px;
   height: 60px;
@@ -89,3 +89,14 @@
     transform: rotate(360deg);
   }
 }
+
+
+.opacity-effect {
+  opacity: 0.5; /* Set the desired opacity value */
+}
+
+
+
+
+
+

@@ -11,177 +11,29 @@ import { motion } from "framer-motion";
 import { Swiper, SwiperSlide, useSwiper } from "swiper/react";
 import { Navigation, Pagination } from "swiper";
 import swiperConfig from "../utils/swiperConfig.ts";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { SkeletonCard } from "@/components/Skeleton.jsx";
 
 export default function Home() {
-  const vehicles = [
-    {
-      name:`Honda Civic 2017`,
-      brand: "Honda",
-      model: "Civic",
-      year: 2017,
-      price_per_day: 30.5,
-      image: honda,
-      specs: {
-        ppl_capacity: 5,
-        range: 500,
-        luggage_capacity: 3,
-        transmission: "AUT.",
-        air_conditioner: true,
-        abs: true,
-        heated_seats: true,
-      },
-    },
-    {
-      brand: "Honda",
-      model: "Accord",
-      year: 2018,
-      price_per_day: 35.0,
-      image: honda,
-      specs: {
-        ppl_capacity: 5,
-        range: 520,
-        luggage_capacity: 4,
-        transmission: "AUT.",
-        air_conditioner: true,
-        abs: true,
-        heated_seats: true,
-      },
-    },
-    {
-      brand: "Honda",
-      model: "CR-V",
-      year: 2020,
-      price_per_day: 40.25,
-      image: honda,
-      specs: {
-        ppl_capacity: 5,
-        range: 550,
-        luggage_capacity: 5,
-        transmission: "CVT",
-        air_conditioner: true,
-        abs: true,
-        heated_seats: false,
-      },
-    },
-    {
-      brand: "Honda",
-      model: "Pilot",
-      year: 2019,
-      price_per_day: 45.75,
-      image: honda,
-      specs: {
-        ppl_capacity: 8,
-        range: 480,
-        luggage_capacity: 6,
-        transmission: "AUT.",
-        air_conditioner: true,
-        abs: true,
-        heated_seats: true,
-      },
-    },
-    {
-      brand: "Honda",
-      model: "Fit",
-      year: 2021,
-      price_per_day: 28.0,
-      image: honda,
-      specs: {
-        ppl_capacity: 5,
-        range: 450,
-        luggage_capacity: 2,
-        transmission: "CVT",
-        air_conditioner: true,
-        abs: true,
-        heated_seats: false,
-      },
-    },
-    {
-      brand: "Honda",
-      model: "Odyssey",
-      year: 2019,
-      price_per_day: 50.0,
-      image: honda,
-      specs: {
-        ppl_capacity: 7,
-        range: 420,
-        luggage_capacity: 7,
-        transmission: "AUT.",
-        air_conditioner: true,
-        abs: true,
-        heated_seats: true,
-      },
-    },
-    {
-      brand: "Honda",
-      model: "HR-V",
-      year: 2022,
-      price_per_day: 37.5,
-      image: honda,
-      specs: {
-        ppl_capacity: 5,
-        range: 480,
-        luggage_capacity: 4,
-        transmission: "CVT",
-        air_conditioner: true,
-        abs: true,
-        heated_seats: true,
-      },
-    },
-    {
-      brand: "Honda",
-      model: "Ridgeline",
-      year: 2020,
-      price_per_day: 55.0,
-      image: honda,
-      specs: {
-        ppl_capacity: 5,
-        range: 450,
-        luggage_capacity: 5,
-        transmission: "AUT.",
-        air_conditioner: true,
-        abs: true,
-        heated_seats: false,
-      },
-    },
-    {
-      brand: "Honda",
-      model: "Insight",
-      year: 2021,
-      price_per_day: 33.25,
-      image: honda,
-      specs: {
-        ppl_capacity: 5,
-        range: 600,
-        luggage_capacity: 3,
-        transmission: "CVT",
-        air_conditioner: true,
-        abs: true,
-        heated_seats: true,
-      },
-    },
-    {
-      brand: "Honda",
-      model: "Clarity",
-      year: 2022,
-      price_per_day: 48.75,
-      image: honda,
-      specs: {
-        ppl_capacity: 5,
-        range: 520,
-        luggage_capacity: 4,
-        transmission: "CVT",
-        air_conditioner: true,
-        abs: true,
-        heated_seats: true,
-      },
-    },
-  ];
+  const [vehicles, setVehicles] = useState([]);
 
+  const fetchVehicles = async () => {
+    const res = await axios("http://localhost:3000/api/vehicles");
 
+    setVehicles(res.data);
+  };
+
+  useEffect(() => {
+    fetchVehicles();
+  }, []);
+
+  
 
   return (
     <div id="" className="">
       <Hero />
+    
       <FleetCarousel vehicles={vehicles} />
       <Footer />
     </div>
@@ -221,20 +73,20 @@ const Hero = () => {
 };
 
 const FleetCarousel = ({ vehicles }) => {
+  const [isLoading, setIsLoading] = useState(true); // Add a loading state
   const container = {
-    hidden: {
-      y: -100,
-      opacity: 0,
-    },
-    show: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        staggerChildren: 3,
-        delayChildren: 4,
-      },
-    },
+    // ... existing container animation properties ...
   };
+
+  useEffect(() => {
+    const loadingTimeout = setTimeout(() => {
+      setIsLoading(false); // Set loading to false after the timeout
+    }, 2000); // Adjust the timeout duration as needed
+
+    return () => {
+      clearTimeout(loadingTimeout); // Clear the timeout if the component unmounts
+    };
+  }, []);
 
   return (
     <motion.div
@@ -246,11 +98,17 @@ const FleetCarousel = ({ vehicles }) => {
       <p className="font-poppins text-4xl mb-2 text-center">
         Take a look to our fleet
       </p>
-      <div className="grid grid-cols-1 md:grid-cols-2 grid-flow-row gap-12">
-        {vehicles.map((vehicle, index) => {
-          return (
-            <>
-              <div className="">
+      <div className="grid grid-cols-1 md:grid-cols-2 grid-flow-row gap-12 w-full">
+        {isLoading
+          ? // Display skeleton cards while loading
+            Array.from({ length: 4 }).map((_, index) => (
+              <div key={index}>
+                <SkeletonCard />
+              </div>
+            ))
+          : // Render actual vehicle cards
+            vehicles.map((vehicle, index) => (
+              <div key={index}>
                 <motion.div
                   initial={{
                     x: -300,
@@ -265,15 +123,13 @@ const FleetCarousel = ({ vehicles }) => {
                     },
                   }}
                   viewport={{ once: true }}
-                  key={index}
                 >
                   <Card vehicle={vehicle} />
                 </motion.div>
               </div>
-            </>
-          );
-        })}
+            ))}
       </div>
     </motion.div>
   );
 };
+

@@ -27,19 +27,19 @@ const swiperConfig: SwiperConfig = {
       spaceBetween: 5,
     },
     480: {
-      slidesPerView: 2,
-      spaceBetween: 10,
+      slidesPerView: 1,
+      spaceBetween: 30,
     },
     768: {
-      slidesPerView: 3,
-      spaceBetween: 15,
+      slidesPerView: 1,
+      spaceBetween: 30,
     },
     1024: {
-      slidesPerView: 4,
-      spaceBetween: 15,
+      slidesPerView: 1,
+      spaceBetween: 30,
     },
     1280: {
-      slidesPerView: 5,
+      slidesPerView: 2,
       spaceBetween: 30,
     },
   },

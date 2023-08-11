@@ -75,7 +75,7 @@ export const Navbar = () => {
 
   return (
     <div
-      className={`fixed top-0 p-6 lg:px-12 ${
+      className={`fixed top-0 p-6 pb-0 lg:px-12 ${
         sideMenu ? "border-[1px]-black border-b" : "shadow-sm"
       } w-full bg-white z-30 `}
     >
@@ -398,6 +398,6 @@ export const Navbar = () => {
           </div>
         </div>
       </div>
-    </div>
-  );
+    </div>
+  );
 };
