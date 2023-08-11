@@ -21,19 +21,17 @@ export default function Home() {
   const fetchVehicles = async () => {
     const res = await axios("http://localhost:3000/api/vehicles");
 
-    setVehicles(res.data);
+    setVehicles(res.data.slice(0, 10));
   };
 
   useEffect(() => {
     fetchVehicles();
   }, []);
 
-  
-
   return (
     <div id="" className="">
       <Hero />
-    
+
       <FleetCarousel vehicles={vehicles} />
       <Footer />
     </div>
@@ -132,4 +130,3 @@ const FleetCarousel = ({ vehicles }) => {
     </motion.div>
   );
 };
-

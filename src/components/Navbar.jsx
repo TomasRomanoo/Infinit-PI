@@ -110,17 +110,17 @@ export const Navbar = () => {
           <li className="text-lg link-item">
             <Link href="/about">About</Link>
           </li>
-          <li>
-            <div class="relative">
+          <li className="">
+            <div className="relative  ">
               <button
                 onClick={managementClick}
                 type="button"
-                class="inline-flex items-center gap-x-1 text-lg link-item"
+                className="inline-flex items-center gap-x-1 text-lg link-item "
                 aria-expanded="false"
               >
                 <span>Management</span>
                 <svg
-                  class="h-5 w-5"
+                  className="h-5 w-5"
                   viewBox="0 0 20 20"
                   fill="currentColor"
                   aria-hidden="true"
@@ -133,17 +133,17 @@ export const Navbar = () => {
                 </svg>
               </button>
               <div id="mngmnt" className="hide-mngmnt">
-                <div class="w-screen max-w-md flex-auto overflow-hidden rounded-3xl bg-white text-sm leading-6 shadow-lg ring-1 ring-gray-900/5">
-                  <div class="p-4">
-                    <div class="group relative flex gap-x-6 rounded-lg p-4 hover:bg-gray-50">
-                      <div class="mt-1 flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
+                <div className="w-screen max-w-md flex-auto overflow-hidden rounded-3xl bg-white text-sm leading-6 shadow-lg ring-1 ring-gray-900/5">
+                  <div className="p-4">
+                    <div className="group relative flex gap-x-6 rounded-lg p-4 hover:bg-gray-50">
+                      <div className="mt-1 flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           fill="none"
                           viewBox="0 0 24 24"
                           stroke-width="1.5"
                           stroke="currentColor"
-                          class="w-6 h-6 group-hover:text-indigo-600"
+                          className="w-6 h-6 group-hover:text-indigo-600"
                         >
                           <path
                             stroke-linecap="round"
@@ -154,25 +154,25 @@ export const Navbar = () => {
                       </div>
                       <Link href={"/dashboard"} onClick={managementClick}>
                         <div>
-                          <button class="font-semibold text-gray-900">
+                          <button className="font-semibold text-gray-900">
                             Add Car
-                            <span class="absolute inset-0"></span>
+                            <span className="absolute inset-0"></span>
                           </button>
-                          <p class="mt-1 text-gray-600">
+                          <p className="mt-1 text-gray-600">
                             You can rent your car here{" "}
                           </p>
                         </div>
                       </Link>
                     </div>
-                    <div class="group relative flex gap-x-6 rounded-lg p-4 hover:bg-gray-50">
-                      <div class="mt-1 flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
+                    <div className="group relative flex gap-x-6 rounded-lg p-4 hover:bg-gray-50">
+                      <div className="mt-1 flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           fill="none"
                           viewBox="0 0 24 24"
                           stroke-width="1.5"
                           stroke="currentColor"
-                          class="w-6 h-6 group-hover:text-indigo-600"
+                          className="w-6 h-6 group-hover:text-indigo-600"
                         >
                           <path
                             stroke-linecap="round"
@@ -187,11 +187,11 @@ export const Navbar = () => {
                         </svg>
                       </div>
                       <div>
-                        <button class="font-semibold text-gray-900">
+                        <button className="font-semibold text-gray-900">
                           Your rented cars
-                          <span class="absolute inset-0"></span>
+                          <span className="absolute inset-0"></span>
                         </button>
-                        <p class="mt-1 text-gray-600">
+                        <p className="mt-1 text-gray-600">
                           Here you can delete, modify and view analytics{" "}
                         </p>
                       </div>
@@ -203,7 +203,7 @@ export const Navbar = () => {
           </li>
         </ul>
 
-        <div className="lg:block hidden  font-poppins">
+        <div className="lg:block hidden font-poppins">
           {user == false ? (
             <div className="flex items-center gap-8">
               <button className="p-6 py-3 rounded-md bg-primary hover:bg-secondary shadow-lg text-white transition-all duration-200 ease-in-out">
@@ -274,7 +274,7 @@ export const Navbar = () => {
               <p>Services</p>
             </Link>
           </li>
-          <li className="font-bold p-4  w-full ">
+          <li className="font-bold p-4  w-full cursor-pointer ">
             <div className="flex items-center gap-4" onClick={managementClickMobile}>
               <BsNut size={25} />
               <p>Management</p>
@@ -329,20 +329,20 @@ export const Navbar = () => {
       </div>
 
       {/* MODAL FOR MOBILE ENGAGEMENT */}
-      <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity hide-mngmnt lg:hidden" id="modalBg"></div>
-      <div class="flex min-h-full justify-center items-center p-0 fixed inset-0 hide-mngmnt lg:hidden" id="modal">
-          <div class="relative">
-            <div class="w-screen max-w-md flex-auto overflow-hidden rounded-3xl bg-white text-sm leading-6 shadow-lg ring-1 ring-gray-900/5">
-              <div class="p-4">
-                <div class="group relative flex gap-x-6 rounded-lg p-4 hover:bg-gray-50">
-                  <div class="mt-1 flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
+      <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity hide-mngmnt lg:hidden" id="modalBg"></div>
+      <div className="flex min-h-full justify-center items-center p-0 fixed inset-0 hide-mngmnt lg:hidden" id="modal">
+          <div className="relative">
+            <div className="w-screen max-w-md flex-auto overflow-hidden rounded-3xl bg-white text-sm leading-6 shadow-lg ring-1 ring-gray-900/5">
+              <div className="p-4">
+                <div className="group relative flex gap-x-6 rounded-lg p-4 hover:bg-gray-50">
+                  <div className="mt-1 flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke-width="1.5"
                       stroke="currentColor"
-                      class="w-6 h-6 group-hover:text-indigo-600"
+                      className="w-6 h-6 group-hover:text-indigo-600"
                     >
                       <path
                         stroke-linecap="round"
@@ -353,25 +353,25 @@ export const Navbar = () => {
                   </div>
                   <Link href={"/dashboard"} onClick={managementClickMobile}>
                     <div>
-                      <div  class="font-semibold text-gray-900">
+                      <div  className="font-semibold text-gray-900">
                         Add Car
                         
                       </div>
-                      <p class="mt-1 text-gray-600">
+                      <p className="mt-1 text-gray-600">
                         You can rent your car here{" "}
                       </p>
                     </div>
                   </Link>
                 </div>
-                <div class="group relative flex gap-x-6 rounded-lg p-4 hover:bg-gray-50">
-                  <div class="mt-1 flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
+                <div className="group relative flex gap-x-6 rounded-lg p-4 hover:bg-gray-50">
+                  <div className="mt-1 flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke-width="1.5"
                       stroke="currentColor"
-                      class="w-6 h-6 group-hover:text-indigo-600"
+                      className="w-6 h-6 group-hover:text-indigo-600"
                     >
                       <path
                         stroke-linecap="round"
@@ -386,10 +386,10 @@ export const Navbar = () => {
                     </svg>
                   </div>
                   <div>
-                    <div  class="font-semibold text-gray-900">
+                    <div  className="font-semibold text-gray-900">
                       Your rented cars
                     </div>
-                    <p class="mt-1 text-gray-600">
+                    <p className="mt-1 text-gray-600">
                       Here you can delete, modify and view analytics{" "}
                     </p>
                   </div>
