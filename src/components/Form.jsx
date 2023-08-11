@@ -1,10 +1,9 @@
-// import axios from "axios";
+import axios from "axios";
 import React, { useState } from "react"
+import { toast } from 'sonner';
 
 export const Form = () =>{
 
-    const  [isTodoOk, setIsTodoOk] = useState(false)
-    const  [isYearOk, setIsYearOk] = useState(false)
     
     const handlerSubmit = (e) => {
         e.preventDefault();
@@ -21,11 +20,9 @@ export const Form = () =>{
         fields.forEach(field => {
             if (!field.state) {
                 field.setter(true);
-                setIsTodoOk(false)
                 document.querySelector(field.id).classList.add("errInput");
             } else {
                 field.setter(false);
-                setIsTodoOk(true)
                 document.querySelector(field.id).classList.remove("errInput");
             }
         });
@@ -33,51 +30,44 @@ export const Form = () =>{
         if (!year || year.length === 0 || (year > 2023 || year < 1886)) {
             setYearErr1(!year || year.length === 0);
             setYearErr2((year > 2023 || year < 1886) && year != 0);
-            console.log(year);
-            console.log(0);
             document.querySelector("#yearInput").classList.add("errInput");
-            setIsYearOk(false)
 
         } else {
             setYearErr1(false);
             setYearErr2(false);
-            setIsYearOk(true)
             document.querySelector("#yearInput").classList.remove("errInput");
         }
 
-        if(isTodoOk && isYearOk){
+        if(year && year.length !== 0 && (year < 2023 || year > 1886)  && fields[5].state && fields[4].state && fields[3].state && fields[2].state && fields[1].state && fields[0].state){
             createPost()
         }
     };
 
-    // const apiUrl = "http://localhost:3000/api/vehicles/"
+    const apiUrl = "http://localhost:3000/api/vehicles/"
 
-    // const handlerPost = () => {
-    //     React.useEffect(() => {
-    //         axios.get(`${apiUrl}`).then(response => {
-    //             setPost(response.data);
-    //         })
-    //     })
-    // }
+    function createPost() {
 
-    // function createPost() {
-    //     axios
-    //     .post(apiUrl, {
-    //         title: "Hello World!",
-    //         body: {        
-    //             plate,
-    //             brand,
-    //             model,
-    //             detail,
-    //             year,
-    //             price,
-    //             description},
-    //     })
-    //     .then((response) => {
-    //         setPost(response.data);
-    //     });
-    //     // if (!post) return "No post!"
-    // }
+        toast.promise(
+            axios
+            .post(apiUrl, {      
+                    "plate": plate,
+                    "brand": brand,
+                    "model": model,
+                    "detail": detail,
+                    "year": + year,
+                    "price_per_day":+ price,
+                    "long_description": description
+                }),
+                {
+                    loading: 'Loading...',
+                    success: (data) => {
+                        return `Post has been created successfully`;
+                    },
+                    error: 'Error while creating post',
+                }
+        )
+    }
+
 //* Controled inputs states
     const [brand, setBrand] = useState('')
     const [model, setModel] = useState('')
@@ -114,7 +104,7 @@ export const Form = () =>{
                                 type="text"
                                 value={brand}
                                 onChange={()=>setBrand(event.target.value)}
-                                class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 transition ease-in-out duration-300"/>
+                                class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 focus:outline-none sm:text-sm sm:leading-6 transition ease-in-out duration-300"/>
                             </div>
                             {brandErr?                             
                             <span class="flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1">
@@ -130,7 +120,7 @@ export const Form = () =>{
                                 value={model}
                                 onChange={()=>setModel(event.target.value)}
                                 type="text" 
-                                class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 transition ease-in-out duration-300"/>
+                                class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 focus:outline-none sm:text-sm sm:leading-6 transition ease-in-out duration-300"/>
                             </div>
                             {modelErr?                             
                             <span class="flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1">
@@ -151,7 +141,7 @@ export const Form = () =>{
                                 type="number" 
                                 value={price}
                                 onChange={()=>setPrice(event.target.value)}
-                                class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 transition ease-in-out duration-300" 
+                                class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 focus:outline-none sm:text-sm sm:leading-6 transition ease-in-out duration-300" 
                                 placeholder="0.00"/>
                                 <div class="absolute inset-y-0 right-0 flex items-center">
                                     <label  class="sr-only">Currency</label>
@@ -174,7 +164,17 @@ export const Form = () =>{
 
                             <label class="block mb-2 text-sm font-medium leading-6 text-gray-900">Upload multiple photos</label>
                             <div>
-                                <input class=" block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 transition ease-in-out duration-300"  id="multiple_files" type="file" multiple />
+                                <label class="block">
+                                    <span class="sr-only">Choose profile photo</span>
+                                    <input type="file" class=" text-xs block w-full  text-gray-500 pr-2
+                                    ring-2 ring-gray-300 ring-inset rounded-md
+                                    file:mr-1 file:py-2 file:px-2
+                                    file:rounded-md file:border-0
+                                    file:text-sm file:font-semibold
+                                    file:bg-primary file:text-white
+                                    hover:file:bg-secondary file:transition-all duration-200 ease-in-out
+                                    "/>
+                                </label>
                             </div>
                             {/* 
                             {modelErr?                             
@@ -195,7 +195,7 @@ export const Form = () =>{
                                 id="plateInput"
                                 value={plate}
                                 onChange={()=>setPlate(event.target.value)}
-                                type="text" class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 transition ease-in-out duration-300"/>
+                                type="text" class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 focus:outline-none sm:text-sm sm:leading-6 transition ease-in-out duration-300"/>
                             </div>
                             {plateErr?                             
                             <span class="flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1">
@@ -214,7 +214,7 @@ export const Form = () =>{
                                 max="2023" 
                                 value={year} 
                                 onChange={()=>setYear(event.target.value)}
-                                class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 transition ease-in-out duration-300"/>
+                                class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 focus:outline-none sm:text-sm sm:leading-6 transition ease-in-out duration-300"/>
                             </div>
                             {yearErr1?                             
                             <span class="flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1">
@@ -231,7 +231,7 @@ export const Form = () =>{
                             <div class="w-full max-w-sm mx-auto">
                                 <textarea 
                                 id="detailInput"
-                                class=" block w-full h-24 w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 transition ease-in-out duration-300" 
+                                class=" block h-24 w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 focus:outline-none sm:text-sm sm:leading-6 transition ease-in-out duration-300" 
                                 placeholder="Enter your car's detail here"
                                 value={detail}
                                 onChange={()=>setDetail(event.target.value)}
@@ -248,7 +248,7 @@ export const Form = () =>{
                             <label class="block text-sm font-medium leading-6 text-gray-900">Long Description</label>
                             <div class="w-full max-w-sm mx-auto">
                                 <textarea 
-                                class="h-24 w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 transition ease-in-out duration-300" 
+                                class="h-24 w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 focus:outline-none sm:text-sm sm:leading-6 transition ease-in-out duration-300" 
                                 id="descriptionInput"
                                 placeholder="Enter your description here"
                                 value={description}
@@ -266,7 +266,7 @@ export const Form = () =>{
                                 
 
                 <div class='m-5 mb-8'>
-                    <button class="rounded-full py-3 px-5 text-white bg-black">Submit</button>
+                    <button class="rounded-xl py-3 px-5 text-white bg-primary hover:bg-secondary file:transition-all duration-200 ease-in-out">Submit</button>
                 </div>
             </form>
 
