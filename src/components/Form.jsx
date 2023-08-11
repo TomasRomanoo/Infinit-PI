@@ -1,8 +1,11 @@
-import axios from "axios";
+// import axios from "axios";
 import React, { useState } from "react"
 
 export const Form = () =>{
 
+    const  [isTodoOk, setIsTodoOk] = useState(false)
+    const  [isYearOk, setIsYearOk] = useState(false)
+    
     const handlerSubmit = (e) => {
         e.preventDefault();
     
@@ -18,9 +21,11 @@ export const Form = () =>{
         fields.forEach(field => {
             if (!field.state) {
                 field.setter(true);
+                setIsTodoOk(false)
                 document.querySelector(field.id).classList.add("errInput");
             } else {
                 field.setter(false);
+                setIsTodoOk(true)
                 document.querySelector(field.id).classList.remove("errInput");
             }
         });
@@ -31,10 +36,17 @@ export const Form = () =>{
             console.log(year);
             console.log(0);
             document.querySelector("#yearInput").classList.add("errInput");
+            setIsYearOk(false)
+
         } else {
             setYearErr1(false);
             setYearErr2(false);
+            setIsYearOk(true)
             document.querySelector("#yearInput").classList.remove("errInput");
+        }
+
+        if(isTodoOk && isYearOk){
+            createPost()
         }
     };
 
@@ -46,21 +58,26 @@ export const Form = () =>{
     //             setPost(response.data);
     //         })
     //     })
-        
     // }
 
     // function createPost() {
     //     axios
-    //     .post(baseURL, {
+    //     .post(apiUrl, {
     //         title: "Hello World!",
-    //         body: "This is a new post.",
+    //         body: {        
+    //             plate,
+    //             brand,
+    //             model,
+    //             detail,
+    //             year,
+    //             price,
+    //             description},
     //     })
     //     .then((response) => {
     //         setPost(response.data);
     //     });
-    //     if (!post) return "No post!"
+    //     // if (!post) return "No post!"
     // }
-
 //* Controled inputs states
     const [brand, setBrand] = useState('')
     const [model, setModel] = useState('')
