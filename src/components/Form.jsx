@@ -1,10 +1,10 @@
 import axios from "axios";
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { toast } from 'sonner';
+import Options from "./Options";
 
 export const Form = () =>{
 
-    
     const handlerSubmit = (e) => {
         e.preventDefault();
     
@@ -44,9 +44,8 @@ export const Form = () =>{
     };
 
     const apiUrl = "http://localhost:3000/api/vehicles/"
-
+    
     function createPost() {
-
         toast.promise(
             axios
             .post(apiUrl, {      
@@ -88,6 +87,33 @@ export const Form = () =>{
     const [descriptionErr, setDescriptionErr] = useState(false)
 
 
+
+    const [foundCars, setFoundCars ] = useState([])
+    const [foundBrands, setFoundBrands ] = useState([])
+    const [foundModel, setFoundModel ] = useState([])
+
+    useEffect (() => {
+        axios.get(apiUrl).then((response)=> {
+            setFoundCars(response.data)
+
+            const uniqueBrands = new Set();
+            response.data.forEach(car => uniqueBrands.add(car.brand))
+            setFoundBrands(uniqueBrands)
+
+        })    
+    },[])
+
+    useEffect(() => {
+        const uniqueModels = new Set();
+        foundCars.forEach(car => {
+            if(car.brand === brand){
+                uniqueModels.add(car.model)
+            }
+        })
+        setFoundModel(uniqueModels)
+    },[brand])
+
+
     return (
         <>
             <h1 className=" m-5 text-6xl font-bold font-secondary text-center ">Rent your own car!</h1> 
@@ -99,32 +125,38 @@ export const Form = () =>{
                             <label class="block text-sm font-medium leading-6 text-gray-900">Brand</label>
 
                             <div class="relative mt-2 rounded-md shadow-sm">
-                                <input
+                                <select
                                 id="brandInput"
                                 type="text"
                                 value={brand}
                                 onChange={()=>setBrand(event.target.value)}
-                                class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 focus:outline-none sm:text-sm sm:leading-6 transition ease-in-out duration-300"/>
+                                class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 focus:outline-none sm:text-sm sm:leading-6 transition ease-in-out duration-300">
+                                    <option value="" disabled >Select some brand</option>
+                                    <Options list={foundBrands}/>
+                                </select>
                             </div>
                             {brandErr?                             
                             <span class="flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1">
-                                The brand can't be blank    
+                                You must choose the brand of your car  
                             </span> : <></>}
                         </div>
 
                         <div class="m-3">
                             <label class="block text-sm font-medium leading-6 text-gray-900">Model</label>
                             <div>
-                                <input
+                                <select
                                 id="modelInput"
                                 value={model}
                                 onChange={()=>setModel(event.target.value)}
                                 type="text" 
-                                class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 focus:outline-none sm:text-sm sm:leading-6 transition ease-in-out duration-300"/>
+                                class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 focus:outline-none sm:text-sm sm:leading-6 transition ease-in-out duration-300">
+                                    <option value="" disabled >Select some model</option>
+                                    <Options list={foundModel}/>
+                                </select>
                             </div>
                             {modelErr?                             
                             <span class="flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1">
-                                The model can't be blank    
+                                You must choose the model of your car   
                             </span> : <></>}
                         </div>
                         
