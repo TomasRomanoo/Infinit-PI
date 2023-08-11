@@ -1,0 +1,49 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model vehicle {
+  idvehicle        Int     @id @default(autoincrement())
+  plate            String  @unique(map: "plate_UNIQUE") @db.VarChar(45)
+  brand            String  @db.VarChar(45)
+  model            String  @db.VarChar(45)
+  detail           String  @db.Text
+  year             Int
+  price_per_day    Float
+  long_description String  @db.Text
+  name             String? @db.VarChar(100)
+}
+
+model brand {
+  idbrand   Int     @id @default(autoincrement())
+  brandName String  @db.VarChar(45)
+  logo      String  @db.VarChar(45)
+  model     model[]
+}
+
+model image {
+  idimage       Int
+  image         String @db.Text
+  model_idmodel Int
+  model         model  @relation(fields: [model_idmodel], references: [idmodel], onDelete: NoAction, onUpdate: NoAction, map: "fk_image_model1")
+
+  @@id([idimage, model_idmodel])
+  @@index([model_idmodel], map: "fk_image_model1_idx")
+}
+
+model model {
+  idmodel       Int
+  modelName     String  @db.VarChar(45)
+  brand_idbrand Int
+  image         image[]
+  brand         brand   @relation(fields: [brand_idbrand], references: [idbrand], onDelete: NoAction, onUpdate: NoAction, map: "fk_model_brand1")
+
+  @@id([idmodel, brand_idbrand])
+  @@index([brand_idbrand], map: "fk_model_brand1_idx")
+  @@unique([idmodel])
+}

@@ -134,12 +134,6 @@ const StoreLinks = () => {
       <Link href="/products/pickups" className="hover:underline">
         Pick Ups
       </Link>
-      <Link href="/products/electric" className="hover:underline">
-        Electric
-      </Link>
-      <Link href="/products/sport" className="hover:underline">
-        Sport
-      </Link>
     </div>
   );
 };
@@ -149,12 +143,6 @@ const AboutLinks = () => {
     <div className="flex flex-col gap-3 mb-2 px-6 md:px-0">
       <Link href="/store-locator" className="hover:underline">
         Store locator
-      </Link>
-      <Link href="/careers" className="hover:underline">
-        Careers
-      </Link>
-      <Link href="/professional" className="hover:underline">
-        Professional
       </Link>
     </div>
   );
@@ -198,26 +186,6 @@ const ContactLinks = () => {
         <div className="flex flex-col ml-10 mt-4">
           <span className="text-gray-500 text-sm">Mon-Fri 08am - 09pm</span>
           <span className="text-gray-500 text-sm">Sat-Sun 09am - 09pm</span>
-        </div>
-      </Link>
-
-      <Link href="/call-us" className="flex flex-col">
-        <div className="flex items-center gap-3">
-          <IoMdCall size={15} />
-          <div className="flex flex-col">
-            <p className="hover:underline">From abroad</p>
-            <p>727-797-2133</p>
-          </div>
-        </div>
-      </Link>
-
-      <Link href="/address" className="flex flex-col">
-        <div className="flex items-center gap-3">
-          <BsInfoCircleFill size={15} />
-          <div className="flex flex-col">
-            <p className="hover:underline">725 NE 166th St</p>
-            <p>Miami, Florida(FL), 33162</p>
-          </div>
         </div>
       </Link>
     </div>
