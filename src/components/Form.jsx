@@ -212,9 +212,6 @@ export const Form = () =>{
                         <div class="m-3">
                             <label class="block text-sm font-medium leading-6 text-gray-900">Detail</label>
                             <div class="w-full max-w-sm mx-auto">
-<<<<<<< HEAD
-                                <textarea class=" block w-full h-24  rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 transition ease-in-out duration-300" placeholder="Enter your car's detail here"></textarea>
-=======
                                 <textarea 
                                 id="detailInput"
                                 class=" block w-full h-24 w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 transition ease-in-out duration-300" 
@@ -222,8 +219,8 @@ export const Form = () =>{
                                 value={detail}
                                 onChange={()=>setDetail(event.target.value)}
                                 ></textarea>
->>>>>>> cb6a9251b13b453c929f9cac93fd30c38400f95b
                             </div>
+                            
                             {detailErr?                             
                             <span class="flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1">
                                 The details can't be blank  
