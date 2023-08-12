@@ -14,12 +14,13 @@ import { LiaKeySolid } from "react-icons/lia";
 
 import { BsNut } from "react-icons/bs";
 import { GoStack } from "react-icons/go";
+import { Infinit } from "./Infinit";
 
 export const Navbar = () => {
   const [user, isUserLogged] = useState(false);
   const [sideMenu, isSideMenuOpen] = useState(false);
-  const [MngmntOpen, isMngmntOpen] = useState(false); 
-  const [MngmntMobileOpen, isMngmntMobileOpen] = useState(false); 
+  const [MngmntOpen, isMngmntOpen] = useState(false);
+  const [MngmntMobileOpen, isMngmntMobileOpen] = useState(false);
 
   const openSidebar = () => {
     isSideMenuOpen(!sideMenu);
@@ -43,35 +44,34 @@ export const Navbar = () => {
 
   const managementClick = () => {
     if (!MngmntOpen) {
-      isMngmntOpen(true)
+      isMngmntOpen(true);
       document.querySelector("#mngmnt").classList.remove("hide-mngmnt");
       document.querySelector("#mngmnt").classList.add("show-mngmnt");
     } else {
-      isMngmntOpen(false)
+      isMngmntOpen(false);
       document.querySelector("#mngmnt").classList.add("hide-mngmnt");
       document.querySelector("#mngmnt").classList.remove("show-mngmnt");
     }
-  }
+  };
 
-  
   const managementClickMobile = () => {
     if (!MngmntMobileOpen) {
-      isMngmntMobileOpen(true)
+      isMngmntMobileOpen(true);
       document.querySelector("#modal").classList.remove("hide-mngmnt");
       document.querySelector("#modal").classList.add("show-mngmnt-mobile");
 
       document.querySelector("#modalBg").classList.remove("hide-mngmnt");
       document.querySelector("#modalBg").classList.add("show-mngmnt-mobile");
     } else {
-      isMngmntMobileOpen(false)
+      isMngmntMobileOpen(false);
       document.querySelector("#modal").classList.add("hide-mngmnt");
       document.querySelector("#modal").classList.remove("show-mngmnt-mobile");
 
       document.querySelector("#modalBg").classList.add("hide-mngmnt");
       document.querySelector("#modalBg").classList.remove("show-mngmnt-mobile");
     }
-    closeSidebar()
-  }
+    closeSidebar();
+  };
 
   return (
     <div
@@ -92,9 +92,7 @@ export const Navbar = () => {
 
         <div className="sm:block hidden">
           <Link href="/">
-            <p className="uppercase font-infinit tracking-widest text-2xl">
-              Infinit
-            </p>
+            <Infinit />
           </Link>
         </div>
         <ul className="hidden lg:flex items-center gap-12 font-poppins">
@@ -229,15 +227,11 @@ export const Navbar = () => {
 
         <div className="flex sm:hidden">
           <Link href="/">
-            <p className="uppercase font-infinit tracking-widest text-2xl">
-              Infinit
-            </p>
+            <Infinit />
           </Link>
         </div>
       </div>
-
       {/* SIDE MENU */}
-
       <div
         className={`absolute top-[79px] bg-white lg:hidden w-[65%] ${
           sideMenu ? "left-0" : "-left-[100%]"
@@ -275,7 +269,10 @@ export const Navbar = () => {
             </Link>
           </li>
           <li className="font-bold p-4  w-full cursor-pointer ">
-            <div className="flex items-center gap-4" onClick={managementClickMobile}>
+            <div
+              className="flex items-center gap-4"
+              onClick={managementClickMobile}
+            >
               <BsNut size={25} />
               <p>Management</p>
             </div>
@@ -327,77 +324,80 @@ export const Navbar = () => {
           </div>
         )}
       </div>
-
       {/* MODAL FOR MOBILE ENGAGEMENT */}
-      <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity hide-mngmnt lg:hidden" id="modalBg"></div>
-      <div className="flex min-h-full justify-center items-center p-0 fixed inset-0 hide-mngmnt lg:hidden" id="modal">
-          <div className="relative">
-            <div className="w-screen max-w-md flex-auto overflow-hidden rounded-3xl bg-white text-sm leading-6 shadow-lg ring-1 ring-gray-900/5">
-              <div className="p-4">
-                <div className="group relative flex gap-x-6 rounded-lg p-4 hover:bg-gray-50">
-                  <div className="mt-1 flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke-width="1.5"
-                      stroke="currentColor"
-                      className="w-6 h-6 group-hover:text-indigo-600"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M12 4.5v15m7.5-7.5h-15"
-                      />
-                    </svg>
-                  </div>
-                  <Link href={"/dashboard"} onClick={managementClickMobile}>
-                    <div>
-                      <div  className="font-semibold text-gray-900">
-                        Add Car
-                        
-                      </div>
-                      <p className="mt-1 text-gray-600">
-                        You can rent your car here{" "}
-                      </p>
-                    </div>
-                  </Link>
+      <div
+        className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity hide-mngmnt lg:hidden"
+        id="modalBg"
+      ></div>
+      <div
+        className="flex min-h-full justify-center items-center p-0 fixed inset-0 hide-mngmnt lg:hidden"
+        id="modal"
+      >
+        <div className="relative">
+          <div className="w-screen max-w-md flex-auto overflow-hidden rounded-3xl bg-white text-sm leading-6 shadow-lg ring-1 ring-gray-900/5">
+            <div className="p-4">
+              <div className="group relative flex gap-x-6 rounded-lg p-4 hover:bg-gray-50">
+                <div className="mt-1 flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    className="w-6 h-6 group-hover:text-indigo-600"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M12 4.5v15m7.5-7.5h-15"
+                    />
+                  </svg>
                 </div>
-                <div className="group relative flex gap-x-6 rounded-lg p-4 hover:bg-gray-50">
-                  <div className="mt-1 flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke-width="1.5"
-                      stroke="currentColor"
-                      className="w-6 h-6 group-hover:text-indigo-600"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M21.75 6.75a4.5 4.5 0 01-4.884 4.484c-1.076-.091-2.264.071-2.95.904l-7.152 8.684a2.548 2.548 0 11-3.586-3.586l8.684-7.152c.833-.686.995-1.874.904-2.95a4.5 4.5 0 016.336-4.486l-3.276 3.276a3.004 3.004 0 002.25 2.25l3.276-3.276c.256.565.398 1.192.398 1.852z"
-                      />
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M4.867 19.125h.008v.008h-.008v-.008z"
-                      />
-                    </svg>
-                  </div>
+                <Link href={"/dashboard"} onClick={managementClickMobile}>
                   <div>
-                    <div  className="font-semibold text-gray-900">
-                      Your rented cars
-                    </div>
+                    <div className="font-semibold text-gray-900">Add Car</div>
                     <p className="mt-1 text-gray-600">
-                      Here you can delete, modify and view analytics{" "}
+                      You can rent your car here{" "}
                     </p>
                   </div>
+                </Link>
+              </div>
+              <div className="group relative flex gap-x-6 rounded-lg p-4 hover:bg-gray-50">
+                <div className="mt-1 flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    className="w-6 h-6 group-hover:text-indigo-600"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M21.75 6.75a4.5 4.5 0 01-4.884 4.484c-1.076-.091-2.264.071-2.95.904l-7.152 8.684a2.548 2.548 0 11-3.586-3.586l8.684-7.152c.833-.686.995-1.874.904-2.95a4.5 4.5 0 016.336-4.486l-3.276 3.276a3.004 3.004 0 002.25 2.25l3.276-3.276c.256.565.398 1.192.398 1.852z"
+                    />
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M4.867 19.125h.008v.008h-.008v-.008z"
+                    />
+                  </svg>
+                </div>
+                <div>
+                  <div className="font-semibold text-gray-900">
+                    Your rented cars
+                  </div>
+                  <p className="mt-1 text-gray-600">
+                    Here you can delete, modify and view analytics{" "}
+                  </p>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  );
+        
+    </div>
+  );
 };
