@@ -132,9 +132,9 @@ export const Form = () => {
         onSubmit={handlerSubmit}
         className="flex items-center flex-col "
       >
-        <div className="flex flex-col md:flex-row">
+        <div className="grid md:grid-cols-2 grid-cols-1">
           <div className="">
-            <div className="m-3">
+            <div className="m-[0.85rem]  ">
               <label className="block text-sm font-medium leading-6 text-gray-900">
                 Brand
               </label>
@@ -144,8 +144,8 @@ export const Form = () => {
                   id="brandInput"
                   type="text"
                   value={brand}
-                  onChange={() => setBrand(event.target.value)}
-                  className="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 focus:outline-none sm:text-sm sm:leading-6 transition ease-in-out duration-300"
+                  onChange={(e) => setBrand(e.target.value)}
+                  className="block w-full cursor-pointer rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 focus:outline-none sm:text-sm sm:leading-6 transition ease-in-out duration-300"
                 >
                   <option value="" disabled>
                     Select some brand
@@ -163,16 +163,16 @@ export const Form = () => {
             </div>
 
             <div className="m-3">
-              <label className="block text-sm font-medium leading-6 text-gray-900">
+              <label className="block  text-sm font-medium leading-6 text-gray-900">
                 Model
               </label>
               <div>
                 <select
                   id="modelInput"
                   value={model}
-                  onChange={() => setModel(event.target.value)}
+                  onChange={(e) => setModel(e.target.value)}
                   type="text"
-                  className="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 focus:outline-none sm:text-sm sm:leading-6 transition ease-in-out duration-300"
+                  className="block mt-2 w-full cursor-pointer rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 focus:outline-none sm:text-sm sm:leading-6 transition ease-in-out duration-300"
                 >
                   <option value="" disabled>
                     Select some model
@@ -230,7 +230,7 @@ export const Form = () => {
 
             <hr className="mt-5 mb-5" />
 
-            <div className="m-3">
+            <div className="m-3  ">
               <label className="block mb-2 text-sm font-medium leading-6 text-gray-900">
                 Upload multiple photos
               </label>
@@ -240,6 +240,7 @@ export const Form = () => {
                   <input
                     multiple
                     type="file"
+                    cursor-pointer
                     className=" text-xs block w-full  text-gray-500 pr-2
                                     ring-2 ring-gray-300 ring-inset rounded-md
                                     file:mr-1 file:py-2 file:px-2
@@ -270,7 +271,7 @@ export const Form = () => {
                   value={plate}
                   onChange={() => setPlate(event.target.value)}
                   type="text"
-                  className="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 focus:outline-none sm:text-sm sm:leading-6 transition ease-in-out duration-300"
+                  className="block mt-2 w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 focus:outline-none sm:text-sm sm:leading-6 transition ease-in-out duration-300"
                 />
               </div>
               {plateErr ? (
@@ -293,8 +294,8 @@ export const Form = () => {
                   min="1886"
                   max="2023"
                   value={year}
-                  onChange={() => setYear(event.target.value)}
-                  className="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 focus:outline-none sm:text-sm sm:leading-6 transition ease-in-out duration-300"
+                  onChange={(e) => setYear(e.target.value)}
+                  className="block mt-2 w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 focus:outline-none sm:text-sm sm:leading-6 transition ease-in-out duration-300"
                 />
               </div>
               {yearErr1 ? (
@@ -320,7 +321,7 @@ export const Form = () => {
               <div className="w-full max-w-sm mx-auto">
                 <textarea
                   id="detailInput"
-                  className=" block h-full w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 focus:outline-none sm:text-sm sm:leading-6 transition ease-in-out duration-300"
+                  className=" block mt-2 h-full w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 focus:outline-none sm:text-sm sm:leading-6 transition ease-in-out duration-300"
                   placeholder="Enter your car's detail here"
                   value={detail}
                   onChange={() => setDetail(event.target.value)}
@@ -328,7 +329,7 @@ export const Form = () => {
               </div>
 
               {detailErr ? (
-                <span className="flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1">
+                <span className="flex  items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1">
                   The details can't be blank
                 </span>
               ) : (
@@ -342,7 +343,7 @@ export const Form = () => {
               </label>
               <div className="w-full max-w-sm mx-auto">
                 <textarea
-                  className=" w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 focus:outline-none sm:text-sm sm:leading-6 transition ease-in-out duration-300"
+                  className=" w-full mt-2 rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 focus:outline-none sm:text-sm sm:leading-6 transition ease-in-out duration-300"
                   id="descriptionInput"
                   placeholder="Enter your description here"
                   value={description}
@@ -360,8 +361,8 @@ export const Form = () => {
           </div>
         </div>
 
-        <div className="m-5 mb-8">
-          <button className="rounded-xl py-3 px-5 text-white bg-primary hover:bg-secondary file:transition-all duration-200 ease-in-out">
+        <div className="m-5 mb-8 ">
+          <button className="rounded-xl py-3 px-5 w-full text-white bg-primary hover:bg-secondary file:transition-all duration-200 ease-in-out">
             Submit
           </button>
         </div>

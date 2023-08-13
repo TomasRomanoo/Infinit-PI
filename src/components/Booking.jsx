@@ -3,10 +3,13 @@ import React from "react";
 import { MdOutlineLocationOn, MdMyLocation } from "react-icons/md";
 import { BiDirections } from "react-icons/bi";
 import { BsCalendar3 } from "react-icons/bs";
+import { motion } from "framer-motion";
+
+
 
 export const Booking = ({vehicle}) => {
   return (
-    <div className="w-full p-6 bg-[#00243f] flex flex-col lg:flex-row items-center justify-around rounded-md shadow-md gap-4">
+    <div  className="w-full p-6 bg-[#00243f] flex flex-col lg:flex-row items-center justify-around rounded-md shadow-md gap-4 mb-12">
       {/* Location */}
       <div className="flex flex-col lg:flex-row items-center w-full ">
         <div className="relative w-full">
