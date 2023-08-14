@@ -5,7 +5,7 @@ import { Card } from "@/components/Card";
 import bluecar from "@/assets/images/blue-car.jpg";
 
 import { motion } from "framer-motion";
-
+import { Pagination } from "antd";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { SkeletonCard } from "@/components/Skeleton.jsx";
@@ -105,6 +105,7 @@ const FleetCarousel = ({ vehicles }) => {
               </div>
             ))
           : // Render actual vehicle cards
+          
             vehicles.map((vehicle, index) => (
               <div key={index}>
                 <motion.div
@@ -127,6 +128,9 @@ const FleetCarousel = ({ vehicles }) => {
               </div>
             ))}
       </div>
-    </motion.div>
+      <div className="mt-20 ">
+        <Pagination defaultCurrent={1} total={30} />
+      </div>
+    </motion.div>  
   );
 };
