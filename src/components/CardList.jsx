@@ -6,15 +6,16 @@ import { SkeletonCard } from "@/components/Skeleton.jsx";
 import { Card } from "./Card";
 
 
-export const CardList = ({vehicles}) => {    
+export const CardList = ({vehicles}) => {   
+    
+    const NUMERO_DE_VEHICULOS_POR_PAGINA = 2
 
     const totalVehicles = vehicles.length    
-    const [vehiclesPerPage,setvehiclesPerPage] = useState(2)
-    const [currentPage, setCurrentPage] = useState(1)
+    const [vehiclesPerPage,setvehiclesPerPage] = useState(NUMERO_DE_VEHICULOS_POR_PAGINA)
+    const [currentPage, setCurrentPage] = useState(1)    
 
     const lastIndex = currentPage * vehiclesPerPage
     const firstIndex = lastIndex - vehiclesPerPage
-
 
     const [isLoading, setIsLoading] = useState(true);
     const container = {
