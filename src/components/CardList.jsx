@@ -8,10 +8,10 @@ import { Card } from "./Card";
 
 export const CardList = ({vehicles}) => {   
     
-    const NUMERO_DE_VEHICULOS_POR_PAGINA = 2
+    const VEHICLES_PER_PAGE = 4
 
     const totalVehicles = vehicles.length    
-    const [vehiclesPerPage,setvehiclesPerPage] = useState(NUMERO_DE_VEHICULOS_POR_PAGINA)
+    const [vehiclesPerPage,setvehiclesPerPage] = useState(VEHICLES_PER_PAGE)
     const [currentPage, setCurrentPage] = useState(1)    
 
     const lastIndex = currentPage * vehiclesPerPage

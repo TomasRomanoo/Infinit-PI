@@ -2,11 +2,8 @@
 import { Footer } from "@/components/Footer";
 import Image from "next/image";
 import bluecar from "@/assets/images/blue-car.jpg";
-<<<<<<< HEAD
 import honda from "@/assets/images/honda-civic.png";
 
-=======
->>>>>>> 60c2ca3faea7b372880e0abb8221de753ccd54be
 import { motion } from "framer-motion";
 import axios from "axios";
 import { useEffect, useState } from "react";

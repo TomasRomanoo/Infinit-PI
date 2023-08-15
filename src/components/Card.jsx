@@ -25,35 +25,18 @@ export const Card = (props) => {
           </div>
         </div>
 
-<<<<<<< HEAD
       <div className="flex items-center justify-between">
         <p className="ml-4">
           <span className="font-semibold">${props.vehicle.price_per_day}</span>
           <span className="text-gray-400">/day</span>
         </p>
         <button className="bg-primary font-semibold text-white px-8 py-3 rounded-tl-2xl hover:bg-tertiary transition-all duration-300 ease-in-out">
-          <Link href={`/vehicles/${props.vehicle.idvehicle}`} passHref>
+          <Link href={`/vehicles/${props.vehicle.name}`} passHref>
             Details
           </Link>
         </button>
       </div>
     </div>
-=======
-        <div className="flex items-center justify-between">
-          <p className="ml-4">
-            <span className="font-semibold">${props.vehicle.price_per_day}</span>
-            <span className="text-gray-400">/day</span>
-          </p>
-          <button className="bg-primary font-semibold text-white px-8 py-3 rounded-tl-2xl hover:bg-tertiary transition-all duration-300 ease-in-out">
-            <Link href={`/vehicles/${formattedName}`} passHref>
-              Details
-            </Link>
-          </button>
-        </div>
-              
-      </div>  
-      
->>>>>>> 60c2ca3faea7b372880e0abb8221de753ccd54be
   );
   
   

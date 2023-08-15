@@ -20,7 +20,7 @@ const Dashboard = () => {
   const [deleteVehicles, setDeleteVehicles] = useState(false);
 
   const renderComponent = (option) => {
-    setForm();
+    setForm(option);
   };
 
   return (
