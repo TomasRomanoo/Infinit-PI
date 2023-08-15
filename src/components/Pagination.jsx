@@ -1,41 +1,44 @@
-import { useState } from "react"
 
-export const Pagination = ({currentPage}) => {
 
-    let [num, setNum] = useState(1)
-    // const [currentPage, setCurrentPage] = useState(1)
+export const Pagination = ({currentPage, vehiclesPerPage,setCurrentPage,totalVehicles}) => {
 
-    const pages = [
-        { page: num },
-        { page: num + 1 },
-        { page: num + 2 },
-        { page: num + 3 },
-    ]
+    const pageNumber = []
+
+    for (let i=1; i<= Math.ceil(totalVehicles/vehiclesPerPage); i++){
+        
+        pageNumber.push(i)
+    }
     function Next ()
     {
-        setNum(++num)
+        setCurrentPage(currentPage + 1)
     }
     function back ()
     {
-        num > 1 && setNum(--num)
+        setCurrentPage(currentPage - 1)
     }
     return ( 
-        <div className="text-center">
-            <div className="flex bg-white rounded-lg font-[Poppins] items-center">
-                <button onClick={back} className="h-12 border-2 border-r-0 border-primary
-                    px-4 rounded-l-lg hover:bg-primary hover:text-white">
-                    <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" fill-rule="evenodd"></path>
+        <div className="flex justify-center">
+            <div className=" bg-white rounded-lg font-[Poppins] flex items-center">
+                <button onClick={back}
+                className={`h-12 border-2 border-r-0 border-primary px-4 rounded-l-lg hover:bg-primary hover:text-white 
+                ${currentPage === 1 ? "cursor-not-allowed opacity-30" : ""}`} disabled={currentPage === 1}>
+                    <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                        <path d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" fill-rule="evenodd">                            
+                        </path>
                     </svg>
                 </button>
                 {
-                    pages.map((pg, i) => (
-                    <button key={i} onClick={() => setCurrent(pg.page)} className={`h-12 border-2 border-r-0 border-primary
-                    w-12 ${currentPage === pg.page && 'bg-primary text-white'}`}>{pg.page}</button>
+                    pageNumber.map((pg, i) => (
+                    <button key={i} onClick={() => setCurrentPage(pg)} className={`h-12 border-2 border-r-0 border-primary
+                    w-12 ${currentPage === pg && 'bg-primary text-white'}`}>{pg}</button>
                     ))
                 }
-                <button onClick={Next} className="h-12 border-2  border-primary
-                    px-4 rounded-r-lg hover:bg-primary hover:text-white">
-                    <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" fill-rule="evenodd"></path></svg>
+                <button onClick={Next} className={`h-12 border-2  border-primary px-4 rounded-r-lg hover:bg-primary hover:text-white
+                ${currentPage >= pageNumber.length ? "cursor-not-allowed opacity-30" : ""}`} disabled={currentPage >= pageNumber.length}>
+                    <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                        <path d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" fill-rule="evenodd">                            
+                        </path>
+                    </svg>
                 </button>
             </div>
         </div>

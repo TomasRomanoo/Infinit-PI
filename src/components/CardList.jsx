@@ -1,31 +1,25 @@
-import Image from "next/image";
-import Link from "next/link";
-import axios from "axios";
+
 import React,{ useEffect, useState } from "react";
-import image from "@/assets/images/honda-civic.png"
 import { Pagination } from "./Pagination";
 import { motion } from "framer-motion";
 import { SkeletonCard } from "@/components/Skeleton.jsx";
 import { Card } from "./Card";
 
 
+export const CardList = ({vehicles}) => {    
 
+    const totalVehicles = vehicles.length    
+    const [vehiclesPerPage,setvehiclesPerPage] = useState(2)
+    const [currentPage, setCurrentPage] = useState(1)
 
-export const CardList = ({vehicles}) => {
+    const lastIndex = currentPage * vehiclesPerPage
+    const firstIndex = lastIndex - vehiclesPerPage
 
-    console.log("prop vehicles: ",vehicles);
 
     const [isLoading, setIsLoading] = useState(true);
     const container = {
     // ... existing container animation properties ...
     };
-
-
-    const [products,setProducts] = useState([])
-    const [productsPerPage,setProductsPerPage] = useState(10)
-    const [currentPage, setCurrentPage] = useState(1)
-
-
     useEffect(() => {
     const loadingTimeout = setTimeout(() => {
       setIsLoading(false); // Set loading to false after the timeout
@@ -78,12 +72,17 @@ export const CardList = ({vehicles}) => {
                         <Card vehicle={vehicle} />
                         </motion.div>
                     </div>              
-                    ))}
+                    )).slice(firstIndex, lastIndex)}
             </div>  
-                
+        
         </motion.div> 
         <div className="mt-10 ">
-            <Pagination currentPage={currentPage} productsPerPage={productsPerPage} />
+            <Pagination
+                currentPage={currentPage} 
+                vehiclesPerPage={vehiclesPerPage} 
+                setCurrentPage={setCurrentPage}
+                totalVehicles={totalVehicles} 
+            />
         </div>
         </>
         
