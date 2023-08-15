@@ -225,7 +225,7 @@ export const Navbar = () => {
           )}
         </div>
 
-        <div className="flex sm:hidden">
+        <div className="flex sm:hidden" >
           <Link href="/">
             <Infinit />
           </Link>

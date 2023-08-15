@@ -13,12 +13,14 @@ import {
 
 import { FaPencilAlt } from "react-icons/fa";
 import { SiGoogleanalytics } from "react-icons/si";
+import { Infinit } from "@/components/Infinit";
 
 const Dashboard = () => {
   const [form, setForm] = useState(false);
+  const [deleteVehicles, setDeleteVehicles] = useState(false);
 
   const renderComponent = (option) => {
-    setForm(option);
+    setForm();
   };
 
   return (
@@ -26,7 +28,11 @@ const Dashboard = () => {
       <Sidebar renderComponent={renderComponent} />
       <div className="lg:w-4/6 w-full pt-10 mb-10 lg:mx-10 h-auto rounded-2xl shadow-md font-poppins content-around flex-col bg-white">
         <Toaster position="bottom-right" richColors expand={false} />
+        <p className="flex flex-col justify-center items-center text-2xl pb-6">
+          Dashbaord
+        </p>
         {form && <Form />}
+        {deleteVehicles && <DeleteVehicles />}
       </div>
     </div>
   );

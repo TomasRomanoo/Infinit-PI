@@ -38,7 +38,7 @@ export async function GET() {
   console.log('La función GETALL ha sido llamada.');
   try {
     const cars = await prisma.vehicle.findMany();
-    return NextResponse.json(cars, { status: 200 });
+    return NextResponse.json(cars, { status: 200, data: cars });
   } catch (error) {
     console.error(error);
     return NextResponse.json({ mensaje: 'Error al obtener los autos' }, { status: 500 });

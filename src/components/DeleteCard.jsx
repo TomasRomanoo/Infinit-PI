@@ -1,18 +1,28 @@
 import Image from "next/image";
-import Link from "next/link";
 import React from "react";
 
-import image from "@/assets/images/honda-civic.png"
+import image from "@/assets/images/honda-civic.png";
+import axios from "axios";
 
+export const DeleteCard = (props) => {
+  const deleteCar = (id) => {
+    Swal.fire({
+      title: `Delete the car with the id` + id,
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios.delete(`/api/vehicles/${id}`).then((res) => {
+          Swal.fire(res.data);
+        });
+      }
+    });
+  };
 
-
-
-export const Card = (props) => {
-  const formattedName = props.vehicle
-    ? `${props.vehicle.brand.toLowerCase()}-${props.vehicle.model.toLowerCase()}-${
-        props.vehicle.year
-      }`
-    : "";
   return (
     <div className=" w-full  rounded-2xl overflow-hidden shadow-md flex flex-col font-poppins relative hover:shadow-lg transition-all duration-200">
       <div className="flex items-center justify-between p-4">
@@ -33,10 +43,13 @@ export const Card = (props) => {
           <span className="font-semibold">${props.vehicle.price_per_day}</span>
           <span className="text-gray-400">/day</span>
         </p>
-        <button className="bg-primary font-semibold text-white px-8 py-3 rounded-tl-2xl hover:bg-tertiary transition-all duration-300 ease-in-out">
-          <Link href={`/vehicles/${props.vehicle.idvehicle}`} passHref>
-            Details
-          </Link>
+        <button
+          className="bg-red-600 font-semibold text-white px-8 py-3 rounded-tl-2xl hover:bg-black transition-all duration-300 ease-in-out"
+          onClick={() => {
+            deleteCar();
+          }}
+        >
+          Delete
         </button>
       </div>
     </div>
