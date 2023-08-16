@@ -1,19 +1,15 @@
 "use client";
-import { Footer } from "@/components/Footer";
 import Image from "next/image";
 import { Card } from "@/components/Card";
 
 import bluecar from "@/assets/images/blue-car.jpg";
-import honda from "@/assets/images/honda-civic.png";
 
 import { motion } from "framer-motion";
 
-import { Swiper, SwiperSlide, useSwiper } from "swiper/react";
-import { Navigation, Pagination } from "swiper";
-import swiperConfig from "../utils/swiperConfig.ts";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { SkeletonCard } from "@/components/Skeleton.jsx";
+import { Booking } from "@/components/Booking.jsx";
 
 export default function Home() {
   const [vehicles, setVehicles] = useState([]);
@@ -28,14 +24,16 @@ export default function Home() {
     fetchVehicles();
   }, []);
 
-  
-
   return (
     <div id="" className="">
+      <motion.div
+        initial={{ opacity: 0, y: -100 }}
+        animate={{ opacity: 1, y: 0, transition: { duration: 0.3 } }}
+      >
+        <Booking />
+      </motion.div>
       <Hero />
-    
       <FleetCarousel vehicles={vehicles} />
-      <Footer />
     </div>
   );
 }
@@ -132,4 +130,3 @@ const FleetCarousel = ({ vehicles }) => {
     </motion.div>
   );
 };
-

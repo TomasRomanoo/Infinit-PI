@@ -12,6 +12,11 @@ import Image from "next/image";
 
 import mock from "@/assets/images/mock.png";
 import peugeot from "@/assets/images/peugeot.jpg";
+import peugeot2 from "@/assets/images/peugeot-2.jpg";
+import peugeot3 from "@/assets/images/peugeot-3.jpg";
+import peugeot4 from "@/assets/images/peugeot-4.jpg";
+import peugeot5 from "@/assets/images/peugeot-5.jpg";
+
 
 import { MdOutlineLocationOn, MdMyLocation } from "react-icons/md";
 import { BiDirections } from "react-icons/bi";
@@ -25,17 +30,17 @@ import { Booking } from "@/components/Booking";
 const Detail = (vehicle) => {
   const images = [
     { id: 1, url: peugeot },
-    { id: 2, url: peugeot },
-    { id: 3, url: peugeot },
-    { id: 4, url: peugeot },
-    { id: 5, url: peugeot },
+    { id: 2, url: peugeot2 },
+    { id: 3, url: peugeot3 },
+    { id: 4, url: mock },
+    { id: 5, url: peugeot5 },
     { id: 6, url: peugeot },
     { id: 7, url: mock },
     { id: 8, url: mock },
     { id: 9, url: mock },
-    { id: 10, url: mock },
+    { id: 10, url: peugeot2 },
     { id: 11, url: mock },
-    { id: 12, url: mock },
+    { id: 12, url: peugeot },
     { id: 13, url: mock },
   ];
 
@@ -120,7 +125,7 @@ const Gallery = ({
               >
                 <Image
                   key={key}
-                  className="object-contain rounded-lg"
+                  className=" rounded-lg object-contain"
                   src={image.url}
                   alt={`Image ${image.id}`}
                 />
@@ -142,7 +147,7 @@ const Gallery = ({
 const GalleryModal = ({ selectedImageId, images, close }) => {
   return (
     <div
-      className=" w-[90%] absolute top-[40rem] lg:top-[25rem] left-[5%] z-10 bg-white md:p-6 border-8 border-primary rounded-md opacity-100"
+      className=" w-[90%] absolute top-[40rem] lg:top-[25rem] left-[5%] z-10 bg-white md:p-2 rounded-md opacity-100"
       id="gallery"
     >
       <div className="relative ">
