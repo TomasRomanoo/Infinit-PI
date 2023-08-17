@@ -76,6 +76,7 @@ const Hero = () => {
     </div>
   );
 };
+<<<<<<< HEAD
 // SE MIGRO FLEETCARROUSEL AL COMPONENTE CARDLIST
 
 // const FleetCarousel = ({ vehicles }) => {
@@ -142,3 +143,5 @@ const Hero = () => {
 //     </motion.div>
 //   );
 // };
+=======
+>>>>>>> 37afb1144f4c43ad9c8e1eae6628269bda4a4c74
