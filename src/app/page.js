@@ -29,9 +29,7 @@ export default function Home() {
       >
         <Booking />
       </motion.div>
-      <Hero />
-      {/* SE MIGRO EL COMPONENTE FLETTCARROUSEL A CARDLIST */}
-      {/* <FleetCarousel vehicles={vehicles} /> */} 
+      <Hero />      
       <div className="">
         <CardList vehicles={vehicles}/>
       </div>
@@ -70,70 +68,3 @@ const Hero = () => {
     </div>
   );
 };
-                          // SE MIGRO FLEETCARROUSEL AL COMPONENTE CARDLIST
-
-// const FleetCarousel = ({ vehicles }) => {
-//   const [isLoading, setIsLoading] = useState(true); // Add a loading state
-//   const container = {
-//     // ... existing container animation properties ...
-//   };
-
-//   useEffect(() => {
-//     const loadingTimeout = setTimeout(() => {
-//       setIsLoading(false); // Set loading to false after the timeout
-//     }, 2000); // Adjust the timeout duration as needed
-
-//     return () => {
-//       clearTimeout(loadingTimeout); // Clear the timeout if the component unmounts
-//     };
-//   }, []);
-
-//   return (
-//     <motion.div
-//       variants={container}
-//       initial="hidden"
-//       animate="show"
-//       className="flex flex-col items-center mt-20"
-//     >
-//       <p className="font-poppins text-4xl mb-2 text-center">
-//         Take a look to our fleet
-//       </p>
-
-//       <div className="grid grid-cols-1 md:grid-cols-2 grid-flow-row gap-12 w-full">
-//         {isLoading
-//           ? // Display skeleton cards while loading
-//             Array.from({ length: 4 }).map((_, index) => (
-//               <div key={index}>
-//                 <SkeletonCard />
-//               </div>
-//             ))
-//           : // Render actual vehicle cards
-
-//             vehicles.map((vehicle, index) => (
-//               <div key={index}>
-//                 <motion.div
-//                   initial={{
-//                     x: -300,
-//                     opacity: 0,
-//                   }}
-//                   whileInView={{
-//                     x: 0,
-//                     opacity: 1,
-//                     transition: {
-//                       duration: 0.5,
-//                       ease: "easeOut",
-//                     },
-//                   }}
-//                   viewport={{ once: true }}
-//                 >
-                  
-//                   <Card vehicle={vehicle} />
-//                 </motion.div>
-//               </div>              
-//             ))}
-//       </div>      
-      
-        
-//     </motion.div>  
-//   );
-// };

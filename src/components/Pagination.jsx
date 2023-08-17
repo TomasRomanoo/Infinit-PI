@@ -33,8 +33,9 @@ export const Pagination = ({currentPage, vehiclesPerPage,setCurrentPage,totalVeh
                     w-12 ${currentPage === pg && 'bg-primary text-white'}`}>{pg}</button>
                     ))
                 }
-                <button onClick={Next} className={`h-12 border-2  border-primary px-4 rounded-r-lg hover:bg-primary hover:text-white
-                ${currentPage >= pageNumber.length ? "cursor-not-allowed opacity-30" : ""}`} disabled={currentPage >= pageNumber.length}>
+                <button onClick={Next} 
+                className={`h-12 border-2 border-primary px-4 rounded-r-lg hover:bg-primary hover:text-white
+                ${currentPage >= pageNumber.length ? "cursor-not-allowed opacity-30 border-l-0 " : ""}`} disabled={currentPage >= pageNumber.length}>
                     <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
                         <path d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" fill-rule="evenodd">                            
                         </path>
