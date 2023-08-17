@@ -1,6 +1,9 @@
 "use client";
+import { Footer } from "@/components/Footer";
 import Image from "next/image";
 import bluecar from "@/assets/images/blue-car.jpg";
+import honda from "@/assets/images/honda-civic.png";
+
 import { motion } from "framer-motion";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -14,7 +17,7 @@ export default function Home() {
   const fetchVehicles = async () => {
     const res = await axios("http://localhost:3000/api/vehicles");
 
-    setVehicles(res.data);
+    setVehicles(res.data.slice(0, 10));
   };
 
   useEffect(() => {

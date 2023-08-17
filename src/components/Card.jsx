@@ -5,11 +5,12 @@ import React from "react";
 import image from "@/assets/images/honda-civic.png"
 
 export const Card = (props) => {
-  const formattedName = props.vehicle
-    ? `${props.vehicle.brand.toLowerCase()}-${props.vehicle.model.toLowerCase()}-${
-        props.vehicle.year
-      }`
-    : "";
+  // const formattedName = props.vehicle
+  // ? `${props.vehicle.brand.toLowerCase()}-${props.vehicle.model.toLowerCase()}-${
+  //   props.vehicle.year
+  // }`
+  // : "";
+  
   return (
       <div className=" w-full  rounded-2xl overflow-hidden shadow-md flex flex-col font-poppins relative hover:shadow-lg transition-all duration-200">
         <div className="flex items-center justify-between p-4">
@@ -25,20 +26,18 @@ export const Card = (props) => {
           </div>
         </div>
 
-        <div className="flex items-center justify-between">
-          <p className="ml-4">
-            <span className="font-semibold">${props.vehicle.price_per_day}</span>
-            <span className="text-gray-400">/day</span>
-          </p>
-          <button className="bg-primary font-semibold text-white px-8 py-3 rounded-tl-2xl hover:bg-tertiary transition-all duration-300 ease-in-out">
-            <Link href={`/vehicles/${formattedName}`} passHref>
-              Details
-            </Link>
-          </button>
-        </div>
-              
-      </div>  
-      
+      <div className="flex items-center justify-between">
+        <p className="ml-4">
+          <span className="font-semibold">${props.vehicle.price_per_day}</span>
+          <span className="text-gray-400">/day</span>
+        </p>
+        <button className="bg-primary font-semibold text-white px-8 py-3 rounded-tl-2xl hover:bg-tertiary transition-all duration-300 ease-in-out">
+          <Link href={`/vehicles/${props.vehicle.name}`} passHref>
+            Details
+          </Link>
+        </button>
+      </div>
+    </div>
   );
   
   

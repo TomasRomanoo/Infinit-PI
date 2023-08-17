@@ -9,6 +9,8 @@ import {
   AiOutlineClose,
   AiOutlineCar,
   AiOutlineInfoCircle,
+  AiOutlineEdit,
+  AiOutlineDelete,
 } from "react-icons/ai";
 import { LiaKeySolid } from "react-icons/lia";
 
@@ -133,6 +135,27 @@ export const Navbar = () => {
               <div id="mngmnt" className="hide-mngmnt">
                 <div className="w-screen max-w-md flex-auto overflow-hidden rounded-3xl bg-white text-sm leading-6 shadow-lg ring-1 ring-gray-900/5">
                   <div className="p-4">
+        {/* --------------------------------- FLEETS --------------------------------- */}
+                    <div className="group relative flex gap-x-6 rounded-lg p-4 hover:bg-gray-50">
+                      <div className="mt-1 flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
+                        <AiOutlineCar   className="w-6 h-6 group-hover:text-indigo-600" />
+                      </div>
+                      <Link
+                      href="/dashboard/[path]" 
+                      as="/dashboard/fleet"
+                      onClick={managementClick}>
+                        <div>
+                          <button className="font-semibold text-gray-900">
+                            Show Fleet
+                            <span className="absolute inset-0"></span>
+                          </button>
+                          <p className="mt-1 text-gray-600">
+                            Quickly access the cars you have rented.
+                          </p>
+                        </div>
+                      </Link>
+                    </div>
+        {/* ----------------------------------- ADD ---------------------------------- */ }
                     <div className="group relative flex gap-x-6 rounded-lg p-4 hover:bg-gray-50">
                       <div className="mt-1 flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
                         <svg
@@ -150,49 +173,61 @@ export const Navbar = () => {
                           />
                         </svg>
                       </div>
-                      <Link href={"/dashboard"} onClick={managementClick}>
+                      <Link 
+                      href="/dashboard/[path]" 
+                      as="/dashboard/add"
+                      onClick={managementClick}>
                         <div>
                           <button className="font-semibold text-gray-900">
                             Add Car
                             <span className="absolute inset-0"></span>
                           </button>
                           <p className="mt-1 text-gray-600">
-                            You can rent your car here{" "}
+                            Expand your leased fleet in a simple way.
                           </p>
                         </div>
                       </Link>
                     </div>
+        {/* ----------------------------------- MODIFY ---------------------------------- */ }
                     <div className="group relative flex gap-x-6 rounded-lg p-4 hover:bg-gray-50">
                       <div className="mt-1 flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke-width="1.5"
-                          stroke="currentColor"
-                          className="w-6 h-6 group-hover:text-indigo-600"
-                        >
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M21.75 6.75a4.5 4.5 0 01-4.884 4.484c-1.076-.091-2.264.071-2.95.904l-7.152 8.684a2.548 2.548 0 11-3.586-3.586l8.684-7.152c.833-.686.995-1.874.904-2.95a4.5 4.5 0 016.336-4.486l-3.276 3.276a3.004 3.004 0 002.25 2.25l3.276-3.276c.256.565.398 1.192.398 1.852z"
-                          />
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M4.867 19.125h.008v.008h-.008v-.008z"
-                          />
-                        </svg>
+                        <AiOutlineEdit className="w-6 h-6 group-hover:text-indigo-600" />
                       </div>
-                      <div>
-                        <button className="font-semibold text-gray-900">
-                          Your rented cars
-                          <span className="absolute inset-0"></span>
-                        </button>
-                        <p className="mt-1 text-gray-600">
-                          Here you can delete, modify and view analytics{" "}
-                        </p>
+                      <Link
+                      href="/dashboard/[path]" 
+                      as="/dashboard/modify"
+                      onClick={managementClick}>
+                        <div>
+                          <button className="font-semibold text-gray-900">
+                            Edit your cars rental
+                            <span className="absolute inset-0"></span>
+                          </button>
+                          <p className="mt-1 text-gray-600">
+                            Adjust and update your vehicles' information for a personalized experience.
+                          </p>
+                        </div>
+                      </Link>
+                    </div>
+        {/* --------------------------------- DELETE --------------------------------- */}
+                    <div className="group relative flex gap-x-6 rounded-lg p-4 hover:bg-gray-50">
+                      <div className="mt-1 flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
+                        <AiOutlineDelete  className="w-6 h-6 group-hover:text-indigo-600" />
                       </div>
+                      <Link
+                      href="/dashboard/[path]" 
+                      as="/dashboard/delete"
+                      onClick={managementClick}
+                      >
+                        <div>
+                          <button className="font-semibold text-gray-900">
+                            Delete your car rental  
+                            <span className="absolute inset-0"></span>
+                          </button>
+                          <p className="mt-1 text-gray-600">
+                            Easily remove vehicles from your leased fleet.
+                          </p>
+                        </div>
+                      </Link>
                     </div>
                   </div>
                 </div>
@@ -225,7 +260,7 @@ export const Navbar = () => {
           )}
         </div>
 
-        <div className="flex sm:hidden">
+        <div className="flex sm:hidden" >
           <Link href="/">
             <Infinit />
           </Link>
@@ -325,76 +360,109 @@ export const Navbar = () => {
         )}
       </div>
       {/* MODAL FOR MOBILE ENGAGEMENT */}
-      <div
-        className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity hide-mngmnt lg:hidden"
-        id="modalBg"
-      ></div>
-      <div
-        className="flex min-h-full justify-center items-center p-0 fixed inset-0 hide-mngmnt lg:hidden"
-        id="modal"
-      >
+      <div  className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity hide-mngmnt lg:hidden" id="modalBg"></div>
+      <div id="modal" className="flex min-h-full justify-center items-center p-0 fixed inset-0 hide-mngmnt lg:hidden">
         <div className="relative">
-          <div className="w-screen max-w-md flex-auto overflow-hidden rounded-3xl bg-white text-sm leading-6 shadow-lg ring-1 ring-gray-900/5">
-            <div className="p-4">
-              <div className="group relative flex gap-x-6 rounded-lg p-4 hover:bg-gray-50">
-                <div className="mt-1 flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                    className="w-6 h-6 group-hover:text-indigo-600"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M12 4.5v15m7.5-7.5h-15"
-                    />
-                  </svg>
-                </div>
-                <Link href={"/dashboard"} onClick={managementClickMobile}>
-                  <div>
-                    <div className="font-semibold text-gray-900">Add Car</div>
-                    <p className="mt-1 text-gray-600">
-                      You can rent your car here{" "}
-                    </p>
+
+
+          <div className=" m-5 max-w-md flex-auto overflow-hidden rounded-3xl bg-white text-sm leading-6 shadow-lg ring-1 ring-gray-900/5">
+                  <div className="p-4">
+        {/* --------------------------------- FLEETS --------------------------------- */}
+                    <div className="group relative flex gap-x-6 rounded-lg p-4 hover:bg-gray-50">
+                      <div className="mt-1 flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
+                        <AiOutlineCar   className="w-6 h-6 group-hover:text-indigo-600" />
+                      </div>
+                      <Link
+                      href="/dashboard/[path]" 
+                      as="/dashboard/fleet"
+                      onClick={managementClick}>
+                        <div>
+                          <button className="font-semibold text-gray-900">
+                            Show Fleet
+                            <span className="absolute inset-0"></span>
+                          </button>
+                          <p className="mt-1 text-gray-600">
+                            Quickly access the cars you have rented.
+                          </p>
+                        </div>
+                      </Link>
+                    </div>
+        {/* ----------------------------------- ADD ---------------------------------- */ }
+                    <div className="group relative flex gap-x-6 rounded-lg p-4 hover:bg-gray-50">
+                      <div className="mt-1 flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke-width="1.5"
+                          stroke="currentColor"
+                          className="w-6 h-6 group-hover:text-indigo-600"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M12 4.5v15m7.5-7.5h-15"
+                          />
+                        </svg>
+                      </div>
+                      <Link 
+                      href="/dashboard/[path]" 
+                      as="/dashboard/add"
+                      onClick={managementClick}>
+                        <div>
+                          <button className="font-semibold text-gray-900">
+                            Add Car
+                            <span className="absolute inset-0"></span>
+                          </button>
+                          <p className="mt-1 text-gray-600">
+                            Expand your leased fleet in a simple way.
+                          </p>
+                        </div>
+                      </Link>
+                    </div>
+        {/* ----------------------------------- MODIFY ---------------------------------- */ }
+                    <div className="group relative flex gap-x-6 rounded-lg p-4 hover:bg-gray-50">
+                      <div className="mt-1 flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
+                        <AiOutlineEdit className="w-6 h-6 group-hover:text-indigo-600" />
+                      </div>
+                      <Link
+                      href="/dashboard/[path]" 
+                      as="/dashboard/modify"
+                      onClick={managementClick}>
+                        <div>
+                          <button className="font-semibold text-gray-900">
+                            Edit your cars rental
+                            <span className="absolute inset-0"></span>
+                          </button>
+                          <p className="mt-1 text-gray-600">
+                            Adjust and update your vehicles' information for a personalized experience.
+                          </p>
+                        </div>
+                      </Link>
+                    </div>
+        {/* --------------------------------- DELETE --------------------------------- */}
+                    <div className="group relative flex gap-x-6 rounded-lg p-4 hover:bg-gray-50">
+                      <div className="mt-1 flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
+                        <AiOutlineDelete  className="w-6 h-6 group-hover:text-indigo-600" />
+                      </div>
+                      <Link
+                      href="/dashboard/[path]" 
+                      as="/dashboard/delete"
+                      onClick={managementClick}
+                      >
+                        <div>
+                          <button className="font-semibold text-gray-900">
+                            Delete your car rental  
+                            <span className="absolute inset-0"></span>
+                          </button>
+                          <p className="mt-1 text-gray-600">
+                            Easily remove vehicles from your leased fleet.
+                          </p>
+                        </div>
+                      </Link>
+                    </div>
                   </div>
-                </Link>
-              </div>
-              <div className="group relative flex gap-x-6 rounded-lg p-4 hover:bg-gray-50">
-                <div className="mt-1 flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                    className="w-6 h-6 group-hover:text-indigo-600"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M21.75 6.75a4.5 4.5 0 01-4.884 4.484c-1.076-.091-2.264.071-2.95.904l-7.152 8.684a2.548 2.548 0 11-3.586-3.586l8.684-7.152c.833-.686.995-1.874.904-2.95a4.5 4.5 0 016.336-4.486l-3.276 3.276a3.004 3.004 0 002.25 2.25l3.276-3.276c.256.565.398 1.192.398 1.852z"
-                    />
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M4.867 19.125h.008v.008h-.008v-.008z"
-                    />
-                  </svg>
                 </div>
-                <div>
-                  <div className="font-semibold text-gray-900">
-                    Your rented cars
-                  </div>
-                  <p className="mt-1 text-gray-600">
-                    Here you can delete, modify and view analytics{" "}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
         
