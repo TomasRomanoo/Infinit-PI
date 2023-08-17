@@ -17,7 +17,6 @@ import peugeot3 from "@/assets/images/peugeot-3.jpg";
 import peugeot4 from "@/assets/images/peugeot-4.jpg";
 import peugeot5 from "@/assets/images/peugeot-5.jpg";
 
-
 import { MdOutlineLocationOn, MdMyLocation } from "react-icons/md";
 import { BiDirections } from "react-icons/bi";
 import { BsCalendar3 } from "react-icons/bs";
@@ -28,12 +27,9 @@ import swiperConfig from "@/utils/swiperConfig";
 import { Booking } from "@/components/Booking";
 
 const Detail = (vehicle) => {
- 
-
   const router = useRouter();
   const [isGalleryOpen, setGalleryOpen] = useState(false);
   const [selectedImageId, setSelectedImageId] = useState(null);
-
 
   const openGalleryModal = (imageId) => {
     setSelectedImageId(imageId);
@@ -46,7 +42,11 @@ const Detail = (vehicle) => {
   return (
     <>
       {isGalleryOpen && (
-        <GalleryModal images={vehicle.images} close={closeGalleryModal} selectedImageId={selectedImageId} />
+        <GalleryModal
+          images={vehicle.images}
+          close={closeGalleryModal}
+          selectedImageId={selectedImageId}
+        />
       )}
       <div
         className={`flex flex-col gap-4 ${
@@ -75,6 +75,8 @@ const Detail = (vehicle) => {
             setSelectedImageId={setSelectedImageId}
             images={images}
           />
+
+          <Specs />
           <div className="flex flex-col items-start gap-6">
             <p className="text-poppins text-2xl mt-10">Description</p>
 
@@ -91,15 +93,20 @@ const Gallery = ({
   openGalleryModal,
   closeGalleryModal,
   images,
-  setSelectedImageId
+  setSelectedImageId,
 }) => {
-
   return (
     <div className={`relative ${isGalleryOpen ? "opacity-10" : "opacity-100"}`}>
       <div className="flex flex-col lg:flex-row items-center justify-center w-full gap-4">
         {/* Main Image */}
-        <div className="w-full hover:brightness-75 transition-all duration-200 self-stretch cursor-pointer" onClick={() => openGalleryModal(images[0].id)}>
-          <Image className="object-contain rounded-lg" src={vehicle.images[0].url} />
+        <div
+          className="w-full hover:brightness-75 transition-all duration-200 self-stretch cursor-pointer"
+          onClick={() => openGalleryModal(vehicle.images[0].url)}
+        >
+          <Image
+            className="object-contain rounded-lg"
+            src={vehicle.images[0].url}
+          />
         </div>
 
         <div className="flex flex-col gap-4 w-full lg:w-3/4">
@@ -149,7 +156,9 @@ const GalleryModal = ({ selectedImageId, images, close }) => {
           navigation
           pagination={{ clickable: true }}
           className="h-full"
-          initialSlide={vehicle.images.findIndex((image) => image.id === selectedImageId)}
+          initialSlide={vehicle.images.findIndex(
+            (image) => image.id === selectedImageId
+          )}
         >
           {vehicle.images.map((image) => {
             return (
@@ -170,5 +179,19 @@ const GalleryModal = ({ selectedImageId, images, close }) => {
   );
 };
 
+const Specs = ({ specifications }) => {
+  return (
+    <div className="grid grid-cols-2 md:grid-cols-3 grid-flow-row">
+      {specifications.map((spec, index) => {
+        return (
+          <div className="flex items-center gap-4" key={index}>
+            <Image src={spec.image} />
+            <p className="font-poppins text-lg">{spec.description}</p>
+          </div>
+        );
+      })}
+    </div>
+  );
+};
 
 export default Detail;

@@ -8,8 +8,7 @@ import { motion } from "framer-motion";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Booking } from "@/components/Booking.jsx";
-import {CardList} from "@/components/CardList";
-
+import { CardList } from "@/components/CardList";
 
 export default function Home() {
   const [vehicles, setVehicles] = useState([]);
@@ -34,9 +33,13 @@ export default function Home() {
       </motion.div>
       <Hero />
       {/* SE MIGRO EL COMPONENTE FLETTCARROUSEL A CARDLIST */}
-      {/* <FleetCarousel vehicles={vehicles} /> */} 
-      <div className="">
-        <CardList vehicles={vehicles}/>
+      {/* <FleetCarousel vehicles={vehicles} /> */}
+
+      <div>
+        <p className="font-poppins text-4xl mb-2 text-center">
+          Take a look to our fleet
+        </p>
+        <CardList vehicles={vehicles} />
       </div>
     </div>
   );
@@ -73,7 +76,7 @@ const Hero = () => {
     </div>
   );
 };
-                          // SE MIGRO FLEETCARROUSEL AL COMPONENTE CARDLIST
+// SE MIGRO FLEETCARROUSEL AL COMPONENTE CARDLIST
 
 // const FleetCarousel = ({ vehicles }) => {
 //   const [isLoading, setIsLoading] = useState(true); // Add a loading state
@@ -129,14 +132,13 @@ const Hero = () => {
 //                   }}
 //                   viewport={{ once: true }}
 //                 >
-                  
+
 //                   <Card vehicle={vehicle} />
 //                 </motion.div>
-//               </div>              
+//               </div>
 //             ))}
-//       </div>      
-      
-        
-//     </motion.div>  
+//       </div>
+
+//     </motion.div>
 //   );
 // };
