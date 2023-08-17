@@ -3,11 +3,12 @@ import React from "react";
 
 import image from "@/assets/images/honda-civic.png";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 export const DeleteCard = (props) => {
-  const deleteCar = (id) => {
+  const deleteCar = () => {
     Swal.fire({
-      title: `Delete the car with the id` + id,
+      title: `Delete the car with the id ` + props.vehicle?.idvehicle + `?`,
       text: "You won't be able to revert this!",
       icon: "warning",
       showCancelButton: true,
@@ -16,14 +17,15 @@ export const DeleteCard = (props) => {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        axios.delete(`/api/vehicles/${id}`).then((res) => {
+        axios.delete(`/api/vehicles/${props.vehicle?.idvehicle}`).then((res) => {
           Swal.fire(res.data);
         });
       }
     });
   };
-
+  console.log(props);
   return (
+    
     <div className=" w-full  rounded-2xl overflow-hidden shadow-md flex flex-col font-poppins relative hover:shadow-lg transition-all duration-200">
       <div className="flex items-center justify-between p-4">
         <div className="w-1/2">
@@ -31,16 +33,16 @@ export const DeleteCard = (props) => {
         </div>
         <div className="flex flex-col items-end">
           <div className="flex items-start gap-1 font-bold text-lg">
-            <p className="text-start truncate ">{props.vehicle.brand}</p>
-            <p>{props.vehicle.model}</p>
+            <p className="text-start truncate ">{props.vehicle?.brand}</p>
+            <p>{props.vehicle?.model}</p>
           </div>
-          <p className="text-gray-400 font-semibold">{props.vehicle.year}</p>
+          <p className="text-gray-400 font-semibold">{props.vehicle?.year}</p>
         </div>
       </div>
 
       <div className="flex items-center justify-between">
         <p className="ml-4">
-          <span className="font-semibold">${props.vehicle.price_per_day}</span>
+          <span className="font-semibold">${props.vehicle?.price_per_day}</span>
           <span className="text-gray-400">/day</span>
         </p>
         <button

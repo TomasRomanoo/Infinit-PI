@@ -5,11 +5,12 @@ import React from "react";
 import image from "@/assets/images/honda-civic.png"
 
 export const Card = (props) => {
-  const formattedName = props.vehicle
-    ? `${props.vehicle.brand.toLowerCase()}-${props.vehicle.model.toLowerCase()}-${
-        props.vehicle.year
-      }`
-    : "";
+  // const formattedName = props.vehicle
+  // ? `${props.vehicle.brand.toLowerCase()}-${props.vehicle.model.toLowerCase()}-${
+  //   props.vehicle.year
+  // }`
+  // : "";
+  
   return (
       <div className=" w-full  rounded-2xl overflow-hidden shadow-md flex flex-col font-poppins relative hover:shadow-lg transition-all duration-200">
         <div className="flex items-center justify-between p-4">

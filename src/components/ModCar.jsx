@@ -35,7 +35,7 @@ export const ModCar = (props) => {
             modifyCar();
           }}
         >
-          Delete
+          Edit
         </button>
       </div>
     </div>
