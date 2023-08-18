@@ -56,7 +56,7 @@ export const Form = () => {
     }
   };
 
-  const apiUrl = "http://localhost:3000/api/vehicles/";
+  const apiUrl = "/api/vehicle/";
 
   function createPost() {
     toast.promise(

@@ -33,15 +33,11 @@ export default function Login() {
           icon: "success",
           title: res.data.msg,
         }).then(() => {
-          const token = jwt.sign(res.data.user, "your-secret-key", {
-            algorithm: "HS256",
-          });
-          user.loginUser(token);
           window.location.href = "/";
         });
       })
       .catch((error) => {
-     /*    Toast.fire({
+        /*    Toast.fire({
           icon: "error",
           title: error.response.data.error,
         }); */
@@ -69,35 +65,35 @@ export default function Login() {
 
         <div className="mt-10 sm:mx-auto sm:w-full w-full sm:max-w-sm">
           <form action="" className="space-y-6" onSubmit={handleUserLogin}>
-          <div className="flex flex-col">
-          <label className="">Email address</label>
-          <input
-            type="text"
-            className={`px-2 py-1.5 border-black border-2 rounded-md ${
-              submitted === true && userData.email === ""
-                ? "border-red-500"
-                : /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userData.email)
-                ? ""
-                : ""
-            }`}
-            onChange={(e) =>
-              setUserData((prevState) => ({
-                ...prevState,
-                email: e.target.value,
-              }))
-            }
-          />
-          <div className="flex items-center">
-            {submitted && userData.email === "" && (
-              <p className="text-red-500">Email is required.</p>
-            )}
-            {submitted &&
-              userData.email !== "" &&
-              !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userData.email) && (
-                <p className="text-red-500">Invalid email address.</p>
-              )}
-          </div>
-        </div>
+            <div className="flex flex-col">
+              <label className="">Email address</label>
+              <input
+                type="text"
+                className={`px-2 py-1.5 border-black border-2 rounded-md ${
+                  submitted === true && userData.email === ""
+                    ? "border-red-500"
+                    : /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userData.email)
+                    ? ""
+                    : ""
+                }`}
+                onChange={(e) =>
+                  setUserData((prevState) => ({
+                    ...prevState,
+                    email: e.target.value,
+                  }))
+                }
+              />
+              <div className="flex items-center">
+                {submitted && userData.email === "" && (
+                  <p className="text-red-500">Email is required.</p>
+                )}
+                {submitted &&
+                  userData.email !== "" &&
+                  !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userData.email) && (
+                    <p className="text-red-500">Invalid email address.</p>
+                  )}
+              </div>
+            </div>
 
             <div className="flex flex-col">
               <div className="flex items-center justify-between flex-nowrap">

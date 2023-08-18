@@ -14,8 +14,8 @@ export const Card = (props) => {
   return (
       <div className=" w-full  rounded-2xl overflow-hidden shadow-md flex flex-col font-poppins relative hover:shadow-lg transition-all duration-200">
         <div className="flex items-center justify-between p-4">
-          <div className="w-1/2">
-            <Image className="w-full object-contain" src={image} />
+          <div className="w-1/2 h-1/2">
+            <Image className="w-full h-full aspect-video mix-blend-darken object-contain" width={500} height={300} src={props.vehicle.images[0]?.url} />
           </div>
           <div className="flex flex-col items-end">
             <div className="flex items-start gap-1 font-bold text-lg">
@@ -32,7 +32,7 @@ export const Card = (props) => {
           <span className="text-gray-400">/day</span>
         </p>
         <button className="bg-primary font-semibold text-white px-8 py-3 rounded-tl-2xl hover:bg-tertiary transition-all duration-300 ease-in-out">
-          <Link href={`/vehicles/${props.vehicle.name}`} passHref>
+          <Link href={`/vehicle/${props.vehicle.name}`} passHref>
             Details
           </Link>
         </button>
