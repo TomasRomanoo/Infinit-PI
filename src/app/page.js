@@ -9,12 +9,13 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Booking } from "@/components/Booking.jsx";
 import { CardList } from "@/components/CardList";
+import PorscheCanvas from "@/components/canvas/Porsche";
 
 export default function Home() {
   const [vehicles, setVehicles] = useState([]);
 
   const fetchVehicles = async () => {
-    const res = await axios("http://localhost:3000/api/vehicles");
+    const res = await axios("/api/vehicles");
 
     setVehicles(res.data.slice(0, 10));
   };
@@ -69,7 +70,7 @@ const Hero = () => {
         }}
         className="w-full lg:w-[35%]"
       >
-        <Image src={bluecar} className="rounded-xl" />
+        <PorscheCanvas />
       </motion.div>
     </div>
   );

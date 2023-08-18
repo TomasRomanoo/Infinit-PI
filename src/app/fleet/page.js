@@ -7,7 +7,7 @@ export default function Fleet() {
   const [vehicles, setVehicles] = useState([]);
 
   const fetchVehicles = async () => {
-    const res = await axios("http://localhost:3000/api/vehicles");
+    const res = await axios("/api/vehicles");
 
     setVehicles(res.data.slice(0, 10));
   };

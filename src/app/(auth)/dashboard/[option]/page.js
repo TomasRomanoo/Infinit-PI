@@ -34,7 +34,7 @@ const DashboardPage = () => {
 
   
 const fetchVehicles = async () => {
-  setVehicles(((await axios("http://localhost:3000/api/vehicles")).data))
+  setVehicles(((await axios("3000/api/vehicles")).data))
 
 };
 useEffect(() => {fetchVehicles()},[])
