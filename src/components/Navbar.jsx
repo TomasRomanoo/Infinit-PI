@@ -359,7 +359,11 @@ export const Navbar = () => {
           </div>
         )}
       </div>
-      {/* MODAL FOR MOBILE ENGAGEMENT */}
+      
+{     /* -------------------------------------------------------------------------- */
+      /*                         MODAL FOR MOBILE ENGAGEMENT                        */
+      /* -------------------------------------------------------------------------- */}
+
       <div  className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity hide-mngmnt lg:hidden" id="modalBg"></div>
       <div id="modal" className="flex min-h-full justify-center items-center p-0 fixed inset-0 hide-mngmnt lg:hidden">
         <div className="relative">
