@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 
+
+
 export default function PersonalDetails({ onBack, onNext, data }) {
   const [firstName, setFirstName] = useState(data.firstName || "");
   const [lastName, setLastName] = useState(data.lastName || "");
@@ -10,11 +12,15 @@ export default function PersonalDetails({ onBack, onNext, data }) {
   const [city, setCity] = useState(data.city || "");
   const [zipCode, setZipCode] = useState(data.setZipCode || "");
   const [country, setCountry] = useState(data.country || "");
+  const [identification, setIdentification] = useState(data.country || "");
   const [countries, setCountries] = useState([]);
+
+  const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onNext({ firstName, lastName, phone, address, country });
+    onNext({ firstName, lastName, phone, address, country, identification });
+    setSubmitted(true);
   };
 
   const isButtonDisabled =
@@ -22,6 +28,8 @@ export default function PersonalDetails({ onBack, onNext, data }) {
     lastName.trim() === "" ||
     phone.trim() === "" ||
     address.trim() === "";
+  identification.trim() === "";
+
   city.trim() === "";
   zipCode.trim() === "";
 
@@ -74,10 +82,26 @@ export default function PersonalDetails({ onBack, onNext, data }) {
             <label>Phone Number</label>
             <input
               type="text"
-              className="px-2 py-1.5 border-black border-2 rounded-md"
+              className={`px-2 py-1.5 border-black border-2 rounded-md ${
+                submitted && /^[0-9]{10}$/.test(phone) ? "border-red-500" : ""
+              }`}
               value={phone}
               onChange={(e) => {
                 setPhone(e.target.value);
+              }}
+            />
+            {submitted && /^[0-9]{10}$/.test(phone) && (
+              <p className="text-red-500">Invalid phone number.</p>
+            )}
+          </div>
+          <div className="flex flex-col">
+            <label>ID/Passport</label>
+            <input
+              type="text"
+              className="px-2 py-1.5 border-black border-2 rounded-md"
+              value={identification}
+              onChange={(e) => {
+                setIdentification(e.target.value);
               }}
             />
           </div>

@@ -8,12 +8,71 @@ datasource db {
 }
 
 model vehicle {
-  idvehicle        Int    @id @default(autoincrement())
-  plate            String @unique(map: "plate_UNIQUE") @db.VarChar(45)
-  brand            String @db.VarChar(45)
-  model            String @db.VarChar(45)
-  detail           String @db.Text
-  year             Int
-  price_per_day    Float
-  long_description String @db.Text
+  idvehicle          Int             @id @default(autoincrement())
+  name               String
+  plate              String          @unique(map: "plate_UNIQUE")
+  detail             String
+  year               Int
+  price_per_day      Float
+  long_description   String
+  images             image[]
+  specifications     specification[]
+  category           category        @relation(fields: [categoryIdcategory], references: [idcategory])
+  categoryIdcategory Int
+  model              model?          @relation(fields: [modelIdmodel], references: [idmodel])
+  modelIdmodel       Int?
+}
+
+model brand {
+  idbrand Int     @id @default(autoincrement())
+  name    String  @unique(map: "name_UNIQUE")
+  url String
+  model   model[]
+}
+
+model model {
+  idmodel      Int       @id @default(autoincrement())
+  name         String    @unique(map: "name_UNIQUE")
+  vehicle      vehicle[]
+  brand        brand?    @relation(fields: [brandIdbrand], references: [idbrand])
+  brandIdbrand Int?
+}
+
+model user {
+  iduser     Int    @id @default(autoincrement())
+  first_name String
+  last_name  String
+  phone      Int
+  email      String @unique(map: "email_UNIQUE")
+  password   String
+  role       role   @relation(fields: [idrole], references: [idrole])
+  idrole     Int
+}
+
+model role {
+  idrole Int    @id @default(autoincrement())
+  name   String
+  users  user[]
+}
+
+model image {
+  idimage          Int     @id @default(autoincrement())
+  url              String
+  vehicle          vehicle @relation(fields: [vehicleIdvehicle], references: [idvehicle])
+  vehicleIdvehicle Int
+}
+
+model category {
+  idcategory Int       @id @default(autoincrement())
+  name       String    @unique(map: "category_UNIQUE")
+  url        String
+  vehicle    vehicle[]
+}
+
+model specification {
+  idspecification  Int     @id @default(autoincrement())
+  name             String
+  url              String
+  vehicle          vehicle @relation(fields: [vehicleIdvehicle], references: [idvehicle])
+  vehicleIdvehicle Int
 }
