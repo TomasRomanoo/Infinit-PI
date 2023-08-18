@@ -13,11 +13,7 @@ export const Form = () => {
       { state: price, setter: setPriceErr, id: "#priceInput" },
       { state: plate, setter: setPlateErr, id: "#plateInput" },
       { state: detail, setter: setDetailErr, id: "#detailInput" },
-      {
-        state: description,
-        setter: setDescriptionErr,
-        id: "#descriptionInput",
-      },
+      {state: description, setter: setDescriptionErr, id: "#descriptionInput"},
     ];
 
     fields.forEach((field) => {
