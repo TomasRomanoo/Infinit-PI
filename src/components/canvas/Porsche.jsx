@@ -10,7 +10,7 @@ const Porsche = () => {
   return (
     <primitive
       object={porsche.scene}
-      scale={2.5}
+      scale={3.5}
       position-y={0}
       rotation-y={0}
     />
@@ -20,17 +20,23 @@ const Porsche = () => {
 const PorscheCanvas = () => {
   return (
     <Canvas
-      
       frameloop="demand"
       dpr={[1, 6]}
       gl={{ preserveDrawingBuffer: true }}
       camera={{
-        fov: 70,
+        fov: 60,
         near: 0.1,
-        far: 200,
-        position: [-3, 3, 6],
+        far: 300,
+        position: [0, 10, 0], // Position the camera above the scene
+        rotation: [-Math.PI / 2, 0, 0], // Rotate the camera to look down
       }}
     >
+      {/* Ambient Light */}
+      <ambientLight intensity={0.5} color="#ffffff" />
+
+      {/* Directional Light */}
+      <directionalLight position={[10, 10, 5]} intensity={5.5} castShadow />
+
       <Suspense fallback={<CanvasLoader />}>
         <OrbitControls
           autoRotate

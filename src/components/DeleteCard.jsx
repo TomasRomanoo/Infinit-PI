@@ -4,6 +4,7 @@ import React from "react";
 import image from "@/assets/images/honda-civic.png";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { toast } from "sonner";
 
 export const DeleteCard = (props) => {
   const deleteCar = () => {
@@ -17,9 +18,15 @@ export const DeleteCard = (props) => {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        axios.delete(`/api/vehicles/${props.vehicle?.idvehicle}`).then((res) => {
-          Swal.fire(res.data);
-        });
+        toast.promise( 
+          axios.delete(`/api/vehicles/${props.vehicle.plate}`),
+          {
+            loading: "Loading...",
+            success: (data) => {
+              return `The car rent has been deleted successfully`;
+            },
+            error: "Error while deleting car",
+          })
       }
     });
   };

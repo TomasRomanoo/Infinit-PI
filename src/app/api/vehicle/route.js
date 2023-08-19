@@ -7,7 +7,9 @@ export async function POST(request) {
   console.log("The POST function has been called.");
   try {
     const body = await request.json();
-    const {
+
+    console.log("body :>> ", body);
+    /* const {
       plate,
       brand,
       model,
@@ -15,9 +17,9 @@ export async function POST(request) {
       year,
       price_per_day,
       long_description,
-    } = body;
+    } = body; */
 
-    if (!plate || !model || !price_per_day || price_per_day <= 0) {
+    /*   if (!plate || !model || !price_per_day || price_per_day <= 0) {
       return NextResponse.json(
         {
           error:
@@ -26,7 +28,7 @@ export async function POST(request) {
         { status: 400 }
       );
     }
-
+ */
     const car = await prisma.vehicle.create({
       data: {
         name: `${brand} ${model} ${year}`,
@@ -42,6 +44,9 @@ export async function POST(request) {
         },
         specifications: {
           connect: { idspecification: specificationId },
+        },
+        images: {
+          create: images.map((url) => ({ url })),
         },
         detail,
         year,
@@ -64,7 +69,12 @@ export async function POST(request) {
 export async function GET() {
   console.log("The GETALL function has been called.");
   try {
-    const cars = await prisma.vehicle.findMany();
+    const cars = await prisma.vehicle.findMany({
+      include: {
+        images: true,
+      },
+    });
+
     return NextResponse.json(cars, { status: 200, data: cars });
   } catch (error) {
     console.error(error);
