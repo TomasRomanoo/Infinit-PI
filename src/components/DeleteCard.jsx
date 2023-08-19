@@ -33,7 +33,7 @@ export const DeleteCard = (props) => {
   console.log(props);
   return (
     
-    <div className=" w-full  rounded-2xl overflow-hidden shadow-md flex flex-col font-poppins relative hover:shadow-lg transition-all duration-200">
+    <div className=" w-2/5  m-3 rounded-2xl overflow-hidden shadow-md flex flex-col font-poppins hover:shadow-lg transition-all duration-200">
       <div className="flex items-center justify-between p-4">
         <div className="w-1/2">
           <Image className="w-full object-contain" src={image} />

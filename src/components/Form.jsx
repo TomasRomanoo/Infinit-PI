@@ -125,11 +125,11 @@ export const Form = () => {
       </h1>
       <form
         noValidate
-        onSubmit={handlerSubmit}
+        onSubmit={handlerSubmit} 
         className="flex items-center flex-col "
       >
         <div className="grid md:grid-cols-2 grid-cols-1">
-          <div className="">
+          <div>
             <div className="m-[0.85rem]  ">
               <label className="block text-sm font-medium leading-6 text-gray-900">
                 Brand
@@ -357,7 +357,7 @@ export const Form = () => {
           </div>
         </div>
 
-        <div className="m-5 mb-8 ">
+        <div className="mt-5  ">
           <button className="rounded-xl py-3 px-5 w-full text-white bg-primary hover:bg-secondary file:transition-all duration-200 ease-in-out">
             Submit
           </button>
