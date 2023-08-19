@@ -72,6 +72,11 @@ export async function GET() {
     const cars = await prisma.vehicle.findMany({
       include: {
         images: true,
+        model:{
+          include:{
+            brand:true
+          }
+        }
       },
     });
 
