@@ -59,6 +59,7 @@ export async function POST(request) {
   }
 }
 
+
 // Método GETALL
 export async function GET() {
   console.log("The GETALL function has been called.");
