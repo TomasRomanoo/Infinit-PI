@@ -32,7 +32,7 @@ export async function POST(request) {
 }
 
 export async function GET() {
-  console.log("The GETALL function has been called.");
+  console.log("The GETALL BRANDS function has been called.");
   try {
     const brands = await prisma.brand.findMany({ include: { model: true } });
     return NextResponse.json(brands, { status: 200, data: brands });
