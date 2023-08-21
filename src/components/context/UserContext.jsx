@@ -9,8 +9,6 @@ export const UserProvider = ({ children }) => {
 
   const loginUser = (token) => {
     setUser(token);
-    // Set the session ID as an HTTP cookie with appropriate attributes
-    document.cookie = `sessionID=${token}; path=/; secure; HttpOnly`;
   };
   const getUser = () => {
     try {

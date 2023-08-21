@@ -6,24 +6,24 @@ import { getUserByEmail } from "../database";
 export async function POST(request) {
   const { email, password } = await request.json();
 
-  // Obtener el usuario de la base de datos
+  console.log("email, password :>> ", email + " " + password);
+
   const user = await getUserByEmail(email);
 
-  // Verificar si el usuario existe y si la contraseña es correcta
   if (user && bcrypt.compareSync(password, user.password)) {
+    console.log(user);
 
-    console.log(user)
-    
     const token = sign(
       {
         exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 1,
         email,
-        name: user.first_name + ' ' + user.last_name
+        name: user.first_name + " " + user.last_name,
       },
       process.env.JWT_SECRET
     );
 
     const response = NextResponse.json({
+      msg: "Login successfull",
       token,
       isAdmin: user.idrole == 1,
     });
@@ -42,7 +42,7 @@ export async function POST(request) {
   } else {
     return NextResponse.json(
       {
-        message: "Credenciales inválidas",
+        msg: "Invalid Email or Password. Please check your credentials and try again.",
       },
       {
         status: 401,
@@ -50,4 +50,3 @@ export async function POST(request) {
     );
   }
 }
-
