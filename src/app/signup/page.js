@@ -26,30 +26,33 @@ export default function Registration() {
       ...data,
     };
     console.log(completeObject);
-    toast.promise(
-      axios.post("/api/register", completeObject),
-      {
-        loading: "Loading...",
-        success: (data) => {
-          setStep(step + 1);
-          return `User has been created successfully`;
-        },
-        error: (error) => {
-          console.log(error)
-          if (error.response && error.response.data) {
-            return error.response.data.message
-          }
+
+    axios
+      .post("/api/register", completeObject)
+      .then((res) => {
+        console.log("res :>> ", res);
+      })
+      .catch((error) => {
+        console.log("error :>> ", error);
+      });
+
+    /*  toast.promise(axios.post("/api/register", completeObject), {
+      loading: "Loading...",
+      success: (data) => {
+        setStep(step + 1);
+        return `User has been created successfully`;
+      },
+      error: (error) => {
+        console.log(error);
+        if (error.response && error.response.data) {
+          return error.response.data.message;
         }
-      }
-    );
+      },
+    }); */
   };
 
   const handleConfirmationBack = () => {
     setStep(step - 1);
-  };
-
-  const handleConfirmationNext = () => {
-    setStep(step + 1);
   };
 
   return (

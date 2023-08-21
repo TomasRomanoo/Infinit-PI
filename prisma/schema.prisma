@@ -21,6 +21,7 @@ model vehicle {
   categoryIdcategory Int
   model              model?          @relation(fields: [modelIdmodel], references: [idmodel])
   modelIdmodel       Int?
+  deleted Boolean
 }
 
 model brand {
@@ -28,6 +29,7 @@ model brand {
   name    String  @unique(map: "name_UNIQUE")
   url String
   model   model[]
+  deleted Boolean
 }
 
 model model {
@@ -36,6 +38,7 @@ model model {
   vehicle      vehicle[]
   brand        brand?    @relation(fields: [brandIdbrand], references: [idbrand])
   brandIdbrand Int?
+  deleted Boolean
 }
 
 model user {
@@ -52,12 +55,14 @@ model user {
   password          String
   role              role   @relation(fields: [idrole], references: [idrole])
   idrole            Int
+  deleted Boolean
 }
 
 model role {
   idrole Int    @id @default(autoincrement())
   name   String
   users  user[]
+  deleted Boolean
 }
 
 model image {
@@ -65,6 +70,7 @@ model image {
   url              String
   vehicle          vehicle @relation(fields: [vehicleIdvehicle], references: [idvehicle])
   vehicleIdvehicle Int
+  deleted Boolean
 }
 
 model category {
@@ -72,6 +78,7 @@ model category {
   name       String    @unique(map: "category_UNIQUE")
   url        String
   vehicle    vehicle[]
+  deleted Boolean
 }
 
 model specification {
@@ -80,4 +87,5 @@ model specification {
   url              String
   vehicle          vehicle @relation(fields: [vehicleIdvehicle], references: [idvehicle])
   vehicleIdvehicle Int
+  deleted Boolean
 }

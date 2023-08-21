@@ -6,7 +6,6 @@ import { getUserByEmail } from "../database";
 export async function POST(request) {
   const { email, password } = await request.json();
 
-  console.log("email, password :>> ", email + " " + password);
 
   const user = await getUserByEmail(email);
 

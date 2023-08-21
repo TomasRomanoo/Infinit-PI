@@ -12,8 +12,7 @@ import { Infinit } from "@/components/Infinit";
 export default function Login() {
   const [userData, setUserData] = useState({ email: "", password: "" });
   const [submitted, setSubmitted] = useState(false);
-  const { loginUser, getUser } = useContext(UserContext);
-
+  const userContext = useContext(UserContext);
 
   const Toast = Swal.mixin({
     toast: true,
@@ -23,14 +22,12 @@ export default function Login() {
     timerProgressBar: true,
   });
 
-
-
   const fetchUser = () => {
     axios
       .post("/api/auth/login", userData)
       .then((res) => {
         console.log("res :>> ", res);
-        loginUser(res.data.token);
+        userContext.loginUser(res.data.token);
         Toast.fire({
           icon: "success",
           title: res.data.msg,

@@ -5,7 +5,6 @@ import nodemailer from "nodemailer";
 
 const prisma = new PrismaClient();
 
-// Crear un transportador de Nodemailer utilizando SMTP u otro mecanismo de transporte
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
@@ -17,22 +16,33 @@ const transporter = nodemailer.createTransport({
 export async function POST(request) {
   const body = await request.json();
   console.log(body);
-  const { firstName, lastName, address, city, country, zipCode, identification, phone, email, password } = body;
+  const {
+    firstName,
+    lastName,
+    address,
+    city,
+    country,
+    zipCode,
+    identification,
+    phone,
+    email,
+    password,
+  } = body;
 
-  // Verificar si ya existe un usuario con el mismo correo electrónico
   const existingUser = await prisma.user.findUnique({ where: { email } });
   if (existingUser) {
-    // Si ya existe un usuario con el mismo correo electrónico, enviar un mensaje de error
+    console.log("entra aca");
     return NextResponse.json(
       {
-        message: "Ya existe un usuario con ese correo electrónico",
+        message: "There is already a user with that email",
       },
       {
         status: 400,
       }
     );
   } else {
-    // Si no existe un usuario con el mismo correo electrónico, crear uno nuevo
+    console.log("entra aca x2");
+
     const hashedPassword = await bcrypt.hash(password, 10);
     await prisma.user.create({
       data: {
@@ -48,28 +58,27 @@ export async function POST(request) {
         password: hashedPassword,
         role: {
           connect: { idrole: 2 },
-        }
+        },
       },
     });
 
-    // Enviar correo electrónico de confirmación
     const Email = {
       from: "noreply@grupo3.com",
       to: email,
-      subject: "Confirmación de registro",
-      text: `Hola ${firstName}, gracias por registrarte en nuestra aplicación. Por favor, haz clic en el siguiente enlace para confirmar tu dirección de correo electrónico.`,
-      html: `<strong>Hola ${firstName}, gracias por registrarte en nuestra aplicación. Por favor, haz clic en el siguiente enlace para confirmar tu dirección de correo electrónico.</strong>`,
+      subject: "Confirmation of sign up",
+      text: `Hi ${firstName}, thank you for signing up for our app. Please click the link below to confirm your email address.`,
+      html: `<strong>Hi ${firstName}, thank you for signing up for our app. Please click the link below to confirm your email address.</strong>`,
       attachments: [
         {
           filename: "log.jpg",
-          path: "../assets/images/blue-car.jpg",//completar con ruta a la imagen
+          path: "../assets/images/blue-car.jpg",
         },
       ],
     };
     transporter.sendMail(Email);
 
     return NextResponse.json({
-      message: "Usuario registrado con éxito",
+      message: "User registered successfully",
     });
   }
 }
