@@ -19,7 +19,7 @@ export default function PersonalDetails({ onBack, onNext, data }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onNext({ firstName, lastName, phone, address, country, identification });
+    onNext({ firstName, lastName, phone, address, city, country, zipCode, identification });
     setSubmitted(true);
   };
 

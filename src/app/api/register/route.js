@@ -15,7 +15,9 @@ const transporter = nodemailer.createTransport({
 });
 
 export async function POST(request) {
-  const { name, email, password } = await request.json();
+  const body = await request.json();
+  console.log(body);
+  const { firstName, lastName, address, city, country, zipCode, identification, phone, email, password } = body;
 
   // Verificar si ya existe un usuario con el mismo correo electrónico
   const existingUser = await prisma.user.findUnique({ where: { email } });
@@ -34,9 +36,19 @@ export async function POST(request) {
     const hashedPassword = await bcrypt.hash(password, 10);
     await prisma.user.create({
       data: {
-        name,
+        first_name: firstName,
+        last_name: lastName,
+        phone,
         email,
+        address,
+        city,
+        country,
+        zip_code: zipCode,
+        identification,
         password: hashedPassword,
+        role: {
+          connect: { idrole: 2 },
+        }
       },
     });
 
@@ -45,8 +57,8 @@ export async function POST(request) {
       from: "noreply@grupo3.com",
       to: email,
       subject: "Confirmación de registro",
-      text: `Hola ${name}, gracias por registrarte en nuestra aplicación. Por favor, haz clic en el siguiente enlace para confirmar tu dirección de correo electrónico.`,
-      html: `<strong>Hola ${name}, gracias por registrarte en nuestra aplicación. Por favor, haz clic en el siguiente enlace para confirmar tu dirección de correo electrónico.</strong>`,
+      text: `Hola ${firstName}, gracias por registrarte en nuestra aplicación. Por favor, haz clic en el siguiente enlace para confirmar tu dirección de correo electrónico.`,
+      html: `<strong>Hola ${firstName}, gracias por registrarte en nuestra aplicación. Por favor, haz clic en el siguiente enlace para confirmar tu dirección de correo electrónico.</strong>`,
       attachments: [
         {
           filename: "log.jpg",

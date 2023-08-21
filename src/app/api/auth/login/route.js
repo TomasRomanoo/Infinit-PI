@@ -11,20 +11,21 @@ export async function POST(request) {
 
   // Verificar si el usuario existe y si la contraseña es correcta
   if (user && bcrypt.compareSync(password, user.password)) {
+
+    console.log(user)
     
     const token = sign(
       {
         exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 1,
         email,
-        username: user.username,
-        isAdmin: user.isAdmin,
+        name: user.first_name + ' ' + user.last_name
       },
       process.env.JWT_SECRET
     );
 
     const response = NextResponse.json({
       token,
-      isAdmin: user.isAdmin,
+      isAdmin: user.idrole == 1,
     });
 
     response.cookies.set({

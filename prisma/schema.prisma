@@ -39,14 +39,19 @@ model model {
 }
 
 model user {
-  iduser     Int    @id @default(autoincrement())
-  first_name String
-  last_name  String
-  phone      Int
-  email      String @unique(map: "email_UNIQUE")
-  password   String
-  role       role   @relation(fields: [idrole], references: [idrole])
-  idrole     Int
+  iduser            Int    @id @default(autoincrement())
+  first_name        String
+  last_name         String
+  phone             String
+  email             String @unique(map: "email_UNIQUE")
+  address           String
+  city              String
+  country           String
+  zip_code          String
+  identification    String
+  password          String
+  role              role   @relation(fields: [idrole], references: [idrole])
+  idrole            Int
 }
 
 model role {
