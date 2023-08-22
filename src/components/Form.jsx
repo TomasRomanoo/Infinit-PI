@@ -123,7 +123,7 @@ export const Form = () => {
         className="flex items-center flex-col "
       >
         <div className="grid md:grid-cols-2 grid-cols-1">
-          <div>
+          <div className="mx-6">
             <div className="m-[0.85rem]  ">
               <label className="block text-sm font-medium leading-6 text-gray-900">
                 Brand
@@ -146,7 +146,7 @@ export const Form = () => {
                   }}
                   className="block w-full cursor-pointer rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 focus:outline-none sm:text-sm sm:leading-6 transition ease-in-out duration-300"
                 >
-                  <option value="" disabled>
+                  <option value="" disabled selected>
                     Select some brand
                   </option>
                   {brands.map((brand) => {
@@ -182,7 +182,7 @@ export const Form = () => {
                   type="text"
                   className="block mt-2 w-full cursor-pointer rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 focus:outline-none sm:text-sm sm:leading-6 transition ease-in-out duration-300"
                 >
-                  <option value="" disabled>
+                  <option value="" disabled selected>
                     Select some model
                   </option>
                   {brand.models.map((model) => {
