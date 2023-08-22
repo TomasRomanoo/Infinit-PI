@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import bcrypt from "bcrypt";
 import nodemailer from "nodemailer";
 
@@ -17,50 +17,41 @@ export async function POST(request) {
   const body = await request.json();
 
   const {
-    firstName,
-    lastName,
-    address,
-    identification,
-    phone,
+  firstName,
+  lastName,
+  phone,
+  email,
+  identification,
+  password,
+  address,
+  city,
+  country,
+  zipCode,
+} = body;
+
+// const {  ,  street } = address;
+
+
+const hashedPassword = await bcrypt.hash(password, 10);
+
+const result = await prisma.user.create({
+  data: {
+    first_name: firstName,
+    last_name: lastName,
+    phone: parseInt(phone),
     email,
-    password,
-  } = body;
-
-  const { country, city, zipCode, street } = address;
-
-  console.log("body", body);
-
-  const existingUser = await prisma.user.findUnique({ where: { email } });
-  if (existingUser) {
-    return NextResponse.json(
-      {
-        message: "There is already a user with that email",
-      },
-      {
-        status: 400,
-      }
-    );
-  } else {
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-    await prisma.user.create({
-      data: {
-        first_name: firstName,
-        last_name: lastName,
-        phone: parseInt(phone),
-        email,
-        address: street,
-        country,
-        city,
-        zip_code: parseInt(zipCode),
-        identification,
-        password: hashedPassword,
-        role: {
-          connect: { idrole: 2 },
-        },
-        deleted: 0,
-      },
-    });
+    identification,
+    password: hashedPassword,
+    address, // Assign street to the correct field
+    city,
+    country,
+    zip_code: parseInt(zipCode),
+    role: {
+      connect: { idrole: 2 },
+    },
+    deleted: 0, // Assuming deleted is a boolean field
+  },
+});
 
     const Email = {
       from: "noreply@grupo3.com",
@@ -77,8 +68,9 @@ export async function POST(request) {
     };
     transporter.sendMail(Email);
 
-    return NextResponse.json({
+    return  NextResponse.json({
       message: "User registered successfully",
     });
+    
   }
-}
+

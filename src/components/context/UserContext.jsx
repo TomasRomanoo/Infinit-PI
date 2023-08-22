@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useState } from "react";
-import jwt from "jsonwebtoken";
+// import jwt from "jsonwebtoken";
 
 export const UserContext = createContext();
 

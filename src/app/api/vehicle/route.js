@@ -69,9 +69,9 @@ export async function GET() {
   console.log("The GETALL VEHICLES function has been called.");
   try {
     const cars = await prisma.vehicle.findMany({
-      where: {
-        deleted: false,
-      },
+      // where: {
+      //   deleted: false,
+      // },
       include: {
         images: true,
         model: {
