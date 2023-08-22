@@ -21,47 +21,47 @@ model vehicle {
   categoryIdcategory Int
   model              model?          @relation(fields: [modelIdmodel], references: [idmodel])
   modelIdmodel       Int?
-  deleted Boolean
+  deleted            Boolean
 }
 
 model brand {
   idbrand Int     @id @default(autoincrement())
   name    String  @unique(map: "name_UNIQUE")
-  url String
-  model   model[]
+  url     String
+  models  model[]
   deleted Boolean
 }
 
 model model {
   idmodel      Int       @id @default(autoincrement())
   name         String    @unique(map: "name_UNIQUE")
-  vehicle      vehicle[]
+  vehicles     vehicle[]
   brand        brand?    @relation(fields: [brandIdbrand], references: [idbrand])
   brandIdbrand Int?
-  deleted Boolean
+  deleted      Boolean
 }
 
 model user {
-  iduser            Int    @id @default(autoincrement())
-  first_name        String
-  last_name         String
-  phone             String
-  email             String @unique(map: "email_UNIQUE")
-  address           String
-  city              String
-  country           String
-  zip_code          String
-  identification    String
-  password          String
-  role              role   @relation(fields: [idrole], references: [idrole])
-  idrole            Int
-  deleted Boolean
+  iduser         Int     @id @default(autoincrement())
+  first_name     String
+  last_name      String
+  address        String
+  city           String
+  country        String
+  zip_code       Int
+  phone          String
+  email          String  @unique(map: "email_UNIQUE")
+  identification String
+  password       String
+  role           role    @relation(fields: [idrole], references: [idrole])
+  idrole         Int     @default(2)
+  deleted        Boolean
 }
 
 model role {
-  idrole Int    @id @default(autoincrement())
-  name   String
-  users  user[]
+  idrole  Int     @id @default(autoincrement())
+  name    String
+  users   user[]
   deleted Boolean
 }
 
@@ -70,15 +70,15 @@ model image {
   url              String
   vehicle          vehicle @relation(fields: [vehicleIdvehicle], references: [idvehicle])
   vehicleIdvehicle Int
-  deleted Boolean
+  deleted          Boolean
 }
 
 model category {
   idcategory Int       @id @default(autoincrement())
   name       String    @unique(map: "category_UNIQUE")
   url        String
-  vehicle    vehicle[]
-  deleted Boolean
+  vehicles   vehicle[]
+  deleted    Boolean
 }
 
 model specification {
@@ -87,5 +87,5 @@ model specification {
   url              String
   vehicle          vehicle @relation(fields: [vehicleIdvehicle], references: [idvehicle])
   vehicleIdvehicle Int
-  deleted Boolean
+  deleted          Boolean
 }
