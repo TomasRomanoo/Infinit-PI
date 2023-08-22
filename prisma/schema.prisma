@@ -50,20 +50,20 @@ model user {
   identification String
   password       String
   role           role      @relation(fields: [idrole], references: [idrole])
-  idrole         Int
+  idrole         Int       @default(2)
   addresses      address[]
   deleted        Boolean
 }
 
 model address {
-  idaddress  Int    @id @default(autoincrement())
+  idaddress  Int     @id @default(autoincrement())
   address    String
   city       String
   country    String
   zip_code   Int
-  user       user?  @relation(fields: [userIduser], references: [iduser])
+  user       user?   @relation(fields: [userIduser], references: [iduser])
   userIduser Int?
-  deleted Boolean
+  deleted    Boolean
 }
 
 model role {
