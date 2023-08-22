@@ -26,13 +26,12 @@ export default function Login() {
     axios
       .post("/api/auth/login", userData)
       .then((res) => {
-        console.log("res :>> ", res);
         userContext.loginUser(res.data.token);
         Toast.fire({
           icon: "success",
           title: res.data.msg,
         }).then(() => {
-          /*  window.location.href = "/"; */
+          window.location.href = "/";
         });
       })
       .catch((error) => {
