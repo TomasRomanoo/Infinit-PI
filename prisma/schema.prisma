@@ -45,27 +45,20 @@ model user {
   iduser           Int     @id @default(autoincrement())
   first_name       String
   last_name        String
-  phone            String
+  phone            Int
   email            String  @unique(map: "email_UNIQUE")
   identification   String
   password         String
+  address          String
+  city             String
+  country          String
+  zip_code         Int
   role             role    @relation(fields: [idrole], references: [idrole])
   idrole           Int     @default(2)
-  address          address @relation(fields: [addressIdaddress], references: [idaddress])
   deleted          Boolean
-  addressIdaddress Int
 }
 
-model address {
-  idaddress  Int     @id @default(autoincrement())
-  address    String
-  city       String
-  country    String
-  zip_code   Int
-  userIduser Int?
-  deleted    Boolean
-  user       user[]
-}
+
 
 model role {
   idrole  Int     @id @default(autoincrement())

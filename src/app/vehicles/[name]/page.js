@@ -103,7 +103,7 @@ const Gallery = ({
           className="w-full hover:brightness-75 transition-all duration-200 self-stretch cursor-pointer"
           onClick={() => openGalleryModal(vehicle.images[0].url)}
         >
-          <Image
+          strokeWidth
             className="object-contain rounded-lg"
             src={vehicle.images[0].url}
           />
@@ -185,7 +185,7 @@ const Specs = ({ specifications }) => {
       {specifications.map((spec, index) => {
         return (
           <div className="flex items-center gap-4" key={index}>
-            <Image src={spec.image} />
+            strokeWidth src={spec.image} alt="spec" />
             <p className="font-poppins text-lg">{spec.description}</p>
           </div>
         );

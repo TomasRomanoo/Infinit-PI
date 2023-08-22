@@ -70,7 +70,7 @@ export async function GET() {
   try {
     const cars = await prisma.vehicle.findMany({
       where: {
-        deleted: 0,
+        deleted: false,
       },
       include: {
         images: true,

@@ -6,11 +6,19 @@ export default function PersonalDetails({ onBack, onNext, data }) {
   const [firstName, setFirstName] = useState(data.firstName || "");
   const [lastName, setLastName] = useState(data.lastName || "");
   const [phone, setPhone] = useState(data.phone || "");
-  const [address, setAddress] = useState(data.address || "");
+  /*     const [address, setAddress] = useState(data.address || "");
   const [city, setCity] = useState(data.city || "");
   const [zipCode, setZipCode] = useState(data.setZipCode || "");
-  const [country, setCountry] = useState(data.country || "");
+  const [country, setCountry] = useState(data.country || ""); */
   const [identification, setIdentification] = useState(data.country || "");
+
+  const [address, setAddress] = useState({
+    street: "",
+    city: "",
+    zipCode: null,
+    country: "",
+  });
+
   const [countries, setCountries] = useState([]);
 
   const [phoneError, setPhoneError] = useState("");
@@ -41,9 +49,9 @@ export default function PersonalDetails({ onBack, onNext, data }) {
       lastName,
       phone,
       address,
-      city,
+      /*   city,
       country,
-      zipCode,
+      zipCode, */
       identification,
     });
     setSubmitted(true);
@@ -53,13 +61,16 @@ export default function PersonalDetails({ onBack, onNext, data }) {
     firstName.trim() === "" ||
     lastName.trim() === "" ||
     phone.trim() === "" ||
-    address.trim() === "";
-  identification.trim() === "";
+    /*  address.city.trim() === "" ||
+    address.zipCode.trim() === "" ||
+    address.country.trim() === "" ||
+    address.address.trim() === "" || */
+    identification.trim() === "";
 
-  city.trim() === "";
+  /* city.trim() === "";
   zipCode.trim() === "";
 
-  country.selected;
+  country.selected; */
 
   useEffect(() => {
     const fetchCountries = async () => {
@@ -146,9 +157,14 @@ export default function PersonalDetails({ onBack, onNext, data }) {
               id="country"
               name="country"
               onChange={(e) => {
-                setCountry(e.target.options[e.target.selectedIndex].value);
+                const selectedCountry = e.target.value;
+                setAddress((prevState) => ({
+                  ...prevState,
+                  country: selectedCountry,
+                }));
               }}
             >
+              <option selected>Select your country</option>
               {countries.map((country, index) => (
                 <option key={index} value={country.name}>
                   {country.name}
@@ -156,14 +172,18 @@ export default function PersonalDetails({ onBack, onNext, data }) {
               ))}
             </select>
           </div>
+
           <div className="flex flex-col">
-            <label>Address</label>
+            <label>Street</label>
             <input
               type="text"
               className="px-2 py-1.5 border-black border-2 rounded-md"
-              value={address}
+              value={address.street}
               onChange={(e) => {
-                setAddress(e.target.value);
+                setAddress((prevState) => ({
+                  ...prevState,
+                  street: e.target.value,
+                }));
               }}
             />
           </div>
@@ -171,21 +191,28 @@ export default function PersonalDetails({ onBack, onNext, data }) {
             <label>City</label>
             <input
               type="text"
-              className="px-2 py-1.5 border-black border-2 rounded-md"
-              value={city}
+              name="city"
+              value={address.city}
               onChange={(e) => {
-                setCity(e.target.value);
+                setAddress((prevState) => ({
+                  ...prevState,
+                  city: e.target.value,
+                }));
               }}
             />
           </div>
+
           <div className="flex flex-col">
             <label>Zip Code</label>
             <input
               type="text"
               className="px-2 py-1.5 border-black border-2 rounded-md"
-              value={zipCode}
+              value={address.zipCode}
               onChange={(e) => {
-                setZipCode(e.target.value);
+                setAddress((prevState) => ({
+                  ...prevState,
+                  zipCode: e.target.value,
+                }));
               }}
             />
           </div>

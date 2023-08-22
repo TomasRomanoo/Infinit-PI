@@ -15,7 +15,7 @@ const transporter = nodemailer.createTransport({
 
 export async function POST(request) {
   const body = await request.json();
-  console.log(body);
+
   const {
     firstName,
     lastName,
@@ -26,9 +26,12 @@ export async function POST(request) {
     password,
   } = body;
 
+  const { country, city, zipCode, street } = address;
+
+  console.log("body", body);
+
   const existingUser = await prisma.user.findUnique({ where: { email } });
   if (existingUser) {
-    console.log("entra aca");
     return NextResponse.json(
       {
         message: "There is already a user with that email",
@@ -38,7 +41,6 @@ export async function POST(request) {
       }
     );
   } else {
-    console.log("entra aca x2");
 
     const hashedPassword = await bcrypt.hash(password, 10);
     await prisma.user.create({
@@ -47,12 +49,16 @@ export async function POST(request) {
         last_name: lastName,
         phone: parseInt(phone),
         email,
-        address,
+        address: street,
+        country,
+        city,
+        zip_code: parseInt(zipCode),
         identification,
         password: hashedPassword,
         role: {
           connect: { idrole: 2 },
         },
+        deleted: 0,
       },
     });
 
