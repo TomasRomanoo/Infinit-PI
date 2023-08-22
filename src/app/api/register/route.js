@@ -48,7 +48,7 @@ export async function POST(request) {
       data: {
         first_name: firstName,
         last_name: lastName,
-        phone,
+        phone: parseInt(phone),
         email,
         address,
         city,
