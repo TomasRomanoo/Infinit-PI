@@ -1,8 +1,11 @@
 "use client";
 import React, { useEffect } from "react";
 
+
+
+
 export default function Success() {
- /*  useEffect(() => {
+  /*  useEffect(() => {
     const redirectTimeout = setTimeout(() => {
       window.location.href = "/"; 
     }, 3000);
