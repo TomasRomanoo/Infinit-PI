@@ -102,7 +102,7 @@ export const ModCar = ({ vehicles,  firstIndex, lastIndex}) => {
     ) {
       toast.success('Todo ok')
       // toast.promise(
-      //   axios.post(apiUrl, {
+      //   axios.put(apiUrl, {
       //     idvehicle:id,
       //     plate: plate,
       //     brand: brand,
