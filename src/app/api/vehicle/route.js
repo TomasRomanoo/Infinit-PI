@@ -64,19 +64,21 @@ export async function POST(request) {
   }
 }
 
-
 // Método GETALL
 export async function GET() {
   console.log("The GETALL VEHICLES function has been called.");
   try {
     const cars = await prisma.vehicle.findMany({
+      where: {
+        deleted: 0,
+      },
       include: {
         images: true,
-        model:{
-          include:{
-            brand:true
-          }
-        }
+        model: {
+          include: {
+            brand: true,
+          },
+        },
       },
     });
 

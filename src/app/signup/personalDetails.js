@@ -2,8 +2,6 @@
 
 import React, { useState, useEffect } from "react";
 
-
-
 export default function PersonalDetails({ onBack, onNext, data }) {
   const [firstName, setFirstName] = useState(data.firstName || "");
   const [lastName, setLastName] = useState(data.lastName || "");
@@ -15,11 +13,39 @@ export default function PersonalDetails({ onBack, onNext, data }) {
   const [identification, setIdentification] = useState(data.country || "");
   const [countries, setCountries] = useState([]);
 
+  const [phoneError, setPhoneError] = useState("");
+  const [identificationError, setIdentificationError] = useState("");
+
+  const validatePhone = (inputValue) => {
+    if (/^[0-9]{10}$/.test(inputValue)) {
+      setPhoneError("");
+    } else {
+      setPhoneError("Invalid phone number.");
+    }
+  };
+
+  const validateIdentification = (inputValue) => {
+    if (inputValue.trim() !== "") {
+      setIdentificationError("");
+    } else {
+      setIdentificationError("Identification is required.");
+    }
+  };
+
   const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onNext({ firstName, lastName, phone, address, city, country, zipCode, identification });
+    onNext({
+      firstName,
+      lastName,
+      phone,
+      address,
+      city,
+      country,
+      zipCode,
+      identification,
+    });
     setSubmitted(true);
   };
 
@@ -83,27 +109,36 @@ export default function PersonalDetails({ onBack, onNext, data }) {
             <input
               type="text"
               className={`px-2 py-1.5 border-black border-2 rounded-md ${
-                submitted && /^[0-9]{10}$/.test(phone) ? "border-red-500" : ""
+                submitted && phoneError ? "border-red-500" : ""
               }`}
               value={phone}
               onChange={(e) => {
-                setPhone(e.target.value);
+                const inputValue = e.target.value;
+                validatePhone(inputValue);
+                setPhone(inputValue);
               }}
             />
-            {submitted && /^[0-9]{10}$/.test(phone) && (
-              <p className="text-red-500">Invalid phone number.</p>
+            {submitted && phoneError && (
+              <p className="text-red-500">{phoneError}</p>
             )}
           </div>
           <div className="flex flex-col">
             <label>ID/Passport</label>
             <input
               type="text"
-              className="px-2 py-1.5 border-black border-2 rounded-md"
+              className={`px-2 py-1.5 border-black border-2 rounded-md ${
+                submitted && identificationError ? "border-red-500" : ""
+              }`}
               value={identification}
               onChange={(e) => {
-                setIdentification(e.target.value);
+                const inputValue = e.target.value;
+                validateIdentification(inputValue);
+                setIdentification(inputValue);
               }}
             />
+            {submitted && identificationError && (
+              <p className="text-red-500">{identificationError}</p>
+            )}
           </div>
           <div className="flex flex-col">
             <label>Country</label>
