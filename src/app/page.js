@@ -70,7 +70,7 @@ const Hero = () => {
         }}
         className="w-full lg:w-[35%]"
       >
-        <Image src={bluecar} className="rounded-lg" />
+        <Image src={bluecar} className="rounded-lg" alt="bluecar" />
         {/*      <PorscheCanvas /> */}
       </motion.div>
     </div>

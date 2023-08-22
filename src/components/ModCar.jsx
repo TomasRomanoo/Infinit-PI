@@ -6,13 +6,11 @@ import { GrClose } from "react-icons/gr";
 import axios from "axios";
 import { toast } from "sonner";
 
-export const ModCar = ({ vehicles,  firstIndex, lastIndex}) => {
-
+export const ModCar = ({ vehicles, firstIndex, lastIndex }) => {
   const apiUrl = "http://localhost:3000/api/vehicles/";
-  const [showModal, setShowModal] = useState(false)
+  const [showModal, setShowModal] = useState(false);
 
-
-  const handlerModal = (vehicle ,plate) => {
+  const handlerModal = (vehicle, plate) => {
     // axios.get(`/api/vehicles/${plate}`).then(function(response){
     //   setId(response.data.idvehcle)
     //   setBrand(response.data.brand)
@@ -24,18 +22,17 @@ export const ModCar = ({ vehicles,  firstIndex, lastIndex}) => {
     //   setDescription(response.data.description)
     // })
 
-      setId(vehicle.idvehcle)
-      setBrand(vehicle.brand)
-      setModel(vehicle.model)
-      setPrice(vehicle.price_per_day)
-      setPlate(vehicle.plate)
-      setYear(vehicle.year)
-      setDetail(vehicle.detail)
-      setDescription(vehicle.long_description)
+    setId(vehicle.idvehcle);
+    setBrand(vehicle.brand);
+    setModel(vehicle.model);
+    setPrice(vehicle.price_per_day);
+    setPlate(vehicle.plate);
+    setYear(vehicle.year);
+    setDetail(vehicle.detail);
+    setDescription(vehicle.long_description);
 
-    setShowModal(!showModal)
-  }
-
+    setShowModal(!showModal);
+  };
 
   //* Controled inputs states
   const [id, setId] = useState("");
@@ -54,7 +51,6 @@ export const ModCar = ({ vehicles,  firstIndex, lastIndex}) => {
   const [yearErr2, setYearErr2] = useState(false);
   const [detailErr, setDetailErr] = useState(false);
   const [descriptionErr, setDescriptionErr] = useState(false);
-
 
   const handlerEdit = (e) => {
     e.preventDefault();
@@ -100,7 +96,7 @@ export const ModCar = ({ vehicles,  firstIndex, lastIndex}) => {
       fields[1].state &&
       fields[0].state
     ) {
-      toast.success('Todo ok')
+      toast.success("Todo ok");
       // toast.promise(
       //   axios.post(apiUrl, {
       //     idvehicle:id,
@@ -120,51 +116,72 @@ export const ModCar = ({ vehicles,  firstIndex, lastIndex}) => {
       //     error: "Error while editing",
       //   }
       // );
-      setShowModal(!showModal)
+      setShowModal(!showModal);
     }
   };
 
-
   return (
     <>
-      {vehicles.map((vehicle) => {
-        return (
-          <div className=" w-2/5  m-3 rounded-2xl overflow-hidden shadow-md flex flex-col font-poppins hover:shadow-lg transition-all duration-200">
-            <div className="flex items-center justify-between p-4">
-              <div className="w-1/2">
-                <Image className="w-full object-contain" src={image} />
-              </div>
-              <div className="flex flex-col items-end">
-                <div className="flex items-start gap-1 font-bold text-lg">
-                  <p className="text-start truncate ">{vehicle.brand}</p>
-                  <p>{vehicle.model}</p>
+      {vehicles
+        .map((vehicle) => {
+          return (
+            <div className=" w-2/5  m-3 rounded-2xl overflow-hidden shadow-md flex flex-col font-poppins hover:shadow-lg transition-all duration-200">
+              <div className="flex items-center justify-between p-4">
+                <div className="w-1/2">
+                  <Image
+                    className="w-full object-contain"
+                    src={image}
+                    alt="mod-car"
+                  />
                 </div>
-                <p className="text-gray-400 font-semibold">{vehicle.year}</p>
+                <div className="flex flex-col items-end">
+                  <div className="flex items-start gap-1 font-bold text-lg">
+                    <p className="text-start truncate ">{vehicle.brand}</p>
+                    <p>{vehicle.model}</p>
+                  </div>
+                  <p className="text-gray-400 font-semibold">{vehicle.year}</p>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between">
+                <p className="ml-4">
+                  <span className="font-semibold">
+                    ${vehicle.price_per_day}
+                  </span>
+                  <span className="text-gray-400">/day</span>
+                </p>
+                <button
+                  className="bg-green-400 font-semibold text-white px-8 py-3 rounded-tl-2xl hover:bg-black transition-all duration-300 ease-in-out"
+                  onClick={() => handlerModal(vehicle, vehicle.plate)}
+                >
+                  Edit
+                </button>
               </div>
             </div>
-
-            <div className="flex items-center justify-between">
-              <p className="ml-4">
-                <span className="font-semibold">${vehicle.price_per_day}</span>
-                <span className="text-gray-400">/day</span>
-              </p>
-              <button
-                className="bg-green-400 font-semibold text-white px-8 py-3 rounded-tl-2xl hover:bg-black transition-all duration-300 ease-in-out"
-                onClick={ () => handlerModal(vehicle, vehicle.plate)}
-              >
-                Edit
-              </button>
-            </div>
-          </div>
-        );
-      }).slice(firstIndex, lastIndex)}
+          );
+        })
+        .slice(firstIndex, lastIndex)}
 
       {/* ------------------------------- EDIT MODAL ------------------------------- */}
-      <div className= {`fixed inset-0 z-30 bg-gray-500 bg-opacity-75 transition-opacity ${showModal ? 'flex' : 'hidden'}`} id="modalBg"></div>
-      <div id="modal" className={` z-50 min-h-full justify-center items-center p-0 fixed inset-0  ${showModal? 'flex' : 'hidden'}`}>
+      <div
+        className={`fixed inset-0 z-30 bg-gray-500 bg-opacity-75 transition-opacity ${
+          showModal ? "flex" : "hidden"
+        }`}
+        id="modalBg"
+      ></div>
+      <div
+        id="modal"
+        className={` z-50 min-h-full justify-center items-center p-0 fixed inset-0  ${
+          showModal ? "flex" : "hidden"
+        }`}
+      >
         <div className="flex flex-col m-5 px-10 pt-5 max-w-2xl flex-auto overflow-hidden rounded-3xl bg-white text-sm leading-6 shadow-lg ring-1 ring-gray-900/5">
-
-          <button className="p-4 self-end" onClick={()=>{setShowModal(!showModal)}}>
+          <button
+            className="p-4 self-end"
+            onClick={() => {
+              setShowModal(!showModal);
+            }}
+          >
             <GrClose />
           </button>
 
@@ -187,14 +204,12 @@ export const ModCar = ({ vehicles,  firstIndex, lastIndex}) => {
                       value={brand}
                       readOnly
                       className="block w-full cursor-pointer rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 focus:outline-none sm:text-sm sm:leading-6 transition ease-in-out duration-300"
-                    >
-                    </input>
+                    ></input>
                   </div>
 
                   <span className="flex items-center font-medium tracking-wide text-gray-300 text-xs mt-1 ml-1">
                     * This camp can't be modified
                   </span>
-
                 </div>
 
                 <div className="m-3">
@@ -208,14 +223,12 @@ export const ModCar = ({ vehicles,  firstIndex, lastIndex}) => {
                       readOnly
                       type="text"
                       className="block mt-2 w-full cursor-pointer rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 focus:outline-none sm:text-sm sm:leading-6 transition ease-in-out duration-300"
-                    >
-                    </input>
+                    ></input>
                   </div>
 
                   <span className="flex items-center font-medium tracking-wide text-gray-300 text-xs mt-1 ml-1">
-                    * This field can't be moddified 
+                    * This field can't be moddified
                   </span>
-
                 </div>
 
                 <hr className="mt-5 mb-5" />

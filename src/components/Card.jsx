@@ -11,6 +11,7 @@ export const Card = (props) => {
             className="w-full h-full aspect-video mix-blend-darken object-contain"
             width={500}
             height={300}
+            alt="card"
             src={props.vehicle.images[0]?.url}
           />
         </div>

@@ -21,11 +21,13 @@ export default function Registration() {
 
   const handlePersonalDetailsNext = (data) => {
     setPersonalDetails(data);
+
     let completeObject = {
       ...dataDetails,
       ...data,
     };
-    console.log(completeObject);
+
+    console.log('completeObject :>> ', completeObject);
 
     axios
       .post("/api/register", completeObject)
