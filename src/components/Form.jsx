@@ -1,7 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
-import Options from "./Options";
 
 export const Form = () => {
   const handlerSubmit = (e) => {
@@ -13,7 +12,11 @@ export const Form = () => {
       { state: price, setter: setPriceErr, id: "#priceInput" },
       { state: plate, setter: setPlateErr, id: "#plateInput" },
       { state: detail, setter: setDetailErr, id: "#detailInput" },
-      {state: description, setter: setDescriptionErr, id: "#descriptionInput"},
+      {
+        state: description,
+        setter: setDescriptionErr,
+        id: "#descriptionInput",
+      },
     ];
 
     fields.forEach((field) => {
@@ -57,9 +60,9 @@ export const Form = () => {
   function createPost() {
     toast.promise(
       axios.post(apiUrl, {
-        plate: plate,
-        brand: brand,
+        brand: brand.id,
         model: model,
+        plate: plate,
         detail: detail,
         year: +year,
         price_per_day: +price,
@@ -76,8 +79,11 @@ export const Form = () => {
   }
 
   //* Controled inputs states
-  const [brand, setBrand] = useState("");
-  const [model, setModel] = useState("");
+  const [brand, setBrand] = useState({
+    id: 0,
+    models: [],
+  });
+  const [model, setModel] = useState();
   const [price, setPrice] = useState("");
   const [plate, setPlate] = useState("");
   const [year, setYear] = useState("");
@@ -94,29 +100,17 @@ export const Form = () => {
   const [detailErr, setDetailErr] = useState(false);
   const [descriptionErr, setDescriptionErr] = useState(false);
 
-  const [foundCars, setFoundCars] = useState([]);
-  const [foundBrands, setFoundBrands] = useState([]);
-  const [foundModel, setFoundModel] = useState([]);
+  const [brands, setBrands] = useState([]);
+  const [models, setModels] = useState([]);
+
+  const fetchBrands = async () => {
+    const res = await axios("/api/brand");
+    setBrands(res.data);
+  };
 
   useEffect(() => {
-    axios.get(apiUrl).then((response) => {
-      setFoundCars(response.data);
-
-      const uniqueBrands = new Set();
-      response.data.forEach((car) => uniqueBrands.add(car.brand));
-      setFoundBrands(uniqueBrands);
-    });
+    fetchBrands();
   }, []);
-
-  useEffect(() => {
-    const uniqueModels = new Set();
-    foundCars.forEach((car) => {
-      if (car.brand === brand) {
-        uniqueModels.add(car.model);
-      }
-    });
-    setFoundModel(uniqueModels);
-  }, [brand]);
 
   return (
     <>
@@ -129,7 +123,7 @@ export const Form = () => {
         className="flex items-center flex-col "
       >
         <div className="grid md:grid-cols-2 grid-cols-1">
-          <div className="">
+          <div>
             <div className="m-[0.85rem]  ">
               <label className="block text-sm font-medium leading-6 text-gray-900">
                 Brand
@@ -139,14 +133,29 @@ export const Form = () => {
                 <select
                   id="brandInput"
                   type="text"
-                  value={brand}
-                  onChange={(e) => setBrand(e.target.value)}
+                  onChange={(e) => {
+                    const selectedBrand = JSON.parse(e.target.value);
+
+                    setBrand((prevState) => ({
+                      ...prevState,
+                      id: selectedBrand.idbrand,
+                      models: selectedBrand.model,
+                    }));
+
+                    console.log("brand :>> ", brand.id);
+                  }}
                   className="block w-full cursor-pointer rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 focus:outline-none sm:text-sm sm:leading-6 transition ease-in-out duration-300"
                 >
                   <option value="" disabled>
                     Select some brand
                   </option>
-                  <Options list={foundBrands} />
+                  {brands.map((brand) => {
+                    return (
+                      <option value={JSON.stringify(brand)} key={brand.idbrand}>
+                        {brand.name}
+                      </option>
+                    );
+                  })}
                 </select>
               </div>
               {brandErr ? (
@@ -166,14 +175,23 @@ export const Form = () => {
                 <select
                   id="modelInput"
                   value={model}
-                  onChange={(e) => setModel(e.target.value)}
+                  onChange={(e) => {
+                    setModel(e.target.value);
+                    console.log("model :>> ", model);
+                  }}
                   type="text"
                   className="block mt-2 w-full cursor-pointer rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 focus:outline-none sm:text-sm sm:leading-6 transition ease-in-out duration-300"
                 >
                   <option value="" disabled>
                     Select some model
                   </option>
-                  <Options list={foundModel} />
+                  {brand.models.map((model) => {
+                    return (
+                      <option value={model.idmodel} key={model.idmodel}>
+                        {model.name}
+                      </option>
+                    );
+                  })}
                 </select>
               </div>
               {modelErr ? (
@@ -248,11 +266,6 @@ export const Form = () => {
                   />
                 </label>
               </div>
-              {/* 
-                            {modelErr?                             
-                            <span className="flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1">
-                                The model can't be blank    
-                            </span> : <></>} */}
             </div>
           </div>
 
@@ -357,7 +370,7 @@ export const Form = () => {
           </div>
         </div>
 
-        <div className="m-5 mb-8 ">
+        <div className="mt-5  ">
           <button className="rounded-xl py-3 px-5 w-full text-white bg-primary hover:bg-secondary file:transition-all duration-200 ease-in-out">
             Submit
           </button>

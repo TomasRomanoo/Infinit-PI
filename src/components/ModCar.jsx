@@ -6,7 +6,7 @@ import { GrClose } from "react-icons/gr";
 import axios from "axios";
 import { toast } from "sonner";
 
-export const ModCar = ({ vehicles }) => {
+export const ModCar = ({ vehicles,  firstIndex, lastIndex}) => {
 
   const apiUrl = "http://localhost:3000/api/vehicles/";
   const [showModal, setShowModal] = useState(false)
@@ -129,7 +129,7 @@ export const ModCar = ({ vehicles }) => {
     <>
       {vehicles.map((vehicle) => {
         return (
-          <div className=" w-full  rounded-2xl overflow-hidden shadow-md flex flex-col font-poppins relative hover:shadow-lg transition-all duration-200">
+          <div className=" w-2/5  m-3 rounded-2xl overflow-hidden shadow-md flex flex-col font-poppins hover:shadow-lg transition-all duration-200">
             <div className="flex items-center justify-between p-4">
               <div className="w-1/2">
                 <Image className="w-full object-contain" src={image} />
@@ -157,7 +157,7 @@ export const ModCar = ({ vehicles }) => {
             </div>
           </div>
         );
-      })}
+      }).slice(firstIndex, lastIndex)}
 
       {/* ------------------------------- EDIT MODAL ------------------------------- */}
       <div className= {`fixed inset-0 z-30 bg-gray-500 bg-opacity-75 transition-opacity ${showModal ? 'flex' : 'hidden'}`} id="modalBg"></div>

@@ -2,15 +2,15 @@
 import React, { useEffect } from "react";
 
 export default function Success() {
-  useEffect(() => {
+ /*  useEffect(() => {
     const redirectTimeout = setTimeout(() => {
-      window.location.href = "/"; // Replace "/destination" with your desired URL
+      window.location.href = "/"; 
     }, 3000);
 
     return () => {
-      clearTimeout(redirectTimeout); // Clear the timeout if the component is unmounted before the delay completes
+      clearTimeout(redirectTimeout); 
     };
-  }, []);
+  }, []); */
 
   return (
     <div className="flex flex-col items-center justify-center gap-5">

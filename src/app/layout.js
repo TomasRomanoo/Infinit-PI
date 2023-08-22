@@ -6,6 +6,7 @@ import "@/assets/styles/swiperStyles.css";
 import { Inter } from "next/font/google";
 import { Footer } from "@/components/Footer";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import { UserProvider } from "@/components/context/UserContext";
 
 export const metadata = {
   title: "INFINIT",
@@ -17,15 +18,17 @@ const clientId =
 export default function RootLayout({ children }) {
   return (
     <GoogleOAuthProvider clientId={clientId}>
-      <html lang="en">
-        <body className="h-full bg-gray-100 ">
-          <Navbar />
-          <div className="mt-40 mx-5 md:mx-12 lg:mx-20" id="home">
-            {children}
-          </div>
-          <Footer />
-        </body>
-      </html>
+      <UserProvider>
+        <html lang="en">
+          <body className="h-full bg-gray-100 ">
+            <Navbar />
+            <div className="mt-40 mx-5 md:mx-12 lg:mx-20" id="home">
+              {children}
+            </div>
+            <Footer />
+          </body>
+        </html>
+      </UserProvider>
     </GoogleOAuthProvider>
   );
 }

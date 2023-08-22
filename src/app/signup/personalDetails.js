@@ -2,11 +2,9 @@
 
 import React, { useState, useEffect } from "react";
 
-
-
 export default function PersonalDetails({ onBack, onNext, data }) {
-  const [firstName, setFirstName] = useState(data.firstName || "");
-  const [lastName, setLastName] = useState(data.lastName || "");
+  const [first_name, setFirstName] = useState(data.first_name || "");
+  const [last_name, setLastName] = useState(data.last_name || "");
   const [phone, setPhone] = useState(data.phone || "");
   const [address, setAddress] = useState(data.address || "");
   const [city, setCity] = useState(data.city || "");
@@ -19,13 +17,22 @@ export default function PersonalDetails({ onBack, onNext, data }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onNext({ firstName, lastName, phone, address, country, identification });
+    onNext({
+      first_name,
+      last_name,
+      phone,
+      address,
+      city,
+      country,
+      zipCode,
+      identification,
+    });
     setSubmitted(true);
   };
 
   const isButtonDisabled =
-    firstName.trim() === "" ||
-    lastName.trim() === "" ||
+    first_name.trim() === "" ||
+    last_name.trim() === "" ||
     phone.trim() === "" ||
     address.trim() === "";
   identification.trim() === "";
@@ -60,7 +67,7 @@ export default function PersonalDetails({ onBack, onNext, data }) {
               <input
                 type="text"
                 className="px-1 py-1.5 border-black border-2 rounded-md"
-                value={firstName}
+                value={first_name}
                 onChange={(e) => {
                   setFirstName(e.target.value);
                 }}
@@ -71,7 +78,7 @@ export default function PersonalDetails({ onBack, onNext, data }) {
               <input
                 type="text"
                 className="px-2 py-1.5 border-black border-2 rounded-md"
-                value={lastName}
+                value={last_name}
                 onChange={(e) => {
                   setLastName(e.target.value);
                 }}

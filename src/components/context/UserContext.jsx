@@ -1,30 +1,28 @@
 "use client";
 
 import { createContext, useState } from "react";
-export const UserContext = createContext();
 import jwt from "jsonwebtoken";
+
+export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState("");
 
   const loginUser = (token) => {
     setUser(token);
-    // Set the session ID as an HTTP cookie with appropriate attributes
-    document.cookie = `sessionID=${token}; path=/; secure; HttpOnly`;
   };
-  const getUser = () => {
+  
+  const getUser = (token) => {
     try {
-      const sessionID = document.cookie
-        .split("; ")
-        .find((row) => row.startsWith("sessionID="))
-        .split("=")[1];
-
-      const decodedUser = jwt.verify(sessionID, "your-secret-key");
+      const decodedUser = jwt.decode(token);
       return decodedUser;
     } catch (error) {
+      console.error("Error decoding token:", error);
       return null;
     }
   };
+ 
+ 
   const signoutUser = () => {
     setUser("");
     document.cookie =

@@ -67,11 +67,16 @@ export async function POST(request) {
 
 // Método GETALL
 export async function GET() {
-  console.log("The GETALL function has been called.");
+  console.log("The GETALL VEHICLES function has been called.");
   try {
     const cars = await prisma.vehicle.findMany({
       include: {
         images: true,
+        model:{
+          include:{
+            brand:true
+          }
+        }
       },
     });
 
