@@ -13,7 +13,10 @@
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // output: 'export',
+  
   images: {
+    unoptimized: true ,
     domains: ["c6-pi-grupo3.s3.amazonaws.com"],
     remotePatterns: [
       {
