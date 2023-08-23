@@ -91,7 +91,7 @@ export default function PersonalDetails({ onBack, onNext, data }) {
     <div className="sm:mx-auto px-6">
       <form onSubmit={handleSubmit}>
         <div className="space-y-6">
-          <div className="flex items-center justify-between w-full flex-wrap ">
+          <di v className="flex items-center justify-between w-full flex-wrap ">
             <div className="flex flex-col sm:w-[48%] w-full mb-6 sm:mb-0">
               <label>First Name</label>
               <input
@@ -114,7 +114,7 @@ export default function PersonalDetails({ onBack, onNext, data }) {
                 }}
               />
             </div>
-          </div>
+          </di>
           <div className="flex flex-col">
             <label>Phone Number</label>
             <input

@@ -2,7 +2,6 @@
 import { Footer } from "@/components/Footer";
 import Image from "next/image";
 import bluecar from "@/assets/images/blue-car.jpg";
-import honda from "@/assets/images/honda-civic.png";
 
 import { motion } from "framer-motion";
 import axios from "axios";
@@ -11,8 +10,11 @@ import { Booking } from "@/components/Booking.jsx";
 import { CardList } from "@/components/CardList";
 import PorscheCanvas from "@/components/canvas/Porsche";
 
+import Link from "next/link";
+
 export default function Home() {
   const [vehicles, setVehicles] = useState([]);
+  const [categories, setCategories] = useState([]);
 
   const fetchVehicles = async () => {
     const res = await axios("/api/vehicle");
@@ -20,8 +22,15 @@ export default function Home() {
     setVehicles(res.data.slice(0, 10));
   };
 
+  const fetchCategories = async () => {
+    const res = await axios("/api/category");
+
+    setCategories(res.data);
+  };
+
   useEffect(() => {
     fetchVehicles();
+    fetchCategories();
   }, []);
 
   return (
@@ -33,7 +42,11 @@ export default function Home() {
         <Booking />
       </motion.div>
       <Hero />
-
+      <div className="flex items-center gap-4 mt-20">
+        {categories.map((category) => {
+          return <Category category={category} />;
+        })}
+      </div>
       <div>
         <p className="font-poppins text-4xl mb-2 text-center mt-24">
           Take a look to our fleet
@@ -74,5 +87,22 @@ const Hero = () => {
         {/*      <PorscheCanvas /> */}
       </motion.div>
     </div>
+  );
+};
+
+const Category = ({ category }) => {
+  return (
+    <Link href={`/fleet/${category.name}`}>
+      <div className="flex flex-col items-center justify-between " key={category.idcategory}>
+        <Image
+          width={300}
+          height={200}
+          className="object-contain rounded-md"
+          src={category.url}
+          alt="category"
+        />
+        <p className="font-poppins text-lg font-bold capitalize">{category.name}</p>
+      </div>
+    </Link>
   );
 };
