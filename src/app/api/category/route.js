@@ -25,18 +25,18 @@ export async function POST(request) {
   }
 }
 
-
 export async function GET() {
-    console.log("The GETALL function has been called.");
-    try {
-      const categories = await prisma.category.findMany();
-      return NextResponse.json(categories, { status: 200, data: categories });
-    } catch (error) {
-      console.error(error);
-      return NextResponse.json(
-        { message: "Error getting categories" },
-        { status: 500 }
-      );
-    }
+  console.log("The GETALL function has been called.");
+  try {
+    const categories = await prisma.category.findMany({
+      where: { deleted: false },
+    });
+    return NextResponse.json(categories, { status: 200, data: categories });
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json(
+      { message: "Error getting categories" },
+      { status: 500 }
+    );
   }
-  
+}

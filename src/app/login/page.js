@@ -1,6 +1,5 @@
 "use client";
 import React from "react";
-
 import { GoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import Swal from "sweetalert2/dist/sweetalert2.js";
@@ -8,27 +7,26 @@ import "sweetalert2/src/sweetalert2.scss";
 import Link from "next/link";
 import { useContext, useState } from "react";
 import { UserContext } from "@/components/context/UserContext";
-import jwt from "jsonwebtoken";
 import { Infinit } from "@/components/Infinit";
 
 export default function Login() {
   const [userData, setUserData] = useState({ email: "", password: "" });
-  const [response, setResponse] = useState(null);
   const [submitted, setSubmitted] = useState(false);
+  const userContext = useContext(UserContext);
 
-  const user = useContext(UserContext);
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top-bottom",
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+  });
 
   const fetchUser = () => {
-    const Toast = Swal.mixin({
-      toast: true,
-      position: "top-end",
-      showConfirmButton: false,
-      timer: 3000,
-      timerProgressBar: true,
-    });
     axios
-      .post("/api/user", userData)
+      .post("/api/auth/login", userData)
       .then((res) => {
+        userContext.loginUser(res.data.token);
         Toast.fire({
           icon: "success",
           title: res.data.msg,
@@ -37,17 +35,28 @@ export default function Login() {
         });
       })
       .catch((error) => {
-        /*    Toast.fire({
+        Toast.fire({
           icon: "error",
-          title: error.response.data.error,
-        }); */
+          title: error.response.data.msg,
+        });
       });
   };
 
   const handleUserLogin = (e) => {
     e.preventDefault();
-    setResponse(null);
     setSubmitted(true);
+
+    if (userData.email.length <= 0 || userData.password.length <= 0) {
+      Toast.fire({
+        icon: "error",
+        title: "You must complete all fields",
+      });
+      return;
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userData.email)) {
+      return;
+    }
 
     fetchUser();
   };
@@ -124,7 +133,7 @@ export default function Login() {
               )}
             </div>
 
-            <button className="w-full hover:bg-primary shadow-md bg-black text-white transition all duration-300 font-medium text-white text-sm px-8 py-2 rounded-md">
+            <button className="w-full hover:bg-primary shadow-md bg-black  transition all duration-300 font-medium text-white text-sm px-8 py-2 rounded-md">
               Sign in
             </button>
           </form>
