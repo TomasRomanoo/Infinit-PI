@@ -8,15 +8,19 @@ import Link from "next/link";
 import { useContext, useState } from "react";
 import { UserContext } from "@/components/context/UserContext";
 import { Infinit } from "@/components/Infinit";
+import { useRouter } from 'next/navigation';
+
 
 export default function Login() {
   const [userData, setUserData] = useState({ email: "", password: "" });
   const [submitted, setSubmitted] = useState(false);
   const userContext = useContext(UserContext);
 
+  const { push } = useRouter();
+
   const Toast = Swal.mixin({
     toast: true,
-    position: "top-bottom",
+    position: "top-start",
     showConfirmButton: false,
     timer: 3000,
     timerProgressBar: true,
@@ -31,7 +35,7 @@ export default function Login() {
           icon: "success",
           title: res.data.msg,
         }).then(() => {
-          window.location.href = "/";
+          push("/")
         });
       })
       .catch((error) => {

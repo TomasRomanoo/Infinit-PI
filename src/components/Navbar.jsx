@@ -258,7 +258,7 @@ export const Navbar = () => {
           ) : (
             <div className="flex items-center gap-8">
               <button className="p-6 py-3 rounded-md hover:bg-primary bg-black text-white  transition-all duration-200 ease-in-out">
-                <Link href={"/account"}>Account</Link>
+                <Link href={"/porfile"}>Account</Link>
               </button>
               {/* {getUser().role == "ADMIN" ? (
                 <button className="p-6 py-3 rounded-md hover:bg-primary bg-black text-white transition-all duration-200 ease-in-out">
@@ -357,7 +357,7 @@ export const Navbar = () => {
             >
               <Link href="/account">Account</Link>
             </button>
-            {user.role == "ADMIN" ? (
+            {user.role == 1 ? (
               <button
                 onClick={closeSidebar}
                 className="w-full p-6 py-3 rounded-md hover:bg-primary bg-black text-white  transition-all duration-200 ease-in-out"
