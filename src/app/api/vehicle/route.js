@@ -9,15 +9,21 @@ export async function POST(request) {
     const body = await request.json();
 
     console.log("body :>> ", body);
-    /* const {
-      plate,
-      brand,
-      model,
-      detail,
+    const {
+      model:{
+        idmodel,
+        brand:{
+          idbrand,
+        },
+      },
       year,
+      plate,
+      categoryIdcategory,
+      images,
+      detail,
       price_per_day,
       long_description,
-    } = body; */
+    } = body;
 
     /*   if (!plate || !model || !price_per_day || price_per_day <= 0) {
       return NextResponse.json(
@@ -31,27 +37,23 @@ export async function POST(request) {
  */
     const car = await prisma.vehicle.create({
       data: {
-        name: `${brand} ${model} ${year}`,
+        name: `${year}`,
         plate,
-        brand: {
-          connect: { idbrand: brandId },
-        },
         model: {
-          connect: { idmodel: modelId },
+          connect: { idmodel: idmodel },
         },
         category: {
-          connect: { idcategory: categoryId },
-        },
-        specifications: {
-          connect: { idspecification: specificationId },
-        },
-        images: {
-          create: images.map((url) => ({ url })),
+          connect: { idcategory: categoryIdcategory },
         },
         detail,
         year,
         price_per_day,
         long_description,
+        deleted: false, // Set to default value
+      },
+      include: {
+        model: true,
+        category: true,
       },
     });
     return NextResponse.json(
@@ -64,7 +66,7 @@ export async function POST(request) {
   }
 }
 
-// Método GETALLasasasasasaqs
+// Método GETALL
 export async function GET() {
   console.log("The GETALL VEHICLES function has been called.");
   try {
