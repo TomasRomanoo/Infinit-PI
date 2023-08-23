@@ -10,13 +10,13 @@ export const UserProvider = ({ children }) => {
 
   const loginUser = (token) => {
     setUser(token);
-    getUser(user);
+    getUser();
     console.log("User",user)
   };
   
-  const getUser = (token) => {
+  const getUser = () => {
     try {
-      const decodedUser = jwt.decode(token);
+      const decodedUser = jwt.decode(user);
       return decodedUser;
     } catch (error) {
       console.error("Error decoding token:", error);

@@ -245,7 +245,8 @@ export const Navbar = () => {
         </ul>
 
         <div className="lg:block hidden font-poppins">
-          {getUser() == false ? (
+          {console.log(getUser)}
+          {getUser() == null ? (
             <div className="flex items-center gap-8">
               <button className="p-6 py-3 rounded-md bg-primary hover:bg-secondary shadow-lg text-white transition-all duration-200 ease-in-out">
                 <Link href={"/signup"}>Join now</Link>
