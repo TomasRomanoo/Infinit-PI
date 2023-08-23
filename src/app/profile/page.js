@@ -5,7 +5,7 @@ import { useState } from "react";
 
 
 
-export default function Porfile(){
+export default function Profile(){
     
     const [email, setEmail] = useState('example@gmail.com')
     const [phone, setPhone] = useState('123456')
