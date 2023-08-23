@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import { BiMenuAltLeft } from "react-icons/bi";
 import { HiHome } from "react-icons/hi";
@@ -17,13 +17,21 @@ import { LiaKeySolid } from "react-icons/lia";
 import { BsNut } from "react-icons/bs";
 import { GoStack } from "react-icons/go";
 import { Infinit } from "./Infinit";
+import axios from "axios";
+import { UserContext } from "./context/UserContext";
+
 
 export const Navbar = () => {
-  const [user, isUserLogged] = useState(false);
+
+  const {user, getUser} = useContext(UserContext)  // const [user, isUserLogged] = useState(false);
   const [sideMenu, isSideMenuOpen] = useState(false);
   const [MngmntOpen, isMngmntOpen] = useState(false);
   const [MngmntMobileOpen, isMngmntMobileOpen] = useState(false);
 
+  useEffect(() => {
+    console.log("get user: ",getUser());
+
+  },[user])
   const openSidebar = () => {
     isSideMenuOpen(!sideMenu);
 
@@ -237,7 +245,7 @@ export const Navbar = () => {
         </ul>
 
         <div className="lg:block hidden font-poppins">
-          {user == false ? (
+          {getUser() == false ? (
             <div className="flex items-center gap-8">
               <button className="p-6 py-3 rounded-md bg-primary hover:bg-secondary shadow-lg text-white transition-all duration-200 ease-in-out">
                 <Link href={"/signup"}>Join now</Link>
@@ -251,11 +259,11 @@ export const Navbar = () => {
               <button className="p-6 py-3 rounded-md hover:bg-primary bg-black text-white  transition-all duration-200 ease-in-out">
                 <Link href={"/account"}>Account</Link>
               </button>
-              {user.role == "ADMIN" ? (
+              {/* {getUser().role == "ADMIN" ? (
                 <button className="p-6 py-3 rounded-md hover:bg-primary bg-black text-white transition-all duration-200 ease-in-out">
                   <Link href={"/dashboard"}>Dashboard</Link>
                 </button>
-              ) : null}
+              ) : null} */}
             </div>
           )}
         </div>
