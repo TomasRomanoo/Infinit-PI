@@ -118,7 +118,7 @@ export default function PersonalDetails({ onBack, onNext, data }) {
           <div className="flex flex-col">
             <label>Phone Number</label>
             <input
-              type="text"
+              type="number"
               className={`px-2 py-1.5 border-black border-2 rounded-md ${
                 submitted && phoneError ? "border-red-500" : ""
               }`}

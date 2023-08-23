@@ -43,79 +43,79 @@ const DashboardPage = () => {
 
   
 const fetchVehicles = async () => {
-  // setVehicles(((await axios("http://localhost:3000/api/vehicles")).data))
-  setVehicles([
-    {
-      "idvehicle": 1,
-      "plate": "Auto1",
-      "brand": "ASD",
-      "model": "AutoModel",
-      "detail": "ASD",
-      "year": 2000,
-      "price_per_day": 100,
-      "long_description": "ASD"
-  },
-  {
-    "idvehicle": 2, 
-    "plate": "testEliminar",
-    "brand": "Toyota",
-    "model": "Camry",
-    "detail": "ASD",
-    "year": 2000,
-    "price_per_day": 1,
-    "long_description": "ASD"
-},
-{
-  "idvehicle": 53,
-  "plate": "testEliminar",
-  "brand": "Toyota",
-  "model": "Camry",
-  "detail": "ASD",
-  "year": 2000,
-  "price_per_day": 1,
-  "long_description": "ASD"
-},
-{
-  "idvehicle": 53,
-  "plate": "testEliminar",
-  "brand": "Toyota",
-  "model": "Camry",
-  "detail": "ASD",
-  "year": 2000,
-  "price_per_day": 1,
-  "long_description": "ASD"
-},
-{
-  "idvehicle": 53,
-  "plate": "testEliminar",
-  "brand": "Toyota",
-  "model": "Camry",
-  "detail": "ASD",
-  "year": 2000,
-  "price_per_day": 1,
-  "long_description": "ASD"
-},
-{
-  "idvehicle": 53,
-  "plate": "testEliminar",
-  "brand": "Toyota",
-  "model": "Camry",
-  "detail": "ASD",
-  "year": 2000,
-  "price_per_day": 1,
-  "long_description": "ASD"
-},
-{
-  "idvehicle": 53,
-  "plate": "testEliminar",
-  "brand": "Toyota",
-  "model": "Camry",
-  "detail": "ASD",
-  "year": 2000,
-  "price_per_day": 1,
-  "long_description": "ASD"
-}
-  ])
+  setVehicles(((await axios.get("http://localhost:3000/api/vehicle")).data))
+//   setVehicles([
+//     {
+//       "idvehicle": 1,
+//       "plate": "Auto1",
+//       "brand": "ASD",
+//       "model": "AutoModel",
+//       "detail": "ASD",
+//       "year": 2000,
+//       "price_per_day": 100,
+//       "long_description": "ASD"
+//   },
+//   {
+//     "idvehicle": 2, 
+//     "plate": "testEliminar",
+//     "brand": "Toyota",
+//     "model": "Camry",
+//     "detail": "ASD",
+//     "year": 2000,
+//     "price_per_day": 1,
+//     "long_description": "ASD"
+// },
+// {
+//   "idvehicle": 53,
+//   "plate": "testEliminar",
+//   "brand": "Toyota",
+//   "model": "Camry",
+//   "detail": "ASD",
+//   "year": 2000,
+//   "price_per_day": 1,
+//   "long_description": "ASD"
+// },
+// {
+//   "idvehicle": 53,
+//   "plate": "testEliminar",
+//   "brand": "Toyota",
+//   "model": "Camry",
+//   "detail": "ASD",
+//   "year": 2000,
+//   "price_per_day": 1,
+//   "long_description": "ASD"
+// },
+// {
+//   "idvehicle": 53,
+//   "plate": "testEliminar",
+//   "brand": "Toyota",
+//   "model": "Camry",
+//   "detail": "ASD",
+//   "year": 2000,
+//   "price_per_day": 1,
+//   "long_description": "ASD"
+// },
+// {
+//   "idvehicle": 53,
+//   "plate": "testEliminar",
+//   "brand": "Toyota",
+//   "model": "Camry",
+//   "detail": "ASD",
+//   "year": 2000,
+//   "price_per_day": 1,
+//   "long_description": "ASD"
+// },
+// {
+//   "idvehicle": 53,
+//   "plate": "testEliminar",
+//   "brand": "Toyota",
+//   "model": "Camry",
+//   "detail": "ASD",
+//   "year": 2000,
+//   "price_per_day": 1,
+//   "long_description": "ASD"
+// }
+//   ])
 
 };
 useEffect(() => {fetchVehicles()},[])
