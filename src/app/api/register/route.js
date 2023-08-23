@@ -58,7 +58,7 @@ export async function POST(request) {
         role: {
           connect: { idrole: 2 },
         },
-        deleted: 0,
+        deleted: false,
       },
     });
 

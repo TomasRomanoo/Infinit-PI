@@ -16,7 +16,7 @@ export default function Login() {
 
   const Toast = Swal.mixin({
     toast: true,
-    position: "top-end",
+    position: "top-bottom",
     showConfirmButton: false,
     timer: 3000,
     timerProgressBar: true,
@@ -26,13 +26,12 @@ export default function Login() {
     axios
       .post("/api/auth/login", userData)
       .then((res) => {
-        console.log("res :>> ", res);
         userContext.loginUser(res.data.token);
         Toast.fire({
           icon: "success",
           title: res.data.msg,
         }).then(() => {
-          /*  window.location.href = "/"; */
+          window.location.href = "/";
         });
       })
       .catch((error) => {

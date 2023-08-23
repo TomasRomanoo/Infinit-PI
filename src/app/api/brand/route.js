@@ -34,7 +34,10 @@ export async function POST(request) {
 export async function GET() {
   console.log("The GETALL BRANDS function has been called.");
   try {
-    const brands = await prisma.brand.findMany({ include: { model: true } });
+    const brands = await prisma.brand.findMany({
+      include: { model: true },
+      where: { deleted: 0 },
+    });
     return NextResponse.json(brands, { status: 200, data: brands });
   } catch (error) {
     console.error(error);

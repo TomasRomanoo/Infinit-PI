@@ -10,6 +10,8 @@ export const UserProvider = ({ children }) => {
 
   const loginUser = (token) => {
     setUser(token);
+    getUser(user);
+    console.log("User",user)
   };
   
   const getUser = (token) => {
@@ -21,8 +23,7 @@ export const UserProvider = ({ children }) => {
       return null;
     }
   };
- 
- 
+
   const signoutUser = () => {
     setUser("");
     document.cookie =
