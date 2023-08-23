@@ -26,6 +26,8 @@ import { AiOutlineClose } from "react-icons/ai";
 import Calendar from "react-calendar";
 import swiperConfig from "@/utils/swiperConfig";
 import { Booking } from "@/components/Booking";
+import Characterist from "./characterist";
+
 
 const Detail = (vehicle) => {
   const images = [
@@ -94,7 +96,9 @@ const Detail = (vehicle) => {
 
             <p className="text-gray-400 text-xl">{vehicle.long_description}</p>
           </div>
-        </div>
+      
+        </div> 
+        <Characterist/>
       </div>
     </>
   );
@@ -180,6 +184,7 @@ const GalleryModal = ({ selectedImageId, images, close }) => {
           })}
         </Swiper>
       </div>
+      
     </div>
   );
 };
