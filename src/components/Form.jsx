@@ -12,6 +12,7 @@ export const Form = () => {
       { state: price, setter: setPriceErr, id: "#priceInput" },
       { state: plate, setter: setPlateErr, id: "#plateInput" },
       { state: detail, setter: setDetailErr, id: "#detailInput" },
+      { state: category, setter: categoryErr, id: "#categoryInput" },
       {
         state: description,
         setter: setDescriptionErr,
@@ -44,6 +45,7 @@ export const Form = () => {
       year.length !== 0 &&
       year < 2023 &&
       year > 1886 &&
+      fields[6].state &&
       fields[5].state &&
       fields[4].state &&
       fields[3].state &&
@@ -89,6 +91,7 @@ export const Form = () => {
   const [year, setYear] = useState("");
   const [detail, setDetail] = useState("");
   const [description, setDescription] = useState("");
+  const [category, setCategory] = useState("");
 
   //* Error States
   const [brandErr, setBrandErr] = useState(false);
@@ -99,17 +102,24 @@ export const Form = () => {
   const [yearErr2, setYearErr2] = useState(false);
   const [detailErr, setDetailErr] = useState(false);
   const [descriptionErr, setDescriptionErr] = useState(false);
+  const [categoryErr, setCategoryErr] = useState(false);
 
   const [brands, setBrands] = useState([]);
-  const [models, setModels] = useState([]);
+  const [categories, setCategories] = useState([]);
 
   const fetchBrands = async () => {
     const res = await axios("/api/brand");
     setBrands(res.data);
   };
 
+  const fetchCategories = async () => {
+    const res = await axios("/api/category");
+    setCategories(res.data);
+  };
+  
   useEffect(() => {
     fetchBrands();
+    fetchCategories();
   }, []);
 
   return (
@@ -123,7 +133,7 @@ export const Form = () => {
         className="flex items-center flex-col "
       >
         <div className="grid md:grid-cols-2 grid-cols-1">
-          <div>
+          <div className="mx-6">
             <div className="m-[0.85rem]  ">
               <label className="block text-sm font-medium leading-6 text-gray-900">
                 Brand
@@ -146,7 +156,7 @@ export const Form = () => {
                   }}
                   className="block w-full cursor-pointer rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 focus:outline-none sm:text-sm sm:leading-6 transition ease-in-out duration-300"
                 >
-                  <option value="" disabled>
+                  <option value="" disabled selected>
                     Select some brand
                   </option>
                   {brands.map((brand) => {
@@ -182,7 +192,7 @@ export const Form = () => {
                   type="text"
                   className="block mt-2 w-full cursor-pointer rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 focus:outline-none sm:text-sm sm:leading-6 transition ease-in-out duration-300"
                 >
-                  <option value="" disabled>
+                  <option value="" disabled selected>
                     Select some model
                   </option>
                   {brand.models.map((model) => {
@@ -367,6 +377,32 @@ export const Form = () => {
                 <></>
               )}
             </div>
+            <div className="m-3">
+                  <label className="block text-sm font-medium leading-6 text-gray-900">
+                    Category
+                  </label>
+                  <select
+                    id="categoryInput"
+                    value={category}
+                    onChange={(e) => {
+                      setModel(e.target.value);
+                      console.log("category :>> ", category);
+                    }}
+                    type="text"
+                    className="block mt-2 w-full cursor-pointer rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 focus:outline-none sm:text-sm sm:leading-6 transition ease-in-out duration-300"
+                  >
+                    <option value="" disabled selected>
+                      Select some category
+                    </option>
+                    {/* {categories.map((category) => {
+                    return (
+                      <option value={category.} key={model.idmodel}>
+                        {model.name}
+                      </option>
+                    );
+                  })} */}
+                  </select>
+                </div>
           </div>
         </div>
 

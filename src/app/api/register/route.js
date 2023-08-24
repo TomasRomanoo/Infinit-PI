@@ -6,7 +6,10 @@ import nodemailer from "nodemailer";
 const prisma = new PrismaClient();
 
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  pool: true,
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false,
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
@@ -41,9 +44,8 @@ export async function POST(request) {
       }
     );
   } else {
-
     const hashedPassword = await bcrypt.hash(password, 10);
-    await prisma.user.create({
+    const newUser = await prisma.user.create({
       data: {
         first_name: firstName,
         last_name: lastName,
@@ -62,23 +64,25 @@ export async function POST(request) {
       },
     });
 
-    const Email = {
-      from: "noreply@grupo3.com",
+
+    const emailOptions = {
+      from: "noreply@example.com",
       to: email,
       subject: "Confirmation of sign up",
       text: `Hi ${firstName}, thank you for signing up for our app. Please click the link below to confirm your email address.`,
       html: `<strong>Hi ${firstName}, thank you for signing up for our app. Please click the link below to confirm your email address.</strong>`,
-      attachments: [
-        {
-          filename: "log.jpg",
-          path: "../assets/images/blue-car.jpg",
-        },
-      ],
     };
-    transporter.sendMail(Email);
+
+    try {
+      await transporter.sendMail(emailOptions);
+      console.log("Registration confirmation email sent");
+    } catch (error) {
+      console.error("Error sending registration confirmation email:", error);
+    }
 
     return NextResponse.json({
       message: "User registered successfully",
+      user: newUser,
     });
   }
 }

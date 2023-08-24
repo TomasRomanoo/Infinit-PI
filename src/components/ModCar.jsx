@@ -6,30 +6,31 @@ import { GrClose } from "react-icons/gr";
 import axios from "axios";
 import { toast } from "sonner";
 
+
 export const ModCar = ({ vehicles, firstIndex, lastIndex }) => {
   const apiUrl = "http://localhost:3000/api/vehicles/";
   const [showModal, setShowModal] = useState(false);
 
   const handlerModal = (vehicle, plate) => {
-    // axios.get(`/api/vehicles/${plate}`).then(function(response){
-    //   setId(response.data.idvehcle)
-    //   setBrand(response.data.brand)
-    //   setModel(response.data.model)
-    //   setPrice(response.data.price)
-    //   setPlate(response.data.plate)
-    //   setYear(response.data.year)
-    //   setDetail(response.data.detail)
-    //   setDescription(response.data.description)
-    // })
+    axios.get(`/api/vehicle/${plate}`).then(function (response) {
+      setId(response.data.idvehcle);
+      setBrand(response.data.model.brand.name);
+      setModel(response.data.model.name);
+      setPrice(response.data.price_per_day);
+      setPlate(response.data.plate);
+      setYear(response.data.year);
+      setDetail(response.data.detail);
+      setDescription(response.data.long_description);
+    });
 
-    setId(vehicle.idvehcle);
-    setBrand(vehicle.brand);
-    setModel(vehicle.model);
-    setPrice(vehicle.price_per_day);
-    setPlate(vehicle.plate);
-    setYear(vehicle.year);
-    setDetail(vehicle.detail);
-    setDescription(vehicle.long_description);
+    // setId(vehicle.idvehcle);
+    // setBrand(vehicle.brand);
+    // setModel(vehicle.model);
+    // setPrice(vehicle.price_per_day);
+    // setPlate(vehicle.plate);
+    // setYear(vehicle.year);
+    // setDetail(vehicle.detail);
+    // setDescription(vehicle.long_description);
 
     setShowModal(!showModal);
   };
@@ -43,6 +44,7 @@ export const ModCar = ({ vehicles, firstIndex, lastIndex }) => {
   const [year, setYear] = useState("");
   const [detail, setDetail] = useState("");
   const [description, setDescription] = useState("");
+  const [category, setCategory] = useState("");
 
   //* Error States
   const [priceErr, setPriceErr] = useState(false);
@@ -51,6 +53,7 @@ export const ModCar = ({ vehicles, firstIndex, lastIndex }) => {
   const [yearErr2, setYearErr2] = useState(false);
   const [detailErr, setDetailErr] = useState(false);
   const [descriptionErr, setDescriptionErr] = useState(false);
+  const [categoryErr, setCategoryErr] = useState(false);
 
   const handlerEdit = (e) => {
     e.preventDefault();
@@ -59,6 +62,7 @@ export const ModCar = ({ vehicles, firstIndex, lastIndex }) => {
       { state: price, setter: setPriceErr, id: "#priceInput" },
       { state: plate, setter: setPlateErr, id: "#plateInput" },
       { state: detail, setter: setDetailErr, id: "#detailInput" },
+      { state: category, setter: categoryErr, id: "#categoryInput" },
       {
         state: description,
         setter: setDescriptionErr,
@@ -91,6 +95,7 @@ export const ModCar = ({ vehicles, firstIndex, lastIndex }) => {
       year.length !== 0 &&
       year < 2023 &&
       year > 1886 &&
+      fields[4].state &&
       fields[3].state &&
       fields[2].state &&
       fields[1].state &&
@@ -98,7 +103,7 @@ export const ModCar = ({ vehicles, firstIndex, lastIndex }) => {
     ) {
       toast.success("Todo ok");
       // toast.promise(
-      //   axios.post(apiUrl, {
+      //   axios.put(apiUrl, {
       //     idvehicle:id,
       //     plate: plate,
       //     brand: brand,
@@ -136,8 +141,10 @@ export const ModCar = ({ vehicles, firstIndex, lastIndex }) => {
                 </div>
                 <div className="flex flex-col items-end">
                   <div className="flex items-start gap-1 font-bold text-lg">
-                    <p className="text-start truncate ">{vehicle.brand}</p>
-                    <p>{vehicle.model}</p>
+                    <p className="text-start truncate ">
+                      {vehicle.model.brand.name}
+                    </p>
+                    <p>{vehicle.model.name}</p>
                   </div>
                   <p className="text-gray-400 font-semibold">{vehicle.year}</p>
                 </div>
@@ -399,6 +406,33 @@ export const ModCar = ({ vehicles, firstIndex, lastIndex }) => {
                   ) : (
                     <></>
                   )}
+                </div>
+
+                <div className="m-3">
+                  <label className="block text-sm font-medium leading-6 text-gray-900">
+                    Category
+                  </label>
+                  <select
+                    id="categoryInput"
+                    value={category}
+                    onChange={(e) => {
+                      setModel(e.target.value);
+                      console.log("category :>> ", category);
+                    }}
+                    type="text"
+                    className="block mt-2 w-full cursor-pointer rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 focus:outline-none sm:text-sm sm:leading-6 transition ease-in-out duration-300"
+                  >
+                    <option value="" disabled selected>
+                      Select some category
+                    </option>
+                    {/* {brand.models.map((model) => {
+                    return (
+                      <option value={model.idmodel} key={model.idmodel}>
+                        {model.name}
+                      </option>
+                    );
+                  })} */}
+                  </select>
                 </div>
               </div>
             </div>

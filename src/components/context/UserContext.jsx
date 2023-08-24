@@ -1,22 +1,42 @@
 "use client";
 
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import jwt from "jsonwebtoken";
 
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
-  const [user, setUser] = useState("");
+  const [user, setUser] = useState(null);
+  const [isAdmin, setIsAdmin] = useState('');
 
-  const loginUser = (token) => {
+  //* Lo mande con use effect pq en la consola me tiraba
+  //* error si lo inicializaba con el localStorage (pero funcionaba)
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const token = JSON.parse(localStorage.getItem("token"));
+      setUser(token);
+
+
+      const admin = JSON.parse(localStorage.getItem("isAdmin"));
+      setIsAdmin(admin);
+    }
+  }, []);
+
+  const loginUser = (token, admin) => {
+
+    localStorage.setItem("token",JSON.stringify(token));
     setUser(token);
-    getUser(user);
+    getUser();
     console.log("User",user)
+
+
+    localStorage.setItem("admin",JSON.stringify(admin));
+    setIsAdmin(admin)
   };
   
-  const getUser = (token) => {
+  const getUser = () => {
     try {
-      const decodedUser = jwt.decode(token);
+      const decodedUser = jwt.decode(user);
       return decodedUser;
     } catch (error) {
       console.error("Error decoding token:", error);
@@ -32,6 +52,7 @@ export const UserProvider = ({ children }) => {
 
   const userContextValue = {
     user,
+    isAdmin,
     loginUser,
     signoutUser,
     getUser,
