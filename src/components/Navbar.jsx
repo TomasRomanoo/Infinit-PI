@@ -84,20 +84,7 @@ export const Navbar = () => {
     closeSidebar();
   };
 
-  window.addEventListener("click", (event) => {
-    // const modal = document.getElementById("modal");
-    // if (event.target === modal) {
-    //   managementClickMobile()
-    // }
-    // const mngmnt = document.getElementById("mngmnt")
-    // if ( MngmntOpen && event.target !== mngmnt) {
-    //   // mngmnt.classList.add("hide-mngmnt");
-    //   // mngmnt.classList.remove("show-mngmnt");
-    //   console.log('asddassd');
-    //   managementClick()
-    // }
-
-  });
+ 
 
   return (
     <div
