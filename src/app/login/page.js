@@ -30,7 +30,8 @@ export default function Login() {
     axios
       .post("/api/auth/login", userData)
       .then((res) => {
-        userContext.loginUser(res.data.token);
+        userContext.loginUser(res.data.token, res.data.isAdmin );
+        console.log(res.data);
         Toast.fire({
           icon: "success",
           title: res.data.msg,

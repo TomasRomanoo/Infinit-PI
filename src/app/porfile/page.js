@@ -1,7 +1,9 @@
 "use client";
 
+import { UserContext } from "@/components/context/UserContext";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import axios from "axios";
 
 
 
@@ -9,73 +11,78 @@ export default function Porfile(){
     
     const [editable, setEditable] = useState(false)
 
-    const [firstName, setFirstName] = useState('Jaime')
-    const [lastName, setLastName] = useState('Rodriguez')
-    const [email, setEmail] = useState('example@gmail.com')
-    const [phone, setPhone] = useState(123456)
-    const [password, setPassword] = useState('saddsasdsad')
-    const [zipCode, setZipCode] = useState(4600)
-    const [addres, setAddres] = useState('asdasdddadadssadadsadsdasdsdasaddssad')
-    const [city, setCity] = useState('Canada')
-    const [country, setCountry] = useState('Canada')
-    const [identification, setIdentification] = useState('12345A')
+    const [firstName, setFirstName] = useState('')
+    const [lastName, setLastName] = useState('')
+    const [email, setEmail] = useState('')
+    const [phone, setPhone] = useState(0)
+    const [zipCode, setZipCode] = useState(0)
+    const [addres, setAddres] = useState('')
+    const [city, setCity] = useState('')
+    const [country, setCountry] = useState('')
+    const [identification, setIdentification] = useState('')
     
-    // //* Theese states are only for the put, not for Frontend
+    // // //* Theese states are only for the put, not for Frontend
     // const [deleted, setDeleted] = useState(0)
     // const [idRole, setIdRole] = useState(0)
     // const [id, setId] = useState(0)
-
+    const userContext = useContext(UserContext);
+    let user = userContext.getUser()
 
     
-    // const initialValues = ()=>{
-    //     // axios.get(`/api/vehicles/${plate}`).then(function(response){
-    //     // setId(response.data.idUser)
-    //     // setFirstName(response.data.first_name)
-    //     // setLastName(response.data.last_name)
-    //     // setPhone(response.data.phone)
-    //     // setEmail(response.data.email)
-    //     // setIdentification(response.data.identification)
-    //     // setPassword(response.data.password)
-    //     // setAddres(response.data.address)
-    //     // setCity(response.data.city)
-    //     // setCountry(response.data.country)
-    //     // setZipCode(response.data.zip_code)
-    //     // setIdRole(response.data.idrole)
-    //     // setDeleted(response.data.deleted)
-    //     // })
-    // }
+    async function initialValues(){
+        if(!(user===null || user === undefined)){
+            console.log(user);
+            axios.get(`http://localhost:3000/api/user/${user.email}`).then(function(response) {
+                console.log(response);
+                console.log(response.data);
+                // setId(response.data.idUser)
+                setFirstName(response.data.first_name)
+                setLastName(response.data.last_name)
+                setPhone(response.data.phone)
+                setEmail(response.data.email)
+                setIdentification(response.data.identification)
+                setAddres(response.data.address)
+                setCity(response.data.city)
+                setCountry(response.data.country)
+                setZipCode(response.data.zip_code)
+                // setIdRole(response.data.idrole)
+                // setDeleted(response.data.deleted)
+            })
+        }
+    }
 
-    // useEffect(()=>{
-    //     initialValues()
-    // },[])
+    useEffect(()=>{
+        console.log('asd')
+        initialValues()
+    },[user])
 
-    const editHandler = ()=>{
-        // toast.promise(
-        //     axios.put("http://localhost:3000/api/user/", {
-        //     idUser:+id,
-        //     first_name: firstName,
-        //     last_name: lastName,
-        //     phone: +phone,
-        //     identification: identification,
-        //     password: password,
-        //     address: addres,
-        //     city: city,          
-        //     country: country,          
-        //     zip_code: +zipCode,          
-        //     idrole: +idRole,          
-        //     deleted: +deleted,          
-        //     }),
-        //     {
-        //     loading: "Loading...",
-        //     success: (data) => {
-        //         return `Edit has been successfully`;
-        //     },
-        //     error: "Error while editing",
-        //     }
-        // );
+    // const editHandler = ()=>{
+    //     // toast.promise(
+    //     //     axios.put("http://localhost:3000/api/user/", {
+    //     //     idUser:+id,
+    //     //     first_name: firstName,
+    //     //     last_name: lastName,
+    //     //     phone: +phone,
+    //     //     identification: identification,
+    //     //     password: password,
+    //     //     address: addres,
+    //     //     city: city,          
+    //     //     country: country,          
+    //     //     zip_code: +zipCode,          
+    //     //     idrole: +idRole,          
+    //     //     deleted: +deleted,          
+    //     //     }),
+    //     //     {
+    //     //     loading: "Loading...",
+    //     //     success: (data) => {
+    //     //         return `Edit has been successfully`;
+    //     //     },
+    //     //     error: "Error while editing",
+    //     //     }
+    //     // );
 
-        setEditable(false)
-    } 
+    //     setEditable(false)
+    // } 
 
 
     return(
@@ -121,8 +128,7 @@ export default function Porfile(){
                                     <p >Password</p>
                                     <input id="password"
                                         type="password"
-                                        value={password}
-                                        onChange={(e)=> setPassword(e.target.value)}
+                                        value={'contrasena'}
                                         disabled={!editable}
                                         className={`appearance-none bg-transparent border-solid p-1 w-full lg:w-32 xl:w-52 m-0 text-slate-500 transition duration-500  focus:border-indigo-700 focus:outline-none ${editable?('outline-solid border-b-2 border-primary'): 'outline-none'}`}
                                     />
@@ -202,11 +208,11 @@ export default function Porfile(){
                         </div>
                     </div>
 
-                    {editable? 
+                    {/* {editable? 
                     <button onClick={editHandler} className="bg-primary rounded-xl p-2 w-auto self-center text-white font-bold"> Save changes</button>
                     :
                     <button onClick={()=>setEditable(true)}  className="bg-primary rounded-xl p-2 w-auto self-center text-white font-bold"> Edit info </button>    
-                }
+                } */}
                 </div>
 
             </div>

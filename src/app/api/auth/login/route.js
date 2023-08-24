@@ -25,6 +25,7 @@ export async function POST(request) {
       msg: "Login successfull",
       token,
       isAdmin: user.idrole == 1,
+      email: user.email
     });
 
     response.cookies.set({
