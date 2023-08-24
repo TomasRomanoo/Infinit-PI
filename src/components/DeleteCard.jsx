@@ -19,10 +19,14 @@ export const DeleteCard = (props) => {
     }).then((result) => {
       if (result.isConfirmed) {
         toast.promise( 
-          axios.delete(`/api/vehicles/${props.vehicle.plate}`),
+          axios.delete(`/api/vehicle/${props.vehicle.plate}`),
           {
             loading: "Loading...",
             success: (data) => {
+              document.querySelector(`#card${props.vehicle.idvehicle}`).classList.add("opacity-0");
+              setTimeout(() => {
+                window.location.reload()
+              }, 3000);
               return `The car rent has been deleted successfully`;
             },
             error: "Error while deleting car",
@@ -33,15 +37,15 @@ export const DeleteCard = (props) => {
   console.log(props);
   return (
     
-    <div className=" w-2/5  m-3 rounded-2xl overflow-hidden shadow-md flex flex-col font-poppins hover:shadow-lg transition-all duration-200">
+    <div id={`card${ props.vehicle.idvehicle}`} className=" w-2/5  m-3 rounded-2xl overflow-hidden shadow-md flex flex-col font-poppins hover:shadow-lg transition-all transition-opacity duration-500 ease-in-out opacity-100">
       <div className="flex items-center justify-between p-4">
         <div className="w-1/2">
           <Image className="w-full object-contain" src={image} alt="delete-card" />
         </div>
         <div className="flex flex-col items-end">
           <div className="flex items-start gap-1 font-bold text-lg">
-            <p className="text-start truncate ">{props.vehicle?.brand}</p>
-            <p>{props.vehicle?.model}</p>
+            <p className="text-start truncate ">{props.vehicle?.model.brand.nombre}</p>
+            <p>{props.vehicle?.model.name}</p>
           </div>
           <p className="text-gray-400 font-semibold">{props.vehicle?.year}</p>
         </div>
