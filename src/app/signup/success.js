@@ -7,13 +7,13 @@ import { useRouter } from 'next/navigation';
 export default function Success() {
   const { push } = useRouter();
 
-   useEffect(() => {
+  useEffect(() => {
     const redirectTimeout = setTimeout(() => {
-    push('/')
+      push("/");
     }, 3000);
 
     return () => {
-      clearTimeout(redirectTimeout); 
+      clearTimeout(redirectTimeout);
     };
   }, []);
 

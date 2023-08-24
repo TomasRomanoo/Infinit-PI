@@ -11,6 +11,7 @@
 //     },
 //   }
 
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // output: 'export',
@@ -18,6 +19,7 @@ const nextConfig = {
   images: {
     unoptimized: true ,
     domains: ["c6-pi-grupo3.s3.amazonaws.com"],
+    domains: ['cdn.pixabay.com'],
     remotePatterns: [
       {
         protocol: "https",
