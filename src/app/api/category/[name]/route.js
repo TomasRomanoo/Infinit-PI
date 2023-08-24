@@ -2,9 +2,16 @@ import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
 const prisma = new PrismaClient();
 
-export async function GET({ name }) {
+export async function GET(context) {
+  console.log('context.params.name :>> ', context.params.name);
   try {
-    const vehicles = await prisma.category.findMany({
+    console.log("entra aca");
+    const vehicles = await prisma.vehicle.findMany({
+      where: {
+        category: {
+          name: context.params.name,
+        },
+      },
       include: {
         category: true,
         model: {
@@ -16,7 +23,7 @@ export async function GET({ name }) {
       },
     });
 
-    console.log('vehicles :>> ', vehicles);
+    console.log("vehicles :>> ", vehicles);
 
     return NextResponse.json(vehicles, { status: 200, data: vehicles });
   } catch (error) {

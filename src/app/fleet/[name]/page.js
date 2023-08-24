@@ -3,22 +3,16 @@ import { CardList } from "@/components/CardList";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 
-export default function FleetByCategory() {
+export default function FleetByCategory({ params: { name } }) {
   const [vehiclesByCategory, setVehiclesByCategory] = useState([]);
 
-  const currentPage = usePathname();
-
-  const urlString = currentPage;
-  const parts = urlString.split("/");
-  const lastPart = parts[parts.length - 1];
-
-  console.log('lastPart :>> ', lastPart);
+  console.log("name :>> ", name);
 
   const fetchVehicles = async () => {
-    const res = await axios(`/api/category`, {lastPart});
-    console.log('res :>> ', res.data);
-
+    const res = await axios(`/api/category/${name}`);
+    console.log("res :>> ", res.data);
 
     setVehiclesByCategory(res.data);
   };
