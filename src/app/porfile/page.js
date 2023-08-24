@@ -39,7 +39,7 @@ export default function Porfile(){
                 setFirstName(response.data.first_name)
                 setLastName(response.data.last_name)
                 setPhone(response.data.phone)
-                setEmail(response.data.email)
+                setEmail(response.data.address)
                 setIdentification(response.data.identification)
                 setAddres(response.data.address)
                 setCity(response.data.city)

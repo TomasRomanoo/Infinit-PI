@@ -25,6 +25,7 @@ export async function GET(request) {
         last_name: true,
         phone: true,
         address: true,
+        identification: true,
         city: true,
         country: true,
         zip_code: true,
