@@ -80,41 +80,49 @@ export async function DELETE(request) {
   }
 }
 
-// METODO PUT
 export async function PUT(request) {
-  console.log("La función PUT ha sido llamada.");
   try {
-    console.log(request);
-    const urlParts = request.url.split("/");
+    const urlParts = request.url.split('/');
     const plate = urlParts[urlParts.length - 1];
-    if (!plate) {
-      return NextResponse.json(
-        { error: "Debes proporcionar la placa del auto" },
-        { status: 400 }
-      );
-    }
 
     const requestData = await request.json();
 
-    if (
-      !requestData.model ||
-      !requestData.price_per_day ||
-      requestData.price_per_day <= 0
-    ) {
-      return NextResponse.json(
-        {
-          error:
-            "Debes proporcionar el modelo y un precio por día válido para actualizar el auto",
-        },
-        { status: 400 }
-      );
-    }
+    const { brand, model, category, specifications, images, ...otherData } = requestData;
+
+    const updatedBrand = brand
+      ? { connect: { idbrand: brand.idbrand } } 
+      : undefined;
+
+  
+    const updatedModel = model
+      ? { connect: { idmodel: model.idmodel } } 
+      : undefined;
+
+  
+    const updatedCategory = category
+      ? { connect: { idcategory: category.idcategory } } 
+      : undefined;
+
+    const updatedSpecifications = specifications
+      ? { connect: specifications.map(spec => ({ idspecification: spec.idspecification })) }
+      : undefined;
+
+    const updatedImages = images
+      ? { create: images.map(img => ({ url: img.url })) }
+      : undefined;
 
     const updatedCar = await prisma.vehicle.update({
       where: {
         plate,
       },
-      data: requestData,
+      data: {
+        ...otherData, 
+        brand: updatedBrand,
+        model: updatedModel,
+        category: updatedCategory,
+        specifications: updatedSpecifications,
+        images: updatedImages,
+      },
     });
 
     return NextResponse.json(updatedCar, { status: 200 });
