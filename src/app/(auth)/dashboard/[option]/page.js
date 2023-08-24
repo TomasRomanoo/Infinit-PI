@@ -43,9 +43,6 @@ const DashboardPage = () => {
 
   
 const fetchVehicles = async () => {
-<<<<<<< HEAD
-  setVehicles(((await axios("/api/vehicle")).data))
-=======
   // setVehicles(((await axios("http://localhost:3000/api/vehicles")).data))
   setVehicles([
     {
@@ -119,7 +116,6 @@ const fetchVehicles = async () => {
   "long_description": "ASD"
 }
   ])
->>>>>>> 6fe6cc1fef15d3c9eb81930828e9fb52510bf964
 
 };
 useEffect(() => {fetchVehicles()},[])
