@@ -2,8 +2,8 @@ import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
 const prisma = new PrismaClient();
 
-export async function GET(context) {
-  console.log('context.params.name :>> ', context.params.name);
+export async function GET(req, context) {
+  console.log("context.params.category :>> ", context.params.name);
   try {
     console.log("entra aca");
     const vehicles = await prisma.vehicle.findMany({
@@ -28,9 +28,18 @@ export async function GET(context) {
     return NextResponse.json(vehicles, { status: 200, data: vehicles });
   } catch (error) {
     console.error(error);
-    return NextResponse.json(
-      { message: "Error getting vehicles by category name" },
-      { status: 500 }
-    );
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      return NextResponse.json(
+        {
+          message: `Error getting vehicles by category name: ${error.message}`,
+        },
+        { status: 500 }
+      );
+    } else {
+      return NextResponse.json(
+        { message: "Error getting vehicles by category name" },
+        { status: 500 }
+      );
+    }
   }
 }
