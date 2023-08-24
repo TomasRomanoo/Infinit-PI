@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 
 import { Swiper, SwiperSlide, useSwiper } from "swiper/react";
 import { Navigation, Pagination } from "swiper";
@@ -26,10 +27,22 @@ import Calendar from "react-calendar";
 import swiperConfig from "@/utils/swiperConfig";
 import { Booking } from "@/components/Booking";
 
-const Detail = (vehicle) => {
+const Detail = ({params}) => {
+  const [vehicle, setVehicle] = useState({});
   const router = useRouter();
   const [isGalleryOpen, setGalleryOpen] = useState(false);
   const [selectedImageId, setSelectedImageId] = useState(null);
+
+  const fetchVehicle = async () => {
+    const res = await axios("/api/vehicle/"+params.plate);
+    console.log(res)
+    setVehicle(res.data);
+    console.log(vehicle)
+  };
+
+  useEffect(() => {
+    fetchVehicle();
+  }, []);
 
   const openGalleryModal = (imageId) => {
     setSelectedImageId(imageId);
@@ -55,7 +68,7 @@ const Detail = (vehicle) => {
         id="detail"
       >
         <div className="flex items-center justify-between">
-          <p className="text-2xl font-poppins font-semibold">{vehicle.name}</p>
+          <p className="text-2xl font-poppins font-semibold">{vehicle.model?.brand?.name +' | ' + vehicle.model?.name + ' | '+vehicle.plate}</p>
           <button
             onClick={() => {
               router.back();
@@ -73,7 +86,7 @@ const Detail = (vehicle) => {
             openGalleryModal={openGalleryModal}
             closeGalleryModal={closeGalleryModal}
             setSelectedImageId={setSelectedImageId}
-            images={images}
+            images={vehicle.images || []}
           />
 
           <Specs />
@@ -95,23 +108,25 @@ const Gallery = ({
   images,
   setSelectedImageId,
 }) => {
+  console.log(images)
   return (
     <div className={`relative ${isGalleryOpen ? "opacity-10" : "opacity-100"}`}>
       <div className="flex flex-col lg:flex-row items-center justify-center w-full gap-4">
         {/* Main Image */}
         <div
           className="w-full hover:brightness-75 transition-all duration-200 self-stretch cursor-pointer"
-          onClick={() => openGalleryModal(vehicle.images[0].url)}
+          onClick={() => openGalleryModal(images[0]?.url)}
         >
-          strokeWidth
+          <Image
             className="object-contain rounded-lg"
-            src={vehicle.images[0].url}
+            src={images[0]?.url}
+            alt="spec"
           />
         </div>
 
         <div className="flex flex-col gap-4 w-full lg:w-3/4">
           <div className="lg:grid flex flex-row items-center lg:grid-cols-2 lg:grid-row-2 gap-4 justify-center w-full">
-            {vehicle.images.slice(1, 5).map((image, key) => (
+            {images?.slice(1, 5).map((image, key) => (
               <div
                 className=" flex justify-center items-center hover:brightness-75 transition-all duration-200 cursor-pointer"
                 onClick={() => openGalleryModal(image.id)}
@@ -156,11 +171,11 @@ const GalleryModal = ({ selectedImageId, images, close }) => {
           navigation
           pagination={{ clickable: true }}
           className="h-full"
-          initialSlide={vehicle.images.findIndex(
+          initialSlide={images.findIndex(
             (image) => image.id === selectedImageId
           )}
         >
-          {vehicle.images.map((image) => {
+          {images.map((image) => {
             return (
               <SwiperSlide
                 key={image.id}
@@ -169,6 +184,7 @@ const GalleryModal = ({ selectedImageId, images, close }) => {
                 <Image
                   className=" pointer-events-none object-cover md:aspect-auto h-screen md:h-full"
                   src={image.url}
+                  alt="spec"
                 />
               </SwiperSlide>
             );
@@ -182,10 +198,10 @@ const GalleryModal = ({ selectedImageId, images, close }) => {
 const Specs = ({ specifications }) => {
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 grid-flow-row">
-      {specifications.map((spec, index) => {
+      {specifications?.map((spec, index) => {
         return (
           <div className="flex items-center gap-4" key={index}>
-            strokeWidth src={spec.image} alt="spec" />
+            <Image src={spec.image} alt="spec" />
             <p className="font-poppins text-lg">{spec.description}</p>
           </div>
         );

@@ -84,7 +84,7 @@ export const Navbar = () => {
     closeSidebar();
   };
 
-  window.addEventListener("click", (event) => {
+  //window.addEventListener("click", (event) => {
     // const modal = document.getElementById("modal");
     // if (event.target === modal) {
     //   managementClickMobile()
@@ -97,7 +97,7 @@ export const Navbar = () => {
     //   managementClick()
     // }
 
-  });
+  //});
 
   return (
     <div
