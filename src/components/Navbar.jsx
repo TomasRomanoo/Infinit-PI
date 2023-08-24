@@ -21,6 +21,7 @@ import axios from "axios";
 import { UserContext } from "./context/UserContext";
 
 
+
 export const Navbar = () => {
 
   const {user, getUser} = useContext(UserContext)  // const [user, isUserLogged] = useState(false);
@@ -86,6 +87,8 @@ export const Navbar = () => {
     }
     closeSidebar();
   };
+
+ 
 
   return (
     <div
@@ -379,7 +382,7 @@ export const Navbar = () => {
       /*                         MODAL FOR MOBILE ENGAGEMENT                        */
       /* -------------------------------------------------------------------------- */}
 
-      <div  className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity hide-mngmnt lg:hidden" id="modalBg"></div>
+      <div  className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity hide-mngmnt lg:hidden" id="modalBg" onClick={()=> isSideMenuOpen(!sideMenu)}></div>
       <div id="modal" className="flex min-h-full justify-center items-center p-0 fixed inset-0 hide-mngmnt lg:hidden">
         <div className="relative">
 
@@ -394,7 +397,7 @@ export const Navbar = () => {
                       <Link
                       href="/dashboard/[path]" 
                       as="/dashboard/fleet"
-                      onClick={managementClick}>
+                      onClick={managementClickMobile}>
                         <div>
                           <button className="font-semibold text-gray-900">
                             Show Fleet
@@ -427,7 +430,7 @@ export const Navbar = () => {
                       <Link 
                       href="/dashboard/[path]" 
                       as="/dashboard/add"
-                      onClick={managementClick}>
+                      onClick={managementClickMobile}>
                         <div>
                           <button className="font-semibold text-gray-900">
                             Add Car
@@ -447,7 +450,7 @@ export const Navbar = () => {
                       <Link
                       href="/dashboard/[path]" 
                       as="/dashboard/modify"
-                      onClick={managementClick}>
+                      onClick={managementClickMobile}>
                         <div>
                           <button className="font-semibold text-gray-900">
                             Edit your cars rental
@@ -467,7 +470,7 @@ export const Navbar = () => {
                       <Link
                       href="/dashboard/[path]" 
                       as="/dashboard/delete"
-                      onClick={managementClick}
+                      onClick={managementClickMobile}
                       >
                         <div>
                           <button className="font-semibold text-gray-900">

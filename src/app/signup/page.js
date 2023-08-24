@@ -7,7 +7,6 @@ import DataDetails from "./dataDetails";
 import PersonalDetails from "./personalDetails";
 import Success from "./success";
 import { Infinit } from "@/components/Infinit";
-import { toast } from "sonner";
 
 export default function Registration() {
   const [step, setStep] = useState(1);
@@ -33,6 +32,7 @@ export default function Registration() {
       .post("/api/register", completeObject)
       .then((res) => {
         console.log("res :>> ", res);
+        setStep(step + 1);
       })
       .catch((error) => {
         console.log("error :>> ", error);
@@ -41,7 +41,7 @@ export default function Registration() {
     /*  toast.promise(axios.post("/api/register", completeObject), {
       loading: "Loading...",
       success: (data) => {
-        setStep(step + 1);
+      
         return `User has been created successfully`;
       },
       error: (error) => {

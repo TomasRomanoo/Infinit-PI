@@ -42,7 +42,7 @@ export default function Home() {
         <Booking />
       </motion.div>
       <Hero />
-      <div className="flex items-center gap-4 mt-20">
+      <div className="flex flex-wrap justify-center items-center gap-4 mt-20">
         {categories.map((category) => {
           return <Category category={category} />;
         })}
@@ -93,7 +93,10 @@ const Hero = () => {
 const Category = ({ category }) => {
   return (
     <Link href={`/fleet/${category.name}`}>
-      <div className="flex flex-col items-center justify-between " key={category.idcategory}>
+      <div
+        className="flex flex-col items-center justify-between "
+        key={category.idcategory}
+      >
         <Image
           width={300}
           height={200}
@@ -101,7 +104,9 @@ const Category = ({ category }) => {
           src={category.url}
           alt="category"
         />
-        <p className="font-poppins text-lg font-bold capitalize">{category.name}</p>
+        <p className="font-poppins text-lg font-bold capitalize">
+          {category.name}
+        </p>
       </div>
     </Link>
   );
