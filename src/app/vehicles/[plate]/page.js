@@ -69,14 +69,14 @@ const Detail = ({params}) => {
       >
         <div className="flex items-center justify-between">
           <p className="text-2xl font-poppins font-semibold">{vehicle.model?.brand?.name +' | ' + vehicle.model?.name + ' | '+vehicle.plate}</p>
-          <button
+          {/* <button
             onClick={() => {
               router.back();
             }}
-            className="text-xl text-blue-700 hover:text-purple-600"
+            // className="text-xl text-blue-700 hover:text-purple-600"
           >
             Go back
-          </button>
+          </button> */}
         </div>
 
         <div className="bg-white rounded-lg w-full h-full shadow-lg py-8 p-4 md:px-12 space-y-8">
@@ -86,7 +86,8 @@ const Detail = ({params}) => {
             openGalleryModal={openGalleryModal}
             closeGalleryModal={closeGalleryModal}
             setSelectedImageId={setSelectedImageId}
-            images={vehicle.images || []}
+            // images={vehicle.images || []}
+            images={vehicle.image || [peugeot,peugeot2,peugeot3,peugeot4,peugeot5]}
           />
 
           <Specs />
@@ -95,6 +96,17 @@ const Detail = ({params}) => {
 
             <p className="text-gray-400 text-xl">{vehicle.long_description}</p>
           </div>
+        <div class="flex justify-end">
+          <button
+            onClick={() => {
+              router.back();
+            }}
+            // className="text-xl text-blue-700 hover:text-purple-600"
+            className="w-1/6 bg-primary text-white p-4 rounded-md hover:bg-secondary transition-all duration-200"
+          >
+            Go back
+          </button>
+        </div>
         </div>
       </div>
     </>
@@ -119,7 +131,9 @@ const Gallery = ({
         >
           <Image
             className="object-contain rounded-lg"
-            src={images[0]?.url}
+            // src={images[0]?.url}
+            src={images[0]}
+
             alt="spec"
           />
         </div>
