@@ -6,7 +6,10 @@ import nodemailer from "nodemailer";
 const prisma = new PrismaClient();
 
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  pool: true,
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false,
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
@@ -41,9 +44,8 @@ export async function POST(request) {
       }
     );
   } else {
-
     const hashedPassword = await bcrypt.hash(password, 10);
-    await prisma.user.create({
+    const newUser = await prisma.user.create({
       data: {
         first_name: firstName,
         last_name: lastName,
@@ -62,23 +64,33 @@ export async function POST(request) {
       },
     });
 
-    const Email = {
-      from: "noreply@grupo3.com",
+
+    const emailOptions = {
+      from: "noreply@infinit.com",
       to: email,
-      subject: "Confirmation of sign up",
-      text: `Hi ${firstName}, thank you for signing up for our app. Please click the link below to confirm your email address.`,
-      html: `<strong>Hi ${firstName}, thank you for signing up for our app. Please click the link below to confirm your email address.</strong>`,
-      attachments: [
-        {
-          filename: "log.jpg",
-          path: "../assets/images/blue-car.jpg",
-        },
-      ],
+      subject: "Confirmación de registro",
+      text: `Hola ${firstName}, gracias por registrarte en INFINIT. Por favor, haz clic en el siguiente enlace para confirmar tu dirección de correo electrónico.`,
+      html: `<div style="background-color: #f0f0f0; padding: 20px;">
+        <h1 style="color: #333333; font-family: Arial, sans-serif;">Bienvenido/a a INFINIT</h1>
+        <p style="color: #333333; font-family: Arial, sans-serif;">Hola <strong>${firstName}</strong>, gracias por registrarte en INFINIT. Estamos encantados de tenerte con nosotros.</p>
+        <p style="color: #333333; font-family: Arial, sans-serif;">Para completar tu registro, solo tienes que hacer clic en el siguiente botón y confirmar tu dirección de correo electrónico.</p>
+        <a href="#" style="display: inline-block; background-color: #0078d4; color: white; padding: 10px 20px; text-decoration: none; font-family: Arial, sans-serif;">Confirmar correo electrónico</a>
+        <p style="color: #333333; font-family: Arial, sans-serif;">Si tienes alguna pregunta o sugerencia, no dudes en contactarnos.</p>
+        <p style="color: #333333; font-family: Arial, sans-serif;">¡Gracias por elegir INFINIT!</p>
+      </div>`,
     };
-    transporter.sendMail(Email);
+    
+
+    try {
+      await transporter.sendMail(emailOptions);
+      console.log("Registration confirmation email sent");
+    } catch (error) {
+      console.error("Error sending registration confirmation email:", error);
+    }
 
     return NextResponse.json({
       message: "User registered successfully",
+      user: newUser,
     });
   }
 }
