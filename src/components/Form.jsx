@@ -1,8 +1,10 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { toast } from "sonner";
+import { UserContext } from "./context/UserContext";
 
 export const Form = () => {
+  const {isAdmin } = useContext(UserContext)
   const handlerSubmit = (e) => {
     e.preventDefault();
 
@@ -22,10 +24,10 @@ export const Form = () => {
 
     fields.forEach((field) => {
       if (!field.state) {
-        field.setter(true);
+        field.setter = true;
         document.querySelector(field.id).classList.add("errInput");
       } else {
-        field.setter(false);
+        field.setter = false;
         document.querySelector(field.id).classList.remove("errInput");
       }
     });
@@ -121,7 +123,7 @@ export const Form = () => {
     fetchBrands();
     fetchCategories();
   }, []);
-
+  
   return (
     <>
       <h1 className=" m-5 text-6xl font-bold font-secondary text-center ">
@@ -195,13 +197,17 @@ export const Form = () => {
                   <option value="" disabled selected>
                     Select some model
                   </option>
-                  {brand.models.map((model) => {
-                    return (
-                      <option value={model.idmodel} key={model.idmodel}>
-                        {model.name}
-                      </option>
-                    );
-                  })}
+                  {brand?
+                  console.log(brand)
+                  // brand.models.map((model) => {
+                  //   return (
+                  //     <option value={model.idmodel} key={model.idmodel}>
+                  //       {model.name}
+                  //     </option>
+                  //   );
+                  // })
+                :
+                <></>}
                 </select>
               </div>
               {modelErr ? (
@@ -377,32 +383,40 @@ export const Form = () => {
                 <></>
               )}
             </div>
-            <div className="m-3">
-                  <label className="block text-sm font-medium leading-6 text-gray-900">
-                    Category
-                  </label>
-                  <select
-                    id="categoryInput"
-                    value={category}
-                    onChange={(e) => {
-                      setModel(e.target.value);
-                      console.log("category :>> ", category);
-                    }}
-                    type="text"
-                    className="block mt-2 w-full cursor-pointer rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 focus:outline-none sm:text-sm sm:leading-6 transition ease-in-out duration-300"
-                  >
-                    <option value="" disabled selected>
-                      Select some category
+            {isAdmin
+              ?
+              <div className="m-3">
+              <label className="block text-sm font-medium leading-6 text-gray-900">
+                Category
+              </label>
+              <select
+                id="categoryInput"
+                value={category}
+                onChange={(e) => {
+                  setModel(e.target.value);
+                  console.log("category :>> ", category);
+                }}
+                type="text"
+                className="block mt-2 w-full cursor-pointer rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 focus:outline-none sm:text-sm sm:leading-6 transition ease-in-out duration-300"
+              >
+                <option value="" disabled selected>
+                  Select some category
+                </option>
+                {categories.map((category) => {
+                  return (
+                    <option
+                      value={JSON.stringify(category)}
+                      key={category.categoryId}
+                    >
+                      {category.name}
                     </option>
-                    {/* {categories.map((category) => {
-                    return (
-                      <option value={category.} key={model.idmodel}>
-                        {model.name}
-                      </option>
-                    );
-                  })} */}
-                  </select>
-                </div>
+                  );
+                })}
+              </select>
+            </div>
+            :
+            <></>
+            }
           </div>
         </div>
 
