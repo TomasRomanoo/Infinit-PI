@@ -1,4 +1,5 @@
 "use client";
+import {shuffle} from "@/utils/arrayUtilities"
 import { Footer } from "@/components/Footer";
 import Image from "next/image";
 import bluecar from "@/assets/images/blue-car.jpg";
@@ -19,7 +20,7 @@ export default function Home() {
   const fetchVehicles = async () => {
     const res = await axios("/api/vehicle");
 
-    setVehicles(res.data.slice(0, 10));
+    setVehicles(shuffle(res.data).slice(0, 10));
   };
 
   const fetchCategories = async () => {
