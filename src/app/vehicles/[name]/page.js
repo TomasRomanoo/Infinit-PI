@@ -26,7 +26,7 @@ import Calendar from "react-calendar";
 import swiperConfig from "@/utils/swiperConfig";
 import { Booking } from "@/components/Booking";
 
-const Detail = (vehicle) => {
+const Detail = ({ vehicle }, { params: { name } }) => {
   const router = useRouter();
   const [isGalleryOpen, setGalleryOpen] = useState(false);
   const [selectedImageId, setSelectedImageId] = useState(null);
@@ -103,7 +103,7 @@ const Gallery = ({
           className="w-full hover:brightness-75 transition-all duration-200 self-stretch cursor-pointer"
           onClick={() => openGalleryModal(vehicle.images[0].url)}
         >
-          strokeWidth
+          <Image
             className="object-contain rounded-lg"
             src={vehicle.images[0].url}
           />
@@ -185,7 +185,7 @@ const Specs = ({ specifications }) => {
       {specifications.map((spec, index) => {
         return (
           <div className="flex items-center gap-4" key={index}>
-            strokeWidth src={spec.image} alt="spec" />
+            <Image src={spec.image} alt="spec" />
             <p className="font-poppins text-lg">{spec.description}</p>
           </div>
         );

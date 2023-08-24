@@ -60,7 +60,7 @@ export const Form = () => {
   function createPost() {
     toast.promise(
       axios.post(apiUrl, {
-        brand: brand.id,
+        brand: brand.name,
         model: model,
         plate: plate,
         detail: detail,
@@ -79,11 +79,12 @@ export const Form = () => {
   }
 
   //* Controled inputs states
-  const [brand, setBrand] = useState({
-    id: 0,
+   const [brand, setBrand] = useState({
+    name: "",
     models: [],
   });
-  const [model, setModel] = useState();
+/*   const [brand, setBrand] = useState(""); */
+  const [model, setModel] = useState("");
   const [price, setPrice] = useState("");
   const [plate, setPlate] = useState("");
   const [year, setYear] = useState("");
@@ -101,7 +102,6 @@ export const Form = () => {
   const [descriptionErr, setDescriptionErr] = useState(false);
 
   const [brands, setBrands] = useState([]);
-  const [models, setModels] = useState([]);
 
   const fetchBrands = async () => {
     const res = await axios("/api/brand");
@@ -138,11 +138,11 @@ export const Form = () => {
 
                     setBrand((prevState) => ({
                       ...prevState,
-                      id: selectedBrand.idbrand,
-                      models: selectedBrand.model,
+                      name: selectedBrand.name,
+                      models: selectedBrand.models,
                     }));
 
-                    console.log("brand :>> ", brand.id);
+                    console.log("selected brand :>> ", brand);
                   }}
                   className="block w-full cursor-pointer rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 focus:outline-none sm:text-sm sm:leading-6 transition ease-in-out duration-300"
                 >
@@ -185,9 +185,9 @@ export const Form = () => {
                   <option value="" disabled>
                     Select some model
                   </option>
-                  {brand.models.map((model) => {
+                  {brand.models?.map((model) => {
                     return (
-                      <option value={model.idmodel} key={model.idmodel}>
+                      <option value={model.name} key={model.idmodel}>
                         {model.name}
                       </option>
                     );

@@ -9,7 +9,7 @@ export async function POST(request) {
     const body = await request.json();
 
     console.log("body :>> ", body);
-    /* const {
+    /*    const {
       plate,
       brand,
       model,
@@ -29,29 +29,38 @@ export async function POST(request) {
       );
     }
  */
+
+    const brand = await prisma.brand.findUnique({
+      where: { name: body.brand },
+    });
+    const model = await prisma.model.findUnique({
+      where: { name: body.model },
+    });
+
     const car = await prisma.vehicle.create({
       data: {
-        name: `${brand} ${model} ${year}`,
-        plate,
-        brand: {
-          connect: { idbrand: brandId },
-        },
+        name: `${brand.name} ${model.name} ${body.year}`,
+        plate: body.plate,
         model: {
-          connect: { idmodel: modelId },
+          connect: {
+            idmodel: model.idmodel,
+            brand: { idbrand: brand.idbrand },
+          },
         },
         category: {
-          connect: { idcategory: categoryId },
+          connect: { idcategory: 1 },
         },
         specifications: {
-          connect: { idspecification: specificationId },
+          connect: { idspecification: 1 },
         },
         images: {
-          create: images.map((url) => ({ url })),
+          /*  create: images.map((url) => ({ url })), */
         },
-        detail,
-        year,
-        price_per_day,
-        long_description,
+        detail: body.detail,
+        year: body.year,
+        price_per_day: body.price_per_day,
+        long_description: body.long_description,
+        deleted: false,
       },
     });
     return NextResponse.json(
@@ -64,7 +73,7 @@ export async function POST(request) {
   }
 }
 
-// Método GETALLasasasasasaqs
+// Método GETALL
 export async function GET() {
   console.log("The GETALL VEHICLES function has been called.");
   try {
