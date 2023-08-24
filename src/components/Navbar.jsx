@@ -63,6 +63,10 @@ export const Navbar = () => {
       document.querySelector("#mngmnt").classList.remove("show-mngmnt");
     }
   };
+  const handleLogout = () => {
+    localStorage.removeItem("user"); 
+    window.location.href = "/"; 
+  };
 
   const managementClickMobile = () => {
     if (!MngmntMobileOpen) {
@@ -258,6 +262,9 @@ export const Navbar = () => {
             <div className="flex items-center gap-8">
               <button className="p-6 py-3 rounded-md hover:bg-primary bg-black text-white  transition-all duration-200 ease-in-out">
                 <Link href={"/account"}>Account</Link>
+              </button>
+              <button className="p-6 py-3 rounded-md hover:bg-primary bg-black text-white  transition-all duration-200 ease-in-out">
+                <Link onClick={handleLogout} href={"/"}>Logout</Link>
               </button>
               {/* {getUser().role == "ADMIN" ? (
                 <button className="p-6 py-3 rounded-md hover:bg-primary bg-black text-white transition-all duration-200 ease-in-out">
