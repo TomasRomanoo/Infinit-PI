@@ -7,7 +7,6 @@ export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [userEmail, setUserEmail] = useState('');
   const [isAdmin, setIsAdmin] = useState('');
 
   //* Lo mande con use effect pq en la consola me tiraba
@@ -17,23 +16,19 @@ export const UserProvider = ({ children }) => {
       const token = JSON.parse(localStorage.getItem("token"));
       setUser(token);
 
-      const userEmail = JSON.parse(localStorage.getItem("userEmail"));
-      setUserEmail(userEmail);
 
       const admin = JSON.parse(localStorage.getItem("isAdmin"));
       setIsAdmin(admin);
     }
   }, []);
 
-  const loginUser = (token, email, admin) => {
+  const loginUser = (token, admin) => {
 
     localStorage.setItem("token",JSON.stringify(token));
     setUser(token);
     getUser();
     console.log("User",user)
 
-    localStorage.setItem("email",JSON.stringify(email));
-    setUserEmail(email)
 
     localStorage.setItem("admin",JSON.stringify(admin));
     setIsAdmin(admin)
@@ -57,7 +52,6 @@ export const UserProvider = ({ children }) => {
 
   const userContextValue = {
     user,
-    userEmail,
     isAdmin,
     loginUser,
     signoutUser,

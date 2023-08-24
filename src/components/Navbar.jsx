@@ -257,9 +257,9 @@ export const Navbar = () => {
             </div>
           ) : (
             <div className="flex items-center gap-8">
-              <button className="p-6 py-3 rounded-md hover:bg-primary bg-black text-white  transition-all duration-200 ease-in-out">
-                <Link href={"/porfile"}>Account</Link>
-              </button>
+              <Link href={"/porfile"} className="p-6 py-3 rounded-md hover:bg-primary bg-black text-white  transition-all duration-200 ease-in-out">
+                Account
+              </Link>
               {/* {getUser().role == "ADMIN" ? (
                 <button className="p-6 py-3 rounded-md hover:bg-primary bg-black text-white transition-all duration-200 ease-in-out">
                   <Link href={"/dashboard"}>Dashboard</Link>
