@@ -66,12 +66,20 @@ export async function POST(request) {
 
 
     const emailOptions = {
-      from: "noreply@example.com",
+      from: "noreply@infinit.com",
       to: email,
-      subject: "Confirmation of sign up",
-      text: `Hi ${firstName}, thank you for signing up for our app. Please click the link below to confirm your email address.`,
-      html: `<strong>Hi ${firstName}, thank you for signing up for our app. Please click the link below to confirm your email address.</strong>`,
+      subject: "Confirmación de registro",
+      text: `Hola ${firstName}, gracias por registrarte en INFINIT. Por favor, haz clic en el siguiente enlace para confirmar tu dirección de correo electrónico.`,
+      html: `<div style="background-color: #f0f0f0; padding: 20px;">
+        <h1 style="color: #333333; font-family: Arial, sans-serif;">Bienvenido/a a INFINIT</h1>
+        <p style="color: #333333; font-family: Arial, sans-serif;">Hola <strong>${firstName}</strong>, gracias por registrarte en INFINIT. Estamos encantados de tenerte con nosotros.</p>
+        <p style="color: #333333; font-family: Arial, sans-serif;">Para completar tu registro, solo tienes que hacer clic en el siguiente botón y confirmar tu dirección de correo electrónico.</p>
+        <a href="#" style="display: inline-block; background-color: #0078d4; color: white; padding: 10px 20px; text-decoration: none; font-family: Arial, sans-serif;">Confirmar correo electrónico</a>
+        <p style="color: #333333; font-family: Arial, sans-serif;">Si tienes alguna pregunta o sugerencia, no dudes en contactarnos.</p>
+        <p style="color: #333333; font-family: Arial, sans-serif;">¡Gracias por elegir INFINIT!</p>
+      </div>`,
     };
+    
 
     try {
       await transporter.sendMail(emailOptions);
