@@ -21,7 +21,7 @@ export default function RootLayout({ children }) {
       <UserProvider>
         <html lang="en">
           <body className="h-full bg-gray-100 ">
-            <Navbar />
+            <Navbar  />
             <div className="mt-40 mx-5 md:mx-12 lg:mx-20" id="home">
               {children}
             </div>

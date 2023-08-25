@@ -64,6 +64,11 @@ export const Navbar = () => {
       document.querySelector("#mngmnt").classList.remove("show-mngmnt");
     }
   };
+  const handleLogout = () => {
+    localStorage.removeItem("token"); 
+    localStorage.removeItem("admin"); 
+    window.location.href = "/"; 
+  };
 
   const managementClickMobile = () => {
     if (!MngmntMobileOpen) {
@@ -254,7 +259,7 @@ export const Navbar = () => {
               <Link href={"/signup"} className="p-6 py-3 rounded-md bg-primary hover:bg-secondary shadow-lg text-white transition-all duration-200 ease-in-out">
                 Join now
               </Link>
-              <Link href={"/login"} className="p-6 py-3 rounded-md bg-primary hover:bg-secondary shadow-md text-white  transition-all duration-200 ease-in-out">
+             <Link href={"/login"} className="p-6 py-3 rounded-md bg-primary hover:bg-secondary shadow-md text-white  transition-all duration-200 ease-in-out">
                 Sign in
               </Link>
             </div>
@@ -263,11 +268,9 @@ export const Navbar = () => {
               <Link href={"/porfile"} className="p-6 py-3 rounded-md hover:bg-primary bg-black text-white  transition-all duration-200 ease-in-out">
                 Account
               </Link>
-              {/* {getUser().role == "ADMIN" ? (
-                <button className="p-6 py-3 rounded-md hover:bg-primary bg-black text-white transition-all duration-200 ease-in-out">
-                  <Link href={"/dashboard"}>Dashboard</Link>
-                </button>
-              ) : null} */}
+              <button className="p-6 py-3 rounded-md hover:bg-primary bg-black text-white  transition-all duration-200 ease-in-out">
+                <Link onClick={handleLogout} href={"/"}>Logout</Link>
+              </button>
             </div>
           )}
         </div>
