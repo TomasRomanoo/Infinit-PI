@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Pagination } from "./Pagination";
 import { motion } from "framer-motion";
-import { SkeletonCard } from "@/components/Skeleton.jsx";
+import { SkeletonCard } from "@/components/skeletons/Card.jsx";
 import { Card } from "./Card";
 
 export const CardList = ({ vehicles }) => {

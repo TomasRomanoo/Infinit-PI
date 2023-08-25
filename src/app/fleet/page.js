@@ -9,7 +9,7 @@ export default function Fleet() {
   const fetchVehicles = async () => {
     const res = await axios("/api/vehicle");
 
-    setVehicles(res.data.slice(0, 10));
+    setVehicles(res.data);
   };
 
   useEffect(() => {

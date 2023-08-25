@@ -21,6 +21,14 @@ export default function FleetByCategory({ params: { name } }) {
 
   return (
     <div>
+      <p className="font-poppins capitalize font-bold text-4xl">{name}</p>
+      {vehiclesByCategory.length == 0 && (
+        <div>
+          <p className="text-lg">
+            Sorry, we dont have those vehicles at the moment!
+          </p>
+        </div>
+      )}
       <CardList vehicles={vehiclesByCategory} />
     </div>
   );
