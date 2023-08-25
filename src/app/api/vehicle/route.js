@@ -9,21 +9,15 @@ export async function POST(request) {
     const body = await request.json();
 
     console.log("body :>> ", body);
-    const {
-      model:{
-        idmodel,
-        brand:{
-          idbrand,
-        },
-      },
-      year,
+    /*    const {
       plate,
-      categoryIdcategory,
-      images,
+      brand,
+      model,
       detail,
+      year,
       price_per_day,
       long_description,
-    } = body;
+    } = body; */
 
     /*   if (!plate || !model || !price_per_day || price_per_day <= 0) {
       return NextResponse.json(
@@ -35,25 +29,38 @@ export async function POST(request) {
       );
     }
  */
+
+    const brand = await prisma.brand.findUnique({
+      where: { name: body.brand },
+    });
+    const model = await prisma.model.findUnique({
+      where: { name: body.model },
+    });
+
     const car = await prisma.vehicle.create({
       data: {
-        name: `${year}`,
-        plate,
+        name: `${brand.name} ${model.name} ${body.year}`,
+        plate: body.plate,
         model: {
-          connect: { idmodel: idmodel },
+          connect: {
+            idmodel: model.idmodel,
+            brand: { idbrand: brand.idbrand },
+          },
         },
         category: {
-          connect: { idcategory: categoryIdcategory },
+          connect: { idcategory: 1 },
         },
-        detail,
-        year,
-        price_per_day,
-        long_description,
-        deleted: false, // Set to default value
-      },
-      include: {
-        model: true,
-        category: true,
+        specifications: {
+          connect: { idspecification: 1 },
+        },
+        images: {
+          /*  create: images.map((url) => ({ url })), */
+        },
+        detail: body.detail,
+        year: body.year,
+        price_per_day: body.price_per_day,
+        long_description: body.long_description,
+        deleted: false,
       },
     });
     return NextResponse.json(

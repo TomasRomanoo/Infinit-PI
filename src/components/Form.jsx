@@ -9,25 +9,24 @@ export const Form = () => {
     e.preventDefault();
 
     const fields = [
-      { state: brand, setter: setBrandErr, id: "#brandInput" },
       { state: model, setter: setModelErr, id: "#modelInput" },
       { state: price, setter: setPriceErr, id: "#priceInput" },
       { state: plate, setter: setPlateErr, id: "#plateInput" },
       { state: detail, setter: setDetailErr, id: "#detailInput" },
-      { state: category, setter: categoryErr, id: "#categoryInput" },
       {
         state: description,
         setter: setDescriptionErr,
         id: "#descriptionInput",
-      },
+      },      
+      { state: category, setter: setCategoryErr, id: "#categoryInput" }
     ];
 
     fields.forEach((field) => {
       if (!field.state) {
-        field.setter = true;
+        field.setter(true);
         document.querySelector(field.id).classList.add("errInput");
       } else {
-        field.setter = false;
+        field.setter(false);
         document.querySelector(field.id).classList.remove("errInput");
       }
     });
@@ -41,13 +40,20 @@ export const Form = () => {
       setYearErr2(false);
       document.querySelector("#yearInput").classList.remove("errInput");
     }
+    if(brand.id === 0){
+      setBrandErr(true);
+      document.querySelector("#brandInput").classList.add("errInput");
+    }else{
+      setBrandErr(false)
+      document.querySelector("#brandInput").classList.remove("errInput");
+    }
 
     if (
       year &&
       year.length !== 0 &&
       year < 2023 &&
       year > 1886 &&
-      fields[6].state &&
+      brand.id !== 0 &&
       fields[5].state &&
       fields[4].state &&
       fields[3].state &&
@@ -64,7 +70,7 @@ export const Form = () => {
   function createPost() {
     toast.promise(
       axios.post(apiUrl, {
-        brand: brand.id,
+        brand: brand.name,
         model: model,
         plate: plate,
         detail: detail,
@@ -84,10 +90,10 @@ export const Form = () => {
 
   //* Controled inputs states
   const [brand, setBrand] = useState({
-    id: 0,
+    name: "",
     models: [],
   });
-  const [model, setModel] = useState();
+  const [model, setModel] = useState("");
   const [price, setPrice] = useState("");
   const [plate, setPlate] = useState("");
   const [year, setYear] = useState("");
@@ -136,7 +142,7 @@ export const Form = () => {
       >
         <div className="grid md:grid-cols-2 grid-cols-1">
           <div className="mx-6">
-            <div className="m-[0.85rem]  ">
+          <div className="m-[0.85rem]  ">
               <label className="block text-sm font-medium leading-6 text-gray-900">
                 Brand
               </label>
@@ -150,11 +156,11 @@ export const Form = () => {
 
                     setBrand((prevState) => ({
                       ...prevState,
-                      id: selectedBrand.idbrand,
-                      models: selectedBrand.model,
+                      name: selectedBrand.name,
+                      models: selectedBrand.models,
                     }));
 
-                    console.log("brand :>> ", brand.id);
+                    console.log("selected brand :>> ", brand);
                   }}
                   className="block w-full cursor-pointer rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 focus:outline-none sm:text-sm sm:leading-6 transition ease-in-out duration-300"
                 >
@@ -194,20 +200,53 @@ export const Form = () => {
                   type="text"
                   className="block mt-2 w-full cursor-pointer rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 focus:outline-none sm:text-sm sm:leading-6 transition ease-in-out duration-300"
                 >
+                  <option value="" disabled>
+                    Select some model
+                  </option>
+                  {brand.models?.map((model) => {
+                    return (
+                      <option value={model.name} key={model.idmodel}>
+                        {model.name}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
+              {modelErr ? (
+                <span className="flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1">
+                  You must choose the model of your car
+                </span>
+              ) : (
+                <></>
+              )}
+            </div>
+
+            <div className="m-3">
+              <label className="block  text-sm font-medium leading-6 text-gray-900">
+                Model
+              </label>
+              <div>
+                <select
+                  id="modelInput"
+                  value={model}
+                  onChange={(e) => {
+                    setModel(e.target.value);
+                    console.log("model :>> ", model);
+                  }}
+                  type="text"
+                  className="block mt-2 w-full cursor-pointer rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 focus:outline-none sm:text-sm sm:leading-6 transition ease-in-out duration-300"
+                >
                   <option value="" disabled selected>
                     Select some model
                   </option>
-                  {brand?
-                  console.log(brand)
-                  // brand.models.map((model) => {
-                  //   return (
-                  //     <option value={model.idmodel} key={model.idmodel}>
-                  //       {model.name}
-                  //     </option>
-                  //   );
-                  // })
-                :
-                <></>}
+                  {brand.models?.map((model) => {
+                    return (
+                      <option value={model.name} key={model.idmodel}>
+                        {model.name}
+                      </option>
+                    );
+                  })}
+
                 </select>
               </div>
               {modelErr ? (
@@ -383,9 +422,10 @@ export const Form = () => {
                 <></>
               )}
             </div>
+            {console.log(isAdmin)}
             {isAdmin
               ?
-              <div className="m-3">
+              (<div className="m-3">
               <label className="block text-sm font-medium leading-6 text-gray-900">
                 Category
               </label>
@@ -393,7 +433,7 @@ export const Form = () => {
                 id="categoryInput"
                 value={category}
                 onChange={(e) => {
-                  setModel(e.target.value);
+                  setCategory(e.target.value);
                   console.log("category :>> ", category);
                 }}
                 type="text"
@@ -413,7 +453,17 @@ export const Form = () => {
                   );
                 })}
               </select>
+              {categoryErr ? (
+                <span className="flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1">
+                  You must choose the category of your car
+                </span>
+              ) : (
+                <></>
+              )}
             </div>
+              
+              
+              )
             :
             <></>
             }

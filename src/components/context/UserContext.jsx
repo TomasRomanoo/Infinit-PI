@@ -7,7 +7,7 @@ export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [isAdmin, setIsAdmin] = useState('');
+  const [isAdmin, setIsAdmin] = useState(null);
 
   //* Lo mande con use effect pq en la consola me tiraba
   //* error si lo inicializaba con el localStorage (pero funcionaba)
@@ -17,7 +17,7 @@ export const UserProvider = ({ children }) => {
       setUser(token);
 
 
-      const admin = JSON.parse(localStorage.getItem("isAdmin"));
+      const admin = JSON.parse(localStorage.getItem("admin"));
       setIsAdmin(admin);
     }
   }, []);
@@ -48,7 +48,7 @@ export const UserProvider = ({ children }) => {
     setUser('');
     setIsAdmin('');
     localStorage.removeItem("token");
-    localStorage.removeItem("isAdmin");
+    localStorage.removeItem("admin");
     document.cookie =
       "sessionID=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; secure; HttpOnly";
   };

@@ -23,7 +23,7 @@ export const DeleteCard = (props) => {
           {
             loading: "Loading...",
             success: (data) => {
-              document.querySelector(`#card${props.vehicle.idvehicle}`).classList.add("opacity-0");
+              document.querySelector(`#cards${props.vehicle.idvehicle}`).classList.add("opacity-0");
               setTimeout(() => {
                 window.location.reload()
               }, 3000);
@@ -37,8 +37,8 @@ export const DeleteCard = (props) => {
   console.log(props);
   return (
     
-    <div id={`card${ props.vehicle.idvehicle}`} className=" w-2/5  m-3 rounded-2xl overflow-hidden shadow-md flex flex-col font-poppins hover:shadow-lg transition-all transition-opacity duration-500 ease-in-out opacity-100">
-      <div className="flex items-center justify-between p-4">
+    <div id={`cards${props.vehicle.idvehicle}`} className=" w-2/5  m-3 rounded-2xl overflow-hidden shadow-md flex flex-col font-poppins hover:shadow-lg transition-opacity duration-500 ease-in-out ">
+      <div className="flex items-center justify-between p-4 ">
         <div className="w-1/2">
           <Image className="w-full object-contain" src={image} alt="delete-card" />
         </div>

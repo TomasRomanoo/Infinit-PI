@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import image from "@/assets/images/honda-civic.png";
 import { GrClose } from "react-icons/gr";
@@ -11,29 +11,6 @@ export const ModCar = ({ vehicles, firstIndex, lastIndex }) => {
   const apiUrl = "http://localhost:3000/api/vehicles/";
   const [showModal, setShowModal] = useState(false);
 
-  const handlerModal = (vehicle, plate) => {
-    axios.get(`/api/vehicle/${plate}`).then(function (response) {
-      setId(response.data.idvehcle);
-      setBrand(response.data.model.brand.name);
-      setModel(response.data.model.name);
-      setPrice(response.data.price_per_day);
-      setPlate(response.data.plate);
-      setYear(response.data.year);
-      setDetail(response.data.detail);
-      setDescription(response.data.long_description);
-    });
-
-    // setId(vehicle.idvehcle);
-    // setBrand(vehicle.brand);
-    // setModel(vehicle.model);
-    // setPrice(vehicle.price_per_day);
-    // setPlate(vehicle.plate);
-    // setYear(vehicle.year);
-    // setDetail(vehicle.detail);
-    // setDescription(vehicle.long_description);
-
-    setShowModal(!showModal);
-  };
 
   //* Controled inputs states
   const [id, setId] = useState("");
@@ -54,6 +31,24 @@ export const ModCar = ({ vehicles, firstIndex, lastIndex }) => {
   const [detailErr, setDetailErr] = useState(false);
   const [descriptionErr, setDescriptionErr] = useState(false);
   const [categoryErr, setCategoryErr] = useState(false);
+
+
+  const handlerModal = (vehicle, plate) => {
+    axios.get(`/api/vehicle/${plate}`).then(function (response) {
+      setId(response.data.idvehcle);
+      setBrand(response.data.model.brand.name);
+      setModel(response.data.model.name);
+      setPrice(response.data.price_per_day);
+      setPlate(response.data.plate);
+      setYear(response.data.year);
+      setDetail(response.data.detail);
+      setDescription(response.data.long_description);
+    });
+  };
+
+  useEffect(()=>{
+    setShowModal(!showModal);
+  },[brand])
 
   const handlerEdit = (e) => {
     e.preventDefault();
