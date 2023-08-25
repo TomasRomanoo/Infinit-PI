@@ -9,6 +9,7 @@ datasource db {
 
 model vehicle {
   idvehicle          Int             @id @default(autoincrement())
+  name               String
   plate              String          @unique(map: "plate_UNIQUE")
   detail             String
   year               Int
