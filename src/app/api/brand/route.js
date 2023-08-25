@@ -1,4 +1,4 @@
-import { fileUploader } from "@/utils/fileUploader";
+import { fileUploader } from "@/utils/uploadImage";
 import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
 const prisma = new PrismaClient();
@@ -35,7 +35,7 @@ export async function GET() {
   console.log("The GETALL BRANDS function has been called.");
   try {
     const brands = await prisma.brand.findMany({
-         include: { models: true },
+      include: { models: true },
       where: { deleted: false },
     });
     return NextResponse.json(brands, { status: 200, data: brands });

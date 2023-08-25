@@ -2,8 +2,6 @@
 import { CardList } from "@/components/CardList";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
-import { useRouter } from "next/navigation";
 
 export default function FleetByCategory({ params: { name } }) {
   const [vehiclesByCategory, setVehiclesByCategory] = useState([]);
