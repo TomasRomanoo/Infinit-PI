@@ -48,7 +48,6 @@ export async function GET(request) {
     );
   }
 }
-
 //METODO DELETE
 export async function DELETE(request) {
   try {
@@ -56,25 +55,58 @@ export async function DELETE(request) {
     const plate = urlParts[urlParts.length - 1];
     if (!plate) {
       return NextResponse.json(
-        { error: "Debes dar la placa del auto" },
+        { error: "Debes proporcionar la placa del auto" },
         { status: 400 }
       );
     }
 
-    const car = await prisma.vehicle.delete({
+    const vehicle = await prisma.vehicle.findUnique({
+      where: {
+        plate,
+      },
+      include: {
+        images: true,
+        specifications: true,
+      },
+    });
+
+    if (!vehicle) {
+      return NextResponse.json(
+        { error: "Vehículo no encontrado" },
+        { status: 404 }
+      );
+    }
+
+    await prisma.image.deleteMany({
+      where: {
+        vehicleIdvehicle: {
+          equals: vehicle.idvehicle,
+        },
+      },
+    });
+
+    await prisma.specification.deleteMany({
+      where: {
+        vehicleIdvehicle: {
+          equals: vehicle.idvehicle,
+        },
+      },
+    });
+
+    await prisma.vehicle.delete({
       where: {
         plate,
       },
     });
 
     return NextResponse.json(
-      { message: "Auto eliminado correctamente" },
+      { message: "Vehículo eliminado correctamente" },
       { status: 200 }
     );
   } catch (error) {
     console.error(error);
     return NextResponse.json(
-      { Error: "Error al eliminar el auto" },
+      { Error: "Error al eliminar el vehículo" },
       { status: 500 }
     );
   }

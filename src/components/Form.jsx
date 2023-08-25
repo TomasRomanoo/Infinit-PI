@@ -1,13 +1,14 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { toast } from "sonner";
+import { UserContext } from "./context/UserContext";
 
 export const Form = () => {
+  const { isAdmin } = useContext(UserContext)
   const handlerSubmit = (e) => {
     e.preventDefault();
 
     const fields = [
-      { state: brand, setter: setBrandErr, id: "#brandInput" },
       { state: model, setter: setModelErr, id: "#modelInput" },
       { state: price, setter: setPriceErr, id: "#priceInput" },
       { state: plate, setter: setPlateErr, id: "#plateInput" },
@@ -16,7 +17,7 @@ export const Form = () => {
         state: description,
         setter: setDescriptionErr,
         id: "#descriptionInput",
-      },
+      }
     ];
 
     fields.forEach((field) => {
@@ -38,58 +39,149 @@ export const Form = () => {
       setYearErr2(false);
       document.querySelector("#yearInput").classList.remove("errInput");
     }
+    if (brand.name == "") {
+      setBrandErr(true);
+      document.querySelector("#brandInput").classList.add("errInput");
+    } else {
+      setBrandErr(false)
+      document.querySelector("#brandInput").classList.remove("errInput");
+    }
+    
+    if (isAdmin) {
+      if(!category) {
+        setCategoryErr(true);
+        document.querySelector("#categoryInput").classList.add("errInput");
+      } else {
+        setCategoryErr(false)
+        document.querySelector("#categoryInput").classList.remove("errInput");
+      }
+    }
 
     if (
       year &&
       year.length !== 0 &&
       year < 2023 &&
       year > 1886 &&
-      fields[5].state &&
+      brand.id !== 0 &&
       fields[4].state &&
       fields[3].state &&
       fields[2].state &&
       fields[1].state &&
       fields[0].state
     ) {
-      createPost();
+      if(isAdmin){
+        if (category) {
+          createPost()
+        }
+      }else{
+        createPost()
+      }
     }
   };
 
-  const apiUrl = "/api/vehicle/";
+  const apiUrl = "/api/vehicle";
 
   function createPost() {
-    toast.promise(
-      axios.post(apiUrl, {
-        brand: brand.name,
-        model: model,
-        plate: plate,
-        detail: detail,
-        year: +year,
-        price_per_day: +price,
-        long_description: description,
-      }),
-      {
-        loading: "Loading...",
-        success: (data) => {
-          return `Post has been created successfully`;
-        },
-        error: "Error while creating post",
-      }
-    );
+    let parsCategory 
+    if(category){
+      parsCategory = JSON.parse(category)
+    }
+
+    let parsModel = JSON.parse(model)
+
+    if(isAdmin){
+
+      toast.promise(
+        axios.post(apiUrl, {
+          "name": "",
+          "plate": plate,
+          "detail": detail,
+          "year": +year,
+          "price_per_day": +price,
+          "long_description": description,
+          "deleted": false,
+          "category": {
+            "idcategory": parsCategory.idcategory,
+            "name": parsCategory.name,
+            "url": parsCategory.url,
+            "deleted": false
+          },
+          "images": [],
+          "model": {
+            "idmodel": parsModel.idmodel,
+            "name": parsModel.name,
+            "brandIdbrand": parsModel.brandIdbrand,
+            "deleted": false,
+            "brand": {
+              "idbrand": brand.idbrand,
+              "name": brand.name,
+              "url": brand.url,
+              "deleted": false
+            }
+          }
+        }),
+        {
+          loading: "Loading...",
+          success: (data) => {
+            return `Post has been created successfully`;
+          },
+          error: "Error while creating post",
+        }
+      );
+
+    }else{
+      toast.promise(
+        axios.post(apiUrl, {
+          "name": "",
+          "plate": plate,
+          "detail": detail,
+          "year": +year,
+          "price_per_day": +price,
+          "long_description": description,
+          "deleted": false,
+          "category": {
+            "idcategory": 1,
+            "name": "sedan",
+            "url": "https://revistacarro.com.br/wp-content/uploads/2021/11/Audi-A3-Sedan-Performance-Black_1.jpg",
+            "deleted": false
+          },
+          "images": [],
+          "model": {
+            "idmodel": parsModel.idmodel,
+            "name": parsModel.name,
+            "brandIdbrand": parsModel.brandIdbrand,
+            "deleted": false,
+            "brand": {
+              "idbrand": brand.idbrand,
+              "name": brand.name,
+              "url": brand.url,
+              "deleted": false
+            }
+          }
+        }),
+        {
+          loading: "Loading...",
+          success: (data) => {
+            return `Post has been created successfully`;
+          },
+          error: "Error while creating post",
+        }
+      );
+    }
   }
 
   //* Controled inputs states
-   const [brand, setBrand] = useState({
+  const [brand, setBrand] = useState({
     name: "",
     models: [],
   });
-/*   const [brand, setBrand] = useState(""); */
   const [model, setModel] = useState("");
   const [price, setPrice] = useState("");
   const [plate, setPlate] = useState("");
   const [year, setYear] = useState("");
   const [detail, setDetail] = useState("");
   const [description, setDescription] = useState("");
+  const [category, setCategory] = useState("");
 
   //* Error States
   const [brandErr, setBrandErr] = useState(false);
@@ -100,16 +192,24 @@ export const Form = () => {
   const [yearErr2, setYearErr2] = useState(false);
   const [detailErr, setDetailErr] = useState(false);
   const [descriptionErr, setDescriptionErr] = useState(false);
+  const [categoryErr, setCategoryErr] = useState(false);
 
   const [brands, setBrands] = useState([]);
+  const [categories, setCategories] = useState([]);
 
   const fetchBrands = async () => {
     const res = await axios("/api/brand");
     setBrands(res.data);
   };
 
+  const fetchCategories = async () => {
+    const res = await axios("/api/category");
+    setCategories(res.data);
+  };
+
   useEffect(() => {
     fetchBrands();
+    fetchCategories();
   }, []);
 
   return (
@@ -123,7 +223,7 @@ export const Form = () => {
         className="flex items-center flex-col "
       >
         <div className="grid md:grid-cols-2 grid-cols-1">
-          <div>
+          <div className="mx-6">
             <div className="m-[0.85rem]  ">
               <label className="block text-sm font-medium leading-6 text-gray-900">
                 Brand
@@ -141,12 +241,10 @@ export const Form = () => {
                       name: selectedBrand.name,
                       models: selectedBrand.models,
                     }));
-
-                    console.log("selected brand :>> ", brand);
                   }}
                   className="block w-full cursor-pointer rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 focus:outline-none sm:text-sm sm:leading-6 transition ease-in-out duration-300"
                 >
-                  <option value="" disabled>
+                  <option value="" disabled selected>
                     Select some brand
                   </option>
                   {brands.map((brand) => {
@@ -182,16 +280,18 @@ export const Form = () => {
                   type="text"
                   className="block mt-2 w-full cursor-pointer rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 focus:outline-none sm:text-sm sm:leading-6 transition ease-in-out duration-300"
                 >
-                  <option value="" disabled>
+                  <option value="" disabled selected>
                     Select some model
                   </option>
                   {brand.models?.map((model) => {
                     return (
-                      <option value={model.name} key={model.idmodel}>
+                      <option value={JSON.stringify(model)} key={model.idmodel}>
                         {model.name}
+                        {console.log(model)}
                       </option>
                     );
                   })}
+
                 </select>
               </div>
               {modelErr ? (
@@ -367,6 +467,49 @@ export const Form = () => {
                 <></>
               )}
             </div>
+            {isAdmin
+              ?
+              (<div className="m-3">
+                <label className="block text-sm font-medium leading-6 text-gray-900">
+                  Category
+                </label>
+                <select
+                  id="categoryInput"
+                  value={category}
+                  onChange={(e) => {
+                    setCategory(e.target.value);
+                    console.log("category :>> ", category);
+                  }}
+                  type="text"
+                  className="block mt-2 w-full cursor-pointer rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 focus:outline-none sm:text-sm sm:leading-6 transition ease-in-out duration-300"
+                >
+                  <option value="" disabled selected>
+                    Select some category
+                  </option>
+                  {categories.map((category) => {
+                    return (
+                      <option
+                        value={JSON.stringify(category)}
+                        key={category.categoryId}
+                      >
+                        {category.name}
+
+                      </option>
+                    );
+                  })}
+                </select>
+                {categoryErr ? (
+                  <span className="flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1">
+                    You must choose the category of your car
+                  </span>
+                ) : (
+                  <></>
+                )}
+              </div>
+              )
+              :
+              <></>
+            }
           </div>
         </div>
 

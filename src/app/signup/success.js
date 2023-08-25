@@ -1,7 +1,8 @@
 "use client";
 import React, { useEffect } from "react";
 
-import { useRouter } from "next/navigation";
+import { useRouter } from 'next/navigation';
+
 
 export default function Success() {
   const { push } = useRouter();

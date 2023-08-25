@@ -64,6 +64,11 @@ export const Navbar = () => {
       document.querySelector("#mngmnt").classList.remove("show-mngmnt");
     }
   };
+  const handleLogout = () => {
+    localStorage.removeItem("token"); 
+    localStorage.removeItem("admin"); 
+    window.location.href = "/"; 
+  };
 
   const managementClickMobile = () => {
     if (!MngmntMobileOpen) {
@@ -248,25 +253,24 @@ export const Navbar = () => {
         </ul>
 
         <div className="lg:block hidden font-poppins">
-          {getUser() == false ? (
+          {console.log(getUser)}
+          {getUser() == null ? (
             <div className="flex items-center gap-8">
-              <button className="p-6 py-3 rounded-md bg-primary hover:bg-secondary shadow-lg text-white transition-all duration-200 ease-in-out">
-                <Link href={"/signup"}>Join now</Link>
-              </button>
-              <button className="p-6 py-3 rounded-md bg-primary hover:bg-secondary shadow-md text-white  transition-all duration-200 ease-in-out">
-                <Link href={"/login"}>Sign in</Link>
-              </button>
+              <Link href={"/signup"} className="p-6 py-3 rounded-md bg-primary hover:bg-secondary shadow-lg text-white transition-all duration-200 ease-in-out">
+                Join now
+              </Link>
+             <Link href={"/login"} className="p-6 py-3 rounded-md bg-primary hover:bg-secondary shadow-md text-white  transition-all duration-200 ease-in-out">
+                Sign in
+              </Link>
             </div>
           ) : (
             <div className="flex items-center gap-8">
+              <Link href={"/porfile"} className="p-6 py-3 rounded-md hover:bg-primary bg-black text-white  transition-all duration-200 ease-in-out">
+                Account
+              </Link>
               <button className="p-6 py-3 rounded-md hover:bg-primary bg-black text-white  transition-all duration-200 ease-in-out">
-                <Link href={"/account"}>Account</Link>
+                <Link onClick={handleLogout} href={"/"}>Logout</Link>
               </button>
-              {/* {getUser().role == "ADMIN" ? (
-                <button className="p-6 py-3 rounded-md hover:bg-primary bg-black text-white transition-all duration-200 ease-in-out">
-                  <Link href={"/dashboard"}>Dashboard</Link>
-                </button>
-              ) : null} */}
             </div>
           )}
         </div>
@@ -336,30 +340,31 @@ export const Navbar = () => {
           </li>
         </ul>
 
-        {user == false ? (
+        {user == null ? (
           <div className="flex flex-wrap items-center justify-center gap-8 mt-4 mx-4 font-poppins">
-            <button
+            <Link href="/signup"
               onClick={closeSidebar}
-              className="w-full p-6 py-3 rounded-md hover:bg-primary bg-black text-white  transition-all duration-200 ease-in-out"
+              className="w-full p-6 py-3 rounded-md hover:bg-primary bg-black text-white text-center transition-all duration-200 ease-in-out"
             >
-              <Link href="/signup">Join now</Link>
-            </button>
-            <button
+              Join now
+            </Link>
+            <Link href="/login"
               onClick={closeSidebar}
-              className="w-full p-6 py-3 rounded-md hover:bg-primary bg-black text-white  transition-all duration-200 ease-in-out"
+              
+              className="w-full p-6 py-3 rounded-md hover:bg-primary bg-black text-white text-center  transition-all duration-200 ease-in-out"
             >
-              <Link href="/login">Sign in</Link>
-            </button>
+              Sign in
+            </Link>
           </div>
         ) : (
           <div className="flex flex-wrap items-center justify-center gap-8 mt-4 mx-4 font-poppins">
-            <button
+            <Link href="/porfile"
               onClick={closeSidebar}
-              className=" w-full p-6 py-3 rounded-md hover:bg-primary bg-black text-white  transition-all duration-200 ease-in-out"
+              className=" w-full p-6 py-3 rounded-md hover:bg-primary bg-black text-white text-center transition-all duration-200 ease-in-out"
             >
-              <Link href="/account">Account</Link>
-            </button>
-            {user.role == "ADMIN" ? (
+              Account
+            </Link>
+            {user?.role == 1 ? (
               <button
                 onClick={closeSidebar}
                 className="w-full p-6 py-3 rounded-md hover:bg-primary bg-black text-white  transition-all duration-200 ease-in-out"
