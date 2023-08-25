@@ -1,6 +1,6 @@
 "use client";
-import Link from "next/link";
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 
 import { Swiper, SwiperSlide, useSwiper } from "swiper/react";
 import { Navigation, Pagination } from "swiper";
@@ -25,11 +25,43 @@ import { AiOutlineClose } from "react-icons/ai";
 import Calendar from "react-calendar";
 import swiperConfig from "@/utils/swiperConfig";
 import { Booking } from "@/components/Booking";
+import Characterist from "./characterist";
 
-const Detail = ({ vehicle }, { params: { name } }) => {
+
+const Detail = ({params}) => {
+  const [vehicle, setVehicle] = useState({});
   const router = useRouter();
   const [isGalleryOpen, setGalleryOpen] = useState(false);
   const [selectedImageId, setSelectedImageId] = useState(null);
+
+  const fetchVehicle = async () => {
+    const res = await axios("/api/vehicle/"+params.plate);
+    //mocking images until DB is ready
+    if (!res.data.images || !res.data.images.length) {
+      res.data.images = [
+        {
+          url: peugeot
+        },
+        {
+          url: peugeot2
+        },
+        {
+          url: peugeot3
+        },
+        {
+          url: peugeot4
+        },
+        {
+          url: peugeot5
+        },
+      ]
+    }
+    setVehicle(res.data);
+  };
+
+  useEffect(() => {
+    fetchVehicle();
+  }, []);
 
   const openGalleryModal = (imageId) => {
     setSelectedImageId(imageId);
@@ -55,15 +87,15 @@ const Detail = ({ vehicle }, { params: { name } }) => {
         id="detail"
       >
         <div className="flex items-center justify-between">
-          <p className="text-2xl font-poppins font-semibold">{vehicle.name}</p>
-          <button
+          <p className="text-2xl font-poppins font-semibold">{vehicle.model?.brand?.name +' | ' + vehicle.model?.name + ' | '+vehicle.plate}</p>
+          {/* <button
             onClick={() => {
               router.back();
             }}
-            className="text-xl text-blue-700 hover:text-purple-600"
+            // className="text-xl text-blue-700 hover:text-purple-600"
           >
             Go back
-          </button>
+          </button> */}
         </div>
 
         <div className="bg-white rounded-lg w-full h-full shadow-lg py-8 p-4 md:px-12 space-y-8">
@@ -73,7 +105,7 @@ const Detail = ({ vehicle }, { params: { name } }) => {
             openGalleryModal={openGalleryModal}
             closeGalleryModal={closeGalleryModal}
             setSelectedImageId={setSelectedImageId}
-            images={images}
+            images={vehicle.images || []}
           />
 
           <Specs />
@@ -81,7 +113,20 @@ const Detail = ({ vehicle }, { params: { name } }) => {
             <p className="text-poppins text-2xl mt-10">Description</p>
 
             <p className="text-gray-400 text-xl">{vehicle.long_description}</p>
-          </div>
+          </div>        
+          <Characterist/>
+
+        <div class="flex justify-end">
+          <button
+            onClick={() => {
+              router.back();
+            }}
+            // className="text-xl text-blue-700 hover:text-purple-600"
+            className="w-1/6 bg-primary text-white p-4 rounded-md hover:bg-secondary transition-all duration-200"
+          >
+            Go back
+          </button>
+        </div>
         </div>
       </div>
     </>
@@ -101,17 +146,18 @@ const Gallery = ({
         {/* Main Image */}
         <div
           className="w-full hover:brightness-75 transition-all duration-200 self-stretch cursor-pointer"
-          onClick={() => openGalleryModal(vehicle.images[0].url)}
+          onClick={() => openGalleryModal(images[0]?.url)}
         >
           <Image
             className="object-contain rounded-lg"
-            src={vehicle.images[0].url}
+            src={images[0]?.url}
+            alt="spec"
           />
         </div>
 
         <div className="flex flex-col gap-4 w-full lg:w-3/4">
           <div className="lg:grid flex flex-row items-center lg:grid-cols-2 lg:grid-row-2 gap-4 justify-center w-full">
-            {vehicle.images.slice(1, 5).map((image, key) => (
+            {images?.slice(1, 5).map((image, key) => (
               <div
                 className=" flex justify-center items-center hover:brightness-75 transition-all duration-200 cursor-pointer"
                 onClick={() => openGalleryModal(image.id)}
@@ -156,11 +202,11 @@ const GalleryModal = ({ selectedImageId, images, close }) => {
           navigation
           pagination={{ clickable: true }}
           className="h-full"
-          initialSlide={vehicle.images.findIndex(
+          initialSlide={images.findIndex(
             (image) => image.id === selectedImageId
           )}
         >
-          {vehicle.images.map((image) => {
+          {images.map((image) => {
             return (
               <SwiperSlide
                 key={image.id}
@@ -169,6 +215,7 @@ const GalleryModal = ({ selectedImageId, images, close }) => {
                 <Image
                   className=" pointer-events-none object-cover md:aspect-auto h-screen md:h-full"
                   src={image.url}
+                  alt="spec"
                 />
               </SwiperSlide>
             );
@@ -182,7 +229,7 @@ const GalleryModal = ({ selectedImageId, images, close }) => {
 const Specs = ({ specifications }) => {
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 grid-flow-row">
-      {specifications.map((spec, index) => {
+      {specifications?.map((spec, index) => {
         return (
           <div className="flex items-center gap-4" key={index}>
             <Image src={spec.image} alt="spec" />

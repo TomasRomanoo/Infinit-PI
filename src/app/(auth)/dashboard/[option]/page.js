@@ -47,17 +47,15 @@ const DashboardPage = () => {
 
   
 const fetchVehicles = async () => {
-  setVehicles(((await axios.get("http://localhost:3000/api/vehicle")).data))
-
-  };
-  
-    useEffect(() => {
-      try{
-        fetchVehicles()
-      }catch{
-        console.error("Error fetching vehicles:", error);
-      }
-    },[])
+  setVehicles(((await axios("/api/vehicle")).data));
+};
+useEffect(() => {
+  try{
+    fetchVehicles()
+  }catch{
+    console.error("Error fetching vehicles:", error);
+  }
+},[])
 
   return (
   <div className="flex items-center justify-evenly h-full">
