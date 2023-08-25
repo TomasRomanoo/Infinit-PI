@@ -1,21 +1,24 @@
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import image from "@/assets/images/honda-civic.png";
 import { GrClose } from "react-icons/gr";
 import axios from "axios";
 import { toast } from "sonner";
+import { UserContext } from "./context/UserContext";
 
 
 export const ModCar = ({ vehicles, firstIndex, lastIndex }) => {
-  const apiUrl = "http://localhost:3000/api/vehicles/";
+  const apiUrl = "http://localhost:3000/api/vehicle/";
   const [showModal, setShowModal] = useState(false);
-
+  const {isAdmin} = useContext(UserContext)
 
   //* Controled inputs states
   const [id, setId] = useState("");
   const [brand, setBrand] = useState("");
+  const [brandName, setBrandName] = useState("");
   const [model, setModel] = useState("");
+  const [modelName, setModelName] = useState("");
   const [price, setPrice] = useState("");
   const [plate, setPlate] = useState("");
   const [year, setYear] = useState("");
@@ -33,22 +36,39 @@ export const ModCar = ({ vehicles, firstIndex, lastIndex }) => {
   const [categoryErr, setCategoryErr] = useState(false);
 
 
+
+  const [categories, setCategories] = useState([]);
+  const fetchCategories = async () => {
+    const res = await axios("/api/category");
+    setCategories(res.data);
+  };
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+  useEffect(() => {
+    console.log(category);
+  }, [category]);
+
   const handlerModal = (vehicle, plate) => {
     axios.get(`/api/vehicle/${plate}`).then(function (response) {
       setId(response.data.idvehcle);
-      setBrand(response.data.model.brand.name);
-      setModel(response.data.model.name);
+      setBrand(JSON.stringify(response.data.model.brand));
+      setBrandName(response.data.model.brand.name)
+
+      setModel(JSON.stringify(response.data.model));
+      setModelName(response.data.model.name)
+      
       setPrice(response.data.price_per_day);
       setPlate(response.data.plate);
       setYear(response.data.year);
       setDetail(response.data.detail);
       setDescription(response.data.long_description);
+      setCategory(JSON.stringify(response.data.category));
     });
+    setShowModal(!showModal);
   };
 
-  useEffect(()=>{
-    setShowModal(!showModal);
-  },[brand])
 
   const handlerEdit = (e) => {
     e.preventDefault();
@@ -57,7 +77,6 @@ export const ModCar = ({ vehicles, firstIndex, lastIndex }) => {
       { state: price, setter: setPriceErr, id: "#priceInput" },
       { state: plate, setter: setPlateErr, id: "#plateInput" },
       { state: detail, setter: setDetailErr, id: "#detailInput" },
-      { state: category, setter: categoryErr, id: "#categoryInput" },
       {
         state: description,
         setter: setDescriptionErr,
@@ -85,47 +104,98 @@ export const ModCar = ({ vehicles, firstIndex, lastIndex }) => {
       document.querySelector("#yearInput").classList.remove("errInput");
     }
 
+    if (isAdmin) {
+      if(!category) {
+        setCategoryErr(true);
+        document.querySelector("#categoryInput").classList.add("errInput");
+      } else {
+        setCategoryErr(false)
+        document.querySelector("#categoryInput").classList.remove("errInput");
+      }
+    }
+
     if (
       year &&
       year.length !== 0 &&
       year < 2023 &&
       year > 1886 &&
-      fields[4].state &&
       fields[3].state &&
       fields[2].state &&
       fields[1].state &&
       fields[0].state
     ) {
-      toast.success("Todo ok");
-      // toast.promise(
-      //   axios.put(apiUrl, {
-      //     idvehicle:id,
-      //     plate: plate,
-      //     brand: brand,
-      //     model: model,
-      //     detail: detail,
-      //     year: +year,
-      //     price_per_day: +price,
-      //     long_description: description,
-      //   }),
-      //   {
-      //     loading: "Loading...",
-      //     success: (data) => {
-      //       return `Edit has been successfully`;
-      //     },
-      //     error: "Error while editing",
-      //   }
-      // );
-      setShowModal(!showModal);
+      if(isAdmin){
+        if (category) {
+          handlerSubmit()
+          setShowModal(!showModal);
+        }
+      }else{
+        handlerSubmit()
+        setShowModal(!showModal);
+      }
     }
   };
+
+  const handlerSubmit = async () => {
+
+    let parsCategory 
+    if(category){
+      parsCategory = JSON.parse(category)
+    }
+    let parsModel = JSON.parse(model)
+    let parsBrand = JSON.parse(brand)
+
+
+    toast.promise(
+      axios.put((apiUrl + plate), {
+        "name": "",
+        "plate": plate,
+        "detail": detail,
+        "year": +year,
+        "price_per_day": +price,
+        "long_description": description,
+        "deleted": false,
+        "category": {
+          "idcategory": parsCategory.idcategory,
+          "name": parsCategory.name,
+          "url": parsCategory.url,
+          "deleted": false
+        },
+        "images": [],
+        "model": {
+          "idmodel": parsModel.idmodel,
+          "name": parsModel.name,
+          "brandIdbrand": parsModel.brandIdbrand,
+          "deleted": false,
+          "brand": {
+            "idbrand": parsBrand.idbrand,
+            "name": parsBrand.name,
+            "url": parsBrand.url,
+            "deleted": false
+          }
+        }
+      }),
+      {
+        loading: "Loading...",
+        success: (data) => {
+          setTimeout(() => {
+            window.location.reload();
+          }, 3000);
+          return `Edit has been successfully`;
+        },
+        error: "Error while editing",
+      }
+    );
+  
+      
+  }
 
   return (
     <>
       {vehicles
         .map((vehicle) => {
           return (
-            <div className=" w-2/5  m-3 rounded-2xl overflow-hidden shadow-md flex flex-col font-poppins hover:shadow-lg transition-all duration-200">
+            <div className=" w-5/12  m-3 rounded-2xl overflow-hidden shadow-md flex flex-col font-poppins hover:shadow-lg transition-all duration-200">
               <div className="flex items-center justify-between p-4">
                 <div className="w-1/2">
                   <Image
@@ -139,6 +209,9 @@ export const ModCar = ({ vehicles, firstIndex, lastIndex }) => {
                     <p className="text-start truncate ">
                       {vehicle.model.brand.name}
                     </p>
+                  </div>
+
+                  <div>
                     <p>{vehicle.model.name}</p>
                   </div>
                   <p className="text-gray-400 font-semibold">{vehicle.year}</p>
@@ -173,7 +246,7 @@ export const ModCar = ({ vehicles, firstIndex, lastIndex }) => {
       ></div>
       <div
         id="modal"
-        className={` z-50 min-h-full justify-center items-center p-0 fixed inset-0  ${
+        className={` z-50 min-h-full  justify-center items-center p-0 fixed inset-0  ${
           showModal ? "flex" : "hidden"
         }`}
       >
@@ -203,7 +276,7 @@ export const ModCar = ({ vehicles, firstIndex, lastIndex }) => {
                     <input
                       id="brandInput"
                       type="text"
-                      value={brand}
+                      value={brandName}
                       readOnly
                       className="block w-full cursor-pointer rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 focus:outline-none sm:text-sm sm:leading-6 transition ease-in-out duration-300"
                     ></input>
@@ -221,7 +294,7 @@ export const ModCar = ({ vehicles, firstIndex, lastIndex }) => {
                   <div>
                     <input
                       id="modelInput"
-                      value={model}
+                      value={modelName}
                       readOnly
                       type="text"
                       className="block mt-2 w-full cursor-pointer rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 focus:outline-none sm:text-sm sm:leading-6 transition ease-in-out duration-300"
@@ -315,16 +388,13 @@ export const ModCar = ({ vehicles, firstIndex, lastIndex }) => {
                       value={plate}
                       onChange={() => setPlate(event.target.value)}
                       type="text"
+                      readOnly
                       className="block mt-2 w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 focus:outline-none sm:text-sm sm:leading-6 transition ease-in-out duration-300"
                     />
                   </div>
-                  {plateErr ? (
-                    <span className="flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1">
-                      Invalid plate
-                    </span>
-                  ) : (
-                    <></>
-                  )}
+                  <span className="flex items-center font-medium tracking-wide text-gray-300 text-xs mt-1 ml-1">
+                    * This camp can't be modified
+                  </span>
                 </div>
 
                 <div className="m-3">
@@ -403,32 +473,49 @@ export const ModCar = ({ vehicles, firstIndex, lastIndex }) => {
                   )}
                 </div>
 
-                <div className="m-3">
-                  <label className="block text-sm font-medium leading-6 text-gray-900">
-                    Category
-                  </label>
-                  <select
-                    id="categoryInput"
-                    value={category}
-                    onChange={(e) => {
-                      setModel(e.target.value);
-                      console.log("category :>> ", category);
-                    }}
-                    type="text"
-                    className="block mt-2 w-full cursor-pointer rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 focus:outline-none sm:text-sm sm:leading-6 transition ease-in-out duration-300"
-                  >
-                    <option value="" disabled selected>
-                      Select some category
-                    </option>
-                    {/* {brand.models.map((model) => {
+                {isAdmin
+              ?
+              (<div className="m-3">
+                <label className="block text-sm font-medium leading-6 text-gray-900">
+                  Category
+                </label>
+                <select
+                  id="categoryInput"
+                  value={category}
+                  onChange={(e) => {
+                    setCategory(e.target.value);
+                    console.log("category :>> ", category);
+                  }}
+                  type="text"
+                  className="block mt-2 w-full cursor-pointer rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 focus:outline-none sm:text-sm sm:leading-6 transition ease-in-out duration-300"
+                >
+                  <option value="" disabled selected>
+                    Select some category
+                  </option>
+                  {categories.map((category) => {
                     return (
-                      <option value={model.idmodel} key={model.idmodel}>
-                        {model.name}
+                      <option
+                        value={JSON.stringify(category)}
+                        key={category.categoryId}
+                      >
+                        {category.name}
+
                       </option>
                     );
-                  })} */}
-                  </select>
-                </div>
+                  })}
+                </select>
+                {categoryErr ? (
+                  <span className="flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1">
+                    You must choose the category of your car
+                  </span>
+                ) : (
+                  <></>
+                )}
+              </div>
+              )
+              :
+              <></>
+            }
               </div>
             </div>
 

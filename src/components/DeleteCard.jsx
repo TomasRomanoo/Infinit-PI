@@ -18,36 +18,44 @@ export const DeleteCard = (props) => {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        toast.promise( 
-          axios.delete(`/api/vehicle/${props.vehicle.plate}`),
-          {
-            loading: "Loading...",
-            success: (data) => {
-              document.querySelector(`#cards${props.vehicle.idvehicle}`).classList.add("opacity-0");
-              setTimeout(() => {
-                window.location.reload()
-              }, 3000);
-              return `The car rent has been deleted successfully`;
-            },
-            error: "Error while deleting car",
-          })
+        toast.promise(axios.delete(`/api/vehicle/${props.vehicle.plate}`), {
+          loading: "Loading...",
+          success: (data) => {
+            document
+              .querySelector(`#cards${props.vehicle.idvehicle}`)
+              .classList.add("opacity-0");
+            setTimeout(() => {
+              window.location.reload();
+            }, 3000);
+            return `The car rent has been deleted successfully`;
+          },
+          error: "Error while deleting car",
+        });
       }
     });
   };
   console.log(props);
   return (
-    
-    <div id={`cards${props.vehicle.idvehicle}`} className=" w-2/5  m-3 rounded-2xl overflow-hidden shadow-md flex flex-col font-poppins hover:shadow-lg transition-opacity duration-500 ease-in-out ">
+    <div
+      id={`cards${props.vehicle.idvehicle}`}
+      className=" w-2/5  m-3 rounded-2xl overflow-hidden shadow-md flex flex-col font-poppins hover:shadow-lg transition-opacity duration-500 ease-in-out "
+    >
       <div className="flex items-center justify-between p-4 ">
         <div className="w-1/2">
-          <Image className="w-full object-contain" src={image} alt="delete-card" />
+          <Image
+            className="w-full object-contain"
+            src={image}
+            alt="delete-card"
+          />
         </div>
         <div className="flex flex-col items-end">
           <div className="flex items-start gap-1 font-bold text-lg">
-            <p className="text-start truncate ">{props.vehicle?.model.brand.nombre}</p>
-            <p>{props.vehicle?.model.name}</p>
+            <p className="text-start truncate ">{props.vehicle.model.brand.name}</p>
           </div>
-          <p className="text-gray-400 font-semibold">{props.vehicle?.year}</p>
+
+          <div>
+            <p>{props.vehicle.model.name}</p>
+          </div>
         </div>
       </div>
 

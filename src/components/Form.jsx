@@ -83,14 +83,11 @@ export const Form = () => {
 
   function createPost() {
     let parsCategory 
-
     if(category){
       parsCategory = JSON.parse(category)
     }
 
     let parsModel = JSON.parse(model)
-
-
 
     if(isAdmin){
 
@@ -509,8 +506,6 @@ export const Form = () => {
                   <></>
                 )}
               </div>
-
-
               )
               :
               <></>

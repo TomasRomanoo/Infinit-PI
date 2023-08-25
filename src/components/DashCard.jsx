@@ -18,9 +18,10 @@ export const DashCard = (props) => {
         </div>
         <div className="flex flex-col items-end">
           <div className="flex items-start gap-1 font-bold text-lg">
-            <p className="text-start truncate ">
-              {props.vehicle.model.brand.name}
-            </p>
+            <p className="text-start truncate ">{props.vehicle.model.brand.name}</p>
+          </div>
+
+          <div>
             <p>{props.vehicle.model.name}</p>
           </div>
           <p className="text-gray-400 font-semibold">{props.vehicle.year}</p>
