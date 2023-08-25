@@ -1,5 +1,4 @@
 "use client";
-import Link from "next/link";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
@@ -35,9 +34,27 @@ const Detail = ({params}) => {
 
   const fetchVehicle = async () => {
     const res = await axios("/api/vehicle/"+params.plate);
-    console.log(res)
+    //mocking images until DB is ready
+    if (!res.data.images || !res.data.images.length) {
+      res.data.images = [
+        {
+          url: peugeot
+        },
+        {
+          url: peugeot2
+        },
+        {
+          url: peugeot3
+        },
+        {
+          url: peugeot4
+        },
+        {
+          url: peugeot5
+        },
+      ]
+    }
     setVehicle(res.data);
-    console.log(vehicle)
   };
 
   useEffect(() => {
@@ -86,8 +103,7 @@ const Detail = ({params}) => {
             openGalleryModal={openGalleryModal}
             closeGalleryModal={closeGalleryModal}
             setSelectedImageId={setSelectedImageId}
-            // images={vehicle.images || []}
-            images={vehicle.image || [peugeot,peugeot2,peugeot3,peugeot4,peugeot5]}
+            images={vehicle.images || []}
           />
 
           <Specs />
@@ -120,7 +136,6 @@ const Gallery = ({
   images,
   setSelectedImageId,
 }) => {
-  console.log(images)
   return (
     <div className={`relative ${isGalleryOpen ? "opacity-10" : "opacity-100"}`}>
       <div className="flex flex-col lg:flex-row items-center justify-center w-full gap-4">
@@ -131,9 +146,7 @@ const Gallery = ({
         >
           <Image
             className="object-contain rounded-lg"
-            // src={images[0]?.url}
-            src={images[0]}
-
+            src={images[0]?.url}
             alt="spec"
           />
         </div>
