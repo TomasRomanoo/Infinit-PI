@@ -265,7 +265,7 @@ export const Navbar = () => {
             </div>
           ) : (
             <div className="flex items-center gap-8">
-              <Link href={"/porfile"} className="p-6 py-3 rounded-md hover:bg-primary bg-black text-white  transition-all duration-200 ease-in-out">
+              <Link href={"/account"} className="p-6 py-3 rounded-md hover:bg-primary bg-black text-white  transition-all duration-200 ease-in-out">
                 Account
               </Link>
               <button className="p-6 py-3 rounded-md hover:bg-primary bg-black text-white  transition-all duration-200 ease-in-out">
@@ -358,7 +358,7 @@ export const Navbar = () => {
           </div>
         ) : (
           <div className="flex flex-wrap items-center justify-center gap-8 mt-4 mx-4 font-poppins">
-            <Link href="/porfile"
+            <Link href="/account"
               onClick={closeSidebar}
               className=" w-full p-6 py-3 rounded-md hover:bg-primary bg-black text-white text-center transition-all duration-200 ease-in-out"
             >

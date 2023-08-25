@@ -44,14 +44,19 @@ export default function PersonalDetails({ onBack, onNext, data }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (phoneError) {
+      return;
+    }
+    if (identificationError) {
+      return;
+    }
+
     onNext({
       firstName,
       lastName,
       phone,
       address,
-      /*   city,
-      country,
-      zipCode, */
       identification,
     });
     setSubmitted(true);
@@ -91,7 +96,7 @@ export default function PersonalDetails({ onBack, onNext, data }) {
     <div className="sm:mx-auto px-6">
       <form onSubmit={handleSubmit}>
         <div className="space-y-6">
-          <di v className="flex items-center justify-between w-full flex-wrap ">
+          <div className="flex items-center justify-between w-full flex-wrap ">
             <div className="flex flex-col sm:w-[48%] w-full mb-6 sm:mb-0">
               <label>First Name</label>
               <input
@@ -114,7 +119,7 @@ export default function PersonalDetails({ onBack, onNext, data }) {
                 }}
               />
             </div>
-          </di>
+          </div>
           <div className="flex flex-col">
             <label>Phone Number</label>
             <input
@@ -129,7 +134,7 @@ export default function PersonalDetails({ onBack, onNext, data }) {
                 setPhone(inputValue);
               }}
             />
-            {submitted && phoneError && (
+            {phoneError && (
               <p className="text-red-500">{phoneError}</p>
             )}
           </div>
@@ -138,7 +143,7 @@ export default function PersonalDetails({ onBack, onNext, data }) {
             <input
               type="text"
               className={`px-2 py-1.5 border-black border-2 rounded-md ${
-                submitted && identificationError ? "border-red-500" : ""
+                identificationError ? "border-red-500" : ""
               }`}
               value={identification}
               onChange={(e) => {
@@ -156,6 +161,7 @@ export default function PersonalDetails({ onBack, onNext, data }) {
             <select
               id="country"
               name="country"
+              className="px-2 py-1.5 border-black border-2 rounded-md"
               onChange={(e) => {
                 const selectedCountry = e.target.value;
                 setAddress((prevState) => ({
@@ -192,6 +198,7 @@ export default function PersonalDetails({ onBack, onNext, data }) {
             <input
               type="text"
               name="city"
+              className="px-2 py-1.5 border-black border-2 rounded-md"
               value={address.city}
               onChange={(e) => {
                 setAddress((prevState) => ({
