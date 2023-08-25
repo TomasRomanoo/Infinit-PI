@@ -351,11 +351,7 @@
     "@smithy/types" "^2.2.0"
     "tslib" "^2.5.0"
 
-<<<<<<< HEAD
-"@aws-sdk/lib-storage@^3.391.0", "@aws-sdk/lib-storage@^3.46.0":
-=======
 "@aws-sdk/lib-storage@^3.391.0":
->>>>>>> 61ced59f6b84a75fad5645e1063aefa7263991cd
   "integrity" "sha512-b7rgVB4ZLj1NIYevSdBpPekh2Yl0kRsszBofCLyer2cRl3rBKBBrQnWex6tJd87XH2cfwhfrs4wjzDSvRDFqIw=="
   "resolved" "https://registry.npmjs.org/@aws-sdk/lib-storage/-/lib-storage-3.395.0.tgz"
   "version" "3.395.0"
