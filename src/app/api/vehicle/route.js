@@ -31,10 +31,14 @@ export async function POST(request) {
  */
 
     const brand = await prisma.brand.findUnique({
-      where: { name: body.brand },
+      where: { name: body.model.brand.name },
     });
     const model = await prisma.model.findUnique({
-      where: { name: body.model },
+      where: { name: body.model.name },
+    });
+
+    const category = await prisma.category.findUnique({
+      where: { name: body.category.name },
     });
 
     const car = await prisma.vehicle.create({
@@ -48,11 +52,11 @@ export async function POST(request) {
           },
         },
         category: {
-          connect: { idcategory: 1 },
+          connect: { idcategory: category.idcategory },
         },
-        specifications: {
-          connect: { idspecification: 1 },
-        },
+        // specifications: {
+        //   connect: { idspecification: 1 },
+        // },
         images: {
           /*  create: images.map((url) => ({ url })), */
         },
