@@ -25,6 +25,8 @@ import { AiOutlineClose } from "react-icons/ai";
 import Calendar from "react-calendar";
 import swiperConfig from "@/utils/swiperConfig";
 import { Booking } from "@/components/Booking";
+import Characterist from "./characterist";
+
 
 const Detail = ({params}) => {
   const [vehicle, setVehicle] = useState({});
@@ -111,7 +113,9 @@ const Detail = ({params}) => {
             <p className="text-poppins text-2xl mt-10">Description</p>
 
             <p className="text-gray-400 text-xl">{vehicle.long_description}</p>
-          </div>
+          </div>        
+          <Characterist/>
+
         <div class="flex justify-end">
           <button
             onClick={() => {
