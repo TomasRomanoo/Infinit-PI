@@ -42,3 +42,32 @@
     }
   }
   
+  .features-block h3 {
+    margin-bottom: 20px; /* Ajusta el margen inferior del encabezado */
+  }
+  
+  .features-block ul {
+    display: grid;
+    margin-top: 20px; /* Ajusta el margen superior de la lista de características */
+  }
+  
+  .features-block li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px; /* Ajusta el margen vertical entre los elementos */
+  }
+  
+  .features-block .grid-cols-1 {
+    grid-template-columns: 1fr;
+  }
+  
+  .features-block .md\:grid-cols-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  @media (max-width: 767px) {
+    .features-block .md\:grid-cols-3 {
+      grid-template-columns: repeat(1, 1fr);
+    }
+  }
+  

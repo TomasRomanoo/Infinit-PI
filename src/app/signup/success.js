@@ -1,14 +1,19 @@
 "use client";
 import React, { useEffect } from "react";
 
+import { useRouter } from 'next/navigation';
+
+
 export default function Success() {
+  const { push } = useRouter();
+
   useEffect(() => {
     const redirectTimeout = setTimeout(() => {
-      window.location.href = "/"; // Replace "/destination" with your desired URL
+      push("/");
     }, 3000);
 
     return () => {
-      clearTimeout(redirectTimeout); // Clear the timeout if the component is unmounted before the delay completes
+      clearTimeout(redirectTimeout);
     };
   }, []);
 
@@ -17,7 +22,7 @@ export default function Success() {
       <div className="text-center">
         <h2 className="text-3xl font-bold mb-4">Success!</h2>
         <p className="text-lg text-gray-600">
-          Your signup process is complete. Let's get rocking!
+          Your signup process is complete. Let's get driving!
         </p>
       </div>
     </div>

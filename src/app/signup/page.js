@@ -1,4 +1,5 @@
 "use client";
+import axios from "axios";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 
@@ -11,11 +12,6 @@ export default function Registration() {
   const [step, setStep] = useState(1);
   const [dataDetails, setDataDetails] = useState({});
   const [personalDetails, setPersonalDetails] = useState({});
-  const [completeObject, setCompleteObject] = useState({});
-
-  useEffect(() => {
-    console.log("completeObject:", completeObject);
-  }, [completeObject]);
 
   const handleDataDetailsNext = (data) => {
     setDataDetails(data);
@@ -24,19 +20,41 @@ export default function Registration() {
 
   const handlePersonalDetailsNext = (data) => {
     setPersonalDetails(data);
-    setCompleteObject({
-      dataDetails,
-      personalDetails: data,
-    });
-    setStep(step + 1);
+
+    let completeObject = {
+      ...dataDetails,
+      ...data,
+    };
+
+    console.log('completeObject :>> ', completeObject);
+
+    axios
+      .post("/api/register", completeObject)
+      .then((res) => {
+        console.log("res :>> ", res);
+        setStep(step + 1);
+      })
+      .catch((error) => {
+        console.log("error :>> ", error);
+      });
+
+    /*  toast.promise(axios.post("/api/register", completeObject), {
+      loading: "Loading...",
+      success: (data) => {
+      
+        return `User has been created successfully`;
+      },
+      error: (error) => {
+        console.log(error);
+        if (error.response && error.response.data) {
+          return error.response.data.message;
+        }
+      },
+    }); */
   };
 
   const handleConfirmationBack = () => {
     setStep(step - 1);
-  };
-
-  const handleConfirmationNext = () => {
-    setStep(step + 1);
   };
 
   return (

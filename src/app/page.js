@@ -1,27 +1,38 @@
 "use client";
+import {shuffle} from "@/utils/arrayUtilities"
+import { Footer } from "@/components/Footer";
 import Image from "next/image";
-import { Card } from "@/components/Card";
-
 import bluecar from "@/assets/images/blue-car.jpg";
 
 import { motion } from "framer-motion";
-
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { SkeletonCard } from "@/components/Skeleton.jsx";
 import { Booking } from "@/components/Booking.jsx";
+import { CardList } from "@/components/CardList";
+import PorscheCanvas from "@/components/canvas/Porsche";
+
+
+import Link from "next/link";
 
 export default function Home() {
   const [vehicles, setVehicles] = useState([]);
+  const [categories, setCategories] = useState([]);
 
   const fetchVehicles = async () => {
-    const res = await axios("http://localhost:3000/api/vehicles");
+    const res = await axios("/api/vehicle");
 
-    setVehicles(res.data);
+    setVehicles(shuffle(res.data).slice(0, 10));
+  };
+
+  const fetchCategories = async () => {
+    const res = await axios("/api/category");
+
+    setCategories(res.data);
   };
 
   useEffect(() => {
     fetchVehicles();
+    fetchCategories();
   }, []);
 
   return (
@@ -33,7 +44,17 @@ export default function Home() {
         <Booking />
       </motion.div>
       <Hero />
-      <FleetCarousel vehicles={vehicles} />
+      <div className="flex flex-wrap justify-center items-center gap-4 mt-20">
+        {categories.map((category) => {
+          return <Category category={category} />;
+        })}
+      </div>
+      <div>
+        <p className="font-poppins text-4xl mb-2 text-center mt-24">
+          Take a look to our fleet
+        </p>
+        <CardList vehicles={vehicles} />
+      </div>
     </div>
   );
 }
@@ -64,69 +85,31 @@ const Hero = () => {
         }}
         className="w-full lg:w-[35%]"
       >
-        <Image src={bluecar} className="rounded-xl" />
+        <Image src={bluecar} className="rounded-lg" alt="bluecar" />
+        {/*      <PorscheCanvas /> */}
       </motion.div>
     </div>
   );
 };
 
-const FleetCarousel = ({ vehicles }) => {
-  const [isLoading, setIsLoading] = useState(true); // Add a loading state
-  const container = {
-    // ... existing container animation properties ...
-  };
-
-  useEffect(() => {
-    const loadingTimeout = setTimeout(() => {
-      setIsLoading(false); // Set loading to false after the timeout
-    }, 2000); // Adjust the timeout duration as needed
-
-    return () => {
-      clearTimeout(loadingTimeout); // Clear the timeout if the component unmounts
-    };
-  }, []);
-
+const Category = ({ category }) => {
   return (
-    <motion.div
-      variants={container}
-      initial="hidden"
-      animate="show"
-      className="flex flex-col items-center mt-20"
-    >
-      <p className="font-poppins text-4xl mb-2 text-center">
-        Take a look to our fleet
-      </p>
-      <div className="grid grid-cols-1 md:grid-cols-2 grid-flow-row gap-12 w-full">
-        {isLoading
-          ? // Display skeleton cards while loading
-            Array.from({ length: 4 }).map((_, index) => (
-              <div key={index}>
-                <SkeletonCard />
-              </div>
-            ))
-          : // Render actual vehicle cards
-            vehicles.map((vehicle, index) => (
-              <div key={index}>
-                <motion.div
-                  initial={{
-                    x: -300,
-                    opacity: 0,
-                  }}
-                  whileInView={{
-                    x: 0,
-                    opacity: 1,
-                    transition: {
-                      duration: 0.5,
-                      ease: "easeOut",
-                    },
-                  }}
-                  viewport={{ once: true }}
-                >
-                  <Card vehicle={vehicle} />
-                </motion.div>
-              </div>
-            ))}
+    <Link href={`/fleet/${category.name}`}>
+      <div
+        className="flex flex-col items-center justify-between "
+        key={category.idcategory}
+      >
+        <Image
+          width={300}
+          height={200}
+          className="object-contain rounded-md"
+          src={category.url}
+          alt="category"
+        />
+        <p className="font-poppins text-lg font-bold capitalize">
+          {category.name}
+        </p>
       </div>
-    </motion.div>
+    </Link>
   );
 };

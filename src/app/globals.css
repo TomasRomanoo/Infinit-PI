@@ -64,6 +64,11 @@
   display: flex;
 }
 
+.show-modal-edit{
+  display: flex;
+
+}
+
 .loading-screen {
   display: flex;
   flex-direction: column;
