@@ -21,6 +21,8 @@ model vehicle {
   categoryIdcategory Int
   model              model?          @relation(fields: [modelIdmodel], references: [idmodel])
   modelIdmodel       Int?
+  checkout           checkout?       @relation(fields: [checkoutIdcheckout], references: [idcheckout])
+  checkoutIdcheckout Int?
   deleted            Boolean
 }
 
@@ -41,24 +43,32 @@ model model {
   deleted      Boolean
 }
 
-model user {
-  iduser           Int     @id @default(autoincrement())
-  first_name       String
-  last_name        String
-  phone            Int     @unique(map: "phone_UNIQUE")
-  email            String  @unique(map: "email_UNIQUE")
-  identification   String  
-  password         String
-  address          String
-  city             String
-  country          String
-  zip_code         Int
-  role             role    @relation(fields: [idrole], references: [idrole])
-  idrole           Int     @default(2)
-  deleted          Boolean
+model checkout {
+  idcheckout Int       @id @default(autoincrement())
+  name       String    @unique(map: "name_UNIQUE")
+  vehicles   vehicle[]
+  address    String
+  city       String
+  country    String
+  zip_code   Int
 }
 
-
+model user {
+  iduser         Int     @id @default(autoincrement())
+  first_name     String
+  last_name      String
+  phone          Int     
+  email          String  @unique(map: "email_UNIQUE")
+  identification String
+  password       String
+  address        String
+  city           String
+  country        String
+  zip_code       Int
+  role           role    @relation(fields: [idrole], references: [idrole])
+  idrole         Int     @default(2)
+  deleted        Boolean
+}
 
 model role {
   idrole  Int     @id @default(autoincrement())
