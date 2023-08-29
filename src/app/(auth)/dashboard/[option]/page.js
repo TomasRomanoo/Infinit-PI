@@ -3,12 +3,14 @@ import { usePathname, useRouter } from 'next/navigation';
 import Sidebar from '../page';
 import { Toaster } from 'sonner';
 import { Form } from '@/components/Form';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { DeleteCard } from '@/components/DeleteCard';
 import axios from 'axios';
 import { ModCar } from '@/components/ModCar';
 import { Pagination } from '@/components/Pagination';
 import { DashCard } from '@/components/DashCard';
+import { UserContext } from '@/components/context/UserContext';
+import { MdNoAccounts } from "react-icons/md";
 
 
 
@@ -16,7 +18,7 @@ const DashboardPage = () => {
   const router = useRouter();
   const path  = usePathname();
   const [vehicles, setVehicles] = useState([])
-
+  const {isAdmin} = useContext(UserContext)
   
 
 
@@ -58,23 +60,31 @@ useEffect(() => {
 },[])
 
   return (
-  <div className="flex items-center justify-evenly h-full">
-    <Sidebar />
-    <div className="lg:w-4/6 w-full py-10 lg:mx-10 h-auto rounded-2xl shadow-md font-poppins content-around flex-col bg-white">
-      <Toaster position="bottom-right" richColors expand={false} />
-      <div className="flex flex-wrap justify-around pb-10">
-        {vehicles && vehicles.length > 0 ? renderComponent() : null}
-      </div>
-      {!('/dashboard/add' == path) && (
-        <Pagination
-          currentPage={currentPage}
-          vehiclesPerPage={vehiclesPerPage}
-          setCurrentPage={setCurrentPage}
-          totalVehicles={totalVehicles}
-        />
-      )}
-    </div>
-  </div>
+  <>
+      {isAdmin ?
+        <div className="flex items-center justify-evenly h-full">
+          <Sidebar />
+          <div className="lg:w-4/6 w-full py-10 lg:mx-10 h-auto rounded-2xl shadow-md font-poppins content-around flex-col bg-white">
+            <Toaster position="bottom-right" richColors expand={false} />
+            <div className="flex flex-wrap justify-around pb-10">
+              {vehicles && vehicles.length > 0 ? renderComponent() : null}
+            </div>
+            {!('/dashboard/add' == path) && (
+              <Pagination
+                currentPage={currentPage}
+                vehiclesPerPage={vehiclesPerPage}
+                setCurrentPage={setCurrentPage}
+                totalVehicles={totalVehicles}
+              />
+            )}
+          </div>
+        </div>
+        :
+        <div className='w-full mt-52 mb-40 px-10 flex flex-col items-center text-center font-bold text-6xl'>
+          You don't have acces to this page!
+          <MdNoAccounts className='text-center w-32 h-32 mt-8'/>
+        </div>}
+  </>
 );
 
 };

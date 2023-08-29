@@ -24,7 +24,7 @@ import { UserContext } from "./context/UserContext";
 
 export const Navbar = () => {
 
-  const {user, getUser} = useContext(UserContext)  // const [user, isUserLogged] = useState(false);
+  const {user, getUser, isAdmin} = useContext(UserContext)  // const [user, isUserLogged] = useState(false);
   const [sideMenu, isSideMenuOpen] = useState(false);
   const [MngmntOpen, isMngmntOpen] = useState(false);
   const [MngmntMobileOpen, isMngmntMobileOpen] = useState(false);
@@ -126,7 +126,8 @@ export const Navbar = () => {
           <li className="text-lg link-item">
             <Link href="/about">About</Link>
           </li>
-          <li className="">
+        {  isAdmin === true ?
+        <li className="">
             <div className="relative  ">
               <button
                 onClick={managementClick}
@@ -250,6 +251,8 @@ export const Navbar = () => {
               </div>
             </div>
           </li>
+          :
+          <></>}
         </ul>
 
         <div className="lg:block hidden font-poppins">
@@ -318,6 +321,7 @@ export const Navbar = () => {
               <p>Services</p>
             </Link>
           </li>
+          {isAdmin&& 
           <li className="font-bold p-4  w-full cursor-pointer ">
             <div
               className="flex items-center gap-4"
@@ -327,7 +331,7 @@ export const Navbar = () => {
               <p>Management</p>
             </div>
             {/* </Link> */}
-          </li>
+          </li>}
           <li className="font-bold p-4  w-full ">
             <Link
               href="/services"
@@ -364,7 +368,10 @@ export const Navbar = () => {
             >
               Account
             </Link>
-            {user?.role == 1 ? (
+            <button className=" w-full p-6 py-3 rounded-md hover:bg-primary bg-black text-white text-center transition-all duration-200 ease-in-out">
+                <Link onClick={handleLogout} href={"/"}>Logout</Link>
+              </button>
+            {false? (
               <button
                 onClick={closeSidebar}
                 className="w-full p-6 py-3 rounded-md hover:bg-primary bg-black text-white  transition-all duration-200 ease-in-out"
