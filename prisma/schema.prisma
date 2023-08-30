@@ -21,6 +21,7 @@ model vehicle {
   categoryIdcategory Int
   model              model?          @relation(fields: [modelIdmodel], references: [idmodel])
   modelIdmodel       Int?
+  favorites          favorite[]
   deleted            Boolean
 }
 
@@ -55,10 +56,9 @@ model user {
   zip_code         Int
   role             role    @relation(fields: [idrole], references: [idrole])
   idrole           Int     @default(2)
+  favorites        favorite[]
   deleted          Boolean
 }
-
-
 
 model role {
   idrole  Int     @id @default(autoincrement())
@@ -90,4 +90,12 @@ model specification {
   vehicle          vehicle @relation(fields: [vehicleIdvehicle], references: [idvehicle])
   vehicleIdvehicle Int
   deleted          Boolean
+}
+
+model favorite {
+  vehicle          vehicle @relation(fields: [idvehicle], references: [idvehicle])
+  idvehicle        Int
+  user             user @relation(fields: [iduser], references: [iduser])
+  iduser           Int
+  @@id([iduser, idvehicle])
 }
