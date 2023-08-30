@@ -26,7 +26,7 @@ model vehicle {
   reservation        reservation[]
   availabilityPeriod availabilityPeriod[]
   deleted            Boolean
-  favorite           favorite?            @relation(fields: [favoriteIdfavorite], references: [idfavorite])
+  favorite           favorite?            
   favoriteIdfavorite Int?
 }
 
@@ -113,8 +113,10 @@ model specification {
 model favorite {
   idfavorite Int       @id @default(autoincrement())
   user       user      @relation(fields: [userIduser], references: [iduser])
-  vehicle    vehicle[]
+  vehicle    vehicle   @relation(fields: [vehicleIdvehicle], references: [idvehicle])
   userIduser Int
+  vehicleIdvehicle Int
+  @@unique([vehicleIdvehicle])
 }
 
 model reservation {
