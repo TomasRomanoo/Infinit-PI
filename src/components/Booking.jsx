@@ -53,20 +53,24 @@ export const Booking = ({ vehicle }) => {
 
   const [query, setQuery] = useState("");
 
-  const [location, setLocation] = useState({});
+  const [location, setLocation] = useState("");
 
   const searchLocations = (searchQuery) => {
     axios
       .get(`/api/location/${searchQuery}`)
       .then((res) => {
         setLocations(res.data);
-        setModal(true);
+
+        if (res.data.length > 0) {
+          setModal(true);
+        } else {
+          setModal(false);
+        }
       })
       .catch((error) => {
         console.log("error :>> ", error);
       });
   };
-
   const debounce = (func, delay) => {
     let timeout;
     return (...args) => {
@@ -78,7 +82,15 @@ export const Booking = ({ vehicle }) => {
   const handleInputChange = (e) => {
     const newQuery = e.target.value;
     setQuery(newQuery);
-    debounce(searchLocations(newQuery), 300); // Delay the API call by 300ms
+
+    if (newQuery.trim() === "") {
+      // If the input is empty or only contains whitespace, close the modal
+      setModal(false);
+    } else {
+      // If there is a query, show the modal and perform the search
+      setModal(true);
+      debounce(searchLocations(newQuery), 300); // Delay the API call by 300ms
+    }
   };
 
   const filterVehicles = () => {
@@ -104,9 +116,18 @@ export const Booking = ({ vehicle }) => {
           </button>
           <input
             type="text"
-            placeholder="Where are you from? Enter your address, city or country"
+            placeholder={`Where are you from? Enter your city, state or country`}
+            value={
+              location
+                ? `${location.city}, ${location.state}, ${location.country}`
+                : query
+            }
             className="w-full  shadow-md rounded-lg pl-12 text-sm  py-5 pt-7  border-r-[1px] border-gray-300 text-ellipsis font-semibold placeholder:font-normal placeholder:italic focus:outline-2 outline-blue-800 "
             onChange={handleInputChange}
+            onFocus={() => {
+              setQuery("");
+              setLocation("");
+            }}
           />
         </div>
 
@@ -152,7 +173,7 @@ export const Booking = ({ vehicle }) => {
           </button>
           <input
             type="date"
-            className="rounded-tl-md rounded-tr-md w-full   lg:rounded-l-md lg:rounded-r-none  pl-12 pr-2 py-4 pt-7 border-r-[1px] border-gray-300 text-ellipsis font-semibold placeholder:font-normal placeholder:italic focus:outline-2 outline-blue-800"
+            className="rounded-tl-md rounded-tr-md w-full   lg:rounded-l-md lg:rounded-r-none  pl-12 pr-2 py-4 pt-6 border-r-[1px] border-gray-300 text-ellipsis font-semibold placeholder:font-normal placeholder:italic focus:outline-2 outline-blue-800"
             onChange={handleCheckinChange}
           />
         </div>
@@ -160,7 +181,7 @@ export const Booking = ({ vehicle }) => {
         <div className="relative w-full">
           <input
             type="date"
-            className="w-full rounded-r-md rounded-l-md  lg:rounded-r-md  rounded-t-none  pl-10 lg:pl-4 pr-2  border-t-2 lg:border-t-0 border-gray-200 lg:rounded-l-none py-4 pt-7 border-l-[1px] lg:border-gray-300 text-ellipsis font-semibold placeholder:font-normal placeholder:italic focus:outline-2 outline-blue-800"
+            className="w-full rounded-r-md rounded-l-md  lg:rounded-r-md  rounded-t-none  pl-10 lg:pl-4 pr-2  border-t-2 lg:border-t-0 border-gray-200 lg:rounded-l-none py-4 pt-6 border-l-[1px] lg:border-gray-300 text-ellipsis font-semibold placeholder:font-normal placeholder:italic focus:outline-2 outline-blue-800"
             onChange={handleCheckoutChange}
           />
         </div>
@@ -187,7 +208,7 @@ const Modal = ({ locations, setLocation, query, hideModal }) => {
       <ul className="bg-white mt-2">
         {locations.map((location) => {
           const lowerCaseQuery = query.toLowerCase();
-          const locationString = `${location.name}, ${location.address}, ${location.country}`;
+          const locationString = `${location.city}, ${location.state}, ${location.country}`;
           const startIndex = locationString
             .toLowerCase()
             .indexOf(lowerCaseQuery);
@@ -207,7 +228,7 @@ const Modal = ({ locations, setLocation, query, hideModal }) => {
               className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
             >
               {locationString.substring(0, startIndex)}
-              <span className="text-purple-600">
+              <span className="text-purple-600 font-bold">
                 {locationString.substring(
                   startIndex,
                   startIndex + query.length
