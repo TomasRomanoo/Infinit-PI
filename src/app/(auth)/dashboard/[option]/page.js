@@ -33,12 +33,12 @@ const DashboardPage = () => {
   const firstIndex = lastIndex - vehiclesPerPage;
 
   const renderComponent = () => {
-    if(vehicles){
-      switch (path) {
+        if(vehicles){
+                switch (path) {
         case '/dashboard/fleet':
           return vehicles.map((vehicle, index )=> { return <DashCard key={index} vehicle={vehicle}/>}).slice(firstIndex, lastIndex)
         case '/dashboard/add':
-          return <Form />;
+                    return <Form />;
         case '/dashboard/delete':
           return vehicles.map((vehicle, index )=> { return <DeleteCard key={index} vehicle={vehicle}/>}).slice(firstIndex, lastIndex)
         case '/dashboard/modify':
@@ -67,7 +67,7 @@ useEffect(() => {
           <div className="lg:w-4/6 w-full py-10 lg:mx-10 h-auto rounded-2xl shadow-md font-poppins content-around flex-col bg-white">
             <Toaster position="bottom-right" richColors expand={false} />
             <div className="flex flex-wrap justify-around pb-10">
-              {vehicles && vehicles.length > 0 ? renderComponent() : null}
+              {renderComponent()}
             </div>
             {!('/dashboard/add' == path) && (
               <Pagination
