@@ -11,7 +11,7 @@ export async function POST(request) {
 
     console.log(body);
 
-    if (!city || !startDate || !endDate) {
+/*     if (!city || !startDate || !endDate) {
       return NextResponse.json(
         {
           error:
@@ -19,19 +19,17 @@ export async function POST(request) {
         },
         { status: 400 }
       );
-    }
+    } */
 
     const formattedStartDate = new Date(startDate);
     const formattedEndDate = new Date(endDate);
-
-    console.log("llega aca");
 
     const carsInCityAndDateRange = await prisma.vehicle.findMany({
       where: {
         dealer: {
           city,
         },
-        availabilityPeriod: {
+   /*      availabilityPeriod: {
           some: {
             startDate: {
               gte: formattedStartDate,
@@ -40,7 +38,7 @@ export async function POST(request) {
               lte: formattedEndDate,
             },
           },
-        },
+        }, */
       },
       include: {
         category: true,

@@ -6,6 +6,7 @@ import { Swiper, SwiperSlide, useSwiper } from "swiper/react";
 import { Navigation, Pagination } from "swiper";
 import "swiper/css";
 import "swiper/swiper-bundle.min.css";
+import swiperConfig from "@/utils/swiperConfig";
 
 import { useRouter } from "next/navigation";
 import Image from "next/image";
@@ -23,7 +24,6 @@ import { BsCalendar3 } from "react-icons/bs";
 import { AiOutlineClose } from "react-icons/ai";
 
 import Calendar from "react-calendar";
-import swiperConfig from "@/utils/swiperConfig";
 import { Booking } from "@/components/Booking";
 import Characterist from "./characterist";
 

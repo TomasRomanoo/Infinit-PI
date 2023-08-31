@@ -1,13 +1,22 @@
 import React, { useEffect, useState } from "react";
 
 import { MdOutlineLocationOn, MdMyLocation } from "react-icons/md";
-import { BiDirections } from "react-icons/bi";
 import { BsCalendar3 } from "react-icons/bs";
 import { motion } from "framer-motion";
 import axios from "axios";
 
+import { Swiper, SwiperSlide, useSwiper } from "swiper/react";
+import { Navigation, Pagination } from "swiper";
+import "swiper/css";
+import "swiper/swiper-bundle.min.css";
+import swiperConfig from "@/utils/swiperConfig";
+
 export const Booking = ({ vehicle }) => {
   const [modal, setModal] = useState(false);
+
+  const [vehiclesModal, setVehiclesModal] = useState(false);
+
+  const [vehicles, setVehicles] = useState([]);
 
   const [locations, setLocations] = useState([{}]);
 
@@ -96,6 +105,7 @@ export const Booking = ({ vehicle }) => {
   const filterVehicles = () => {
     console.log("location :>> ", location.city);
     console.log("dates :>> ", dates);
+    setVehiclesModal(true);
 
     let object = {
       city: location.city,
@@ -109,6 +119,7 @@ export const Booking = ({ vehicle }) => {
       .post("/api/dealer", object)
       .then((res) => {
         console.log("cars location >> ", res.data);
+        setVehicles(res.data);
       })
       .catch((error) => {
         console.error("Error: ", error);
@@ -116,7 +127,7 @@ export const Booking = ({ vehicle }) => {
   };
 
   return (
-    <div className="w-full p-6 bg-[#00243f] flex flex-col lg:flex-row items-center justify-around rounded-md shadow-md gap-4 mb-12">
+    <div className="w-full p-6 bg-[#00243f] relative flex flex-col lg:flex-row items-center justify-around rounded-md shadow-md gap-4 mb-12">
       {/* Location */}
       <div
         className="flex flex-col lg:flex-row items-center w-full relative "
@@ -212,13 +223,37 @@ export const Booking = ({ vehicle }) => {
       >
         Continue
       </button>
+
+      {vehiclesModal && (
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="absolute w-full h-[400px] bg-white rounded-md shadow-md p-4 top-32 z-20"
+        >
+          <Swiper
+            slidesPerView={1}
+            modules={[Navigation, Pagination]}
+            navigation
+            pagination={{ clickable: true }}
+            className="h-full"
+          >
+            {vehicles.map((vehicle) => {
+              return (
+                <SwiperSlide className="flex justify-center items-center h-full">
+                  {vehicle.plate}
+                </SwiperSlide>
+              );
+            })}
+          </Swiper>
+        </motion.div>
+      )}
     </div>
   );
 };
 
 const Modal = ({ locations, setLocation, query, hideModal }) => {
   return (
-    <div className="absolute w-full top-20 bg-white shadow-md rounded-md z-40">
+    <div className="absolute w-full top-20 bg-white shadow-md rounded-md z-20">
       <p className="p-2 bg-gray-200 font-poppins uppercase text-lg font-semibold">
         Results
       </p>
