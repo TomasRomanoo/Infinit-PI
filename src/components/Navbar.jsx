@@ -29,10 +29,6 @@ export const Navbar = () => {
   const [MngmntOpen, isMngmntOpen] = useState(false);
   const [MngmntMobileOpen, isMngmntMobileOpen] = useState(false);
 
-  useEffect(() => {
-    console.log("get user: ",getUser());
-
-  },[user])
   const openSidebar = () => {
     isSideMenuOpen(!sideMenu);
 
@@ -256,7 +252,6 @@ export const Navbar = () => {
         </ul>
 
         <div className="lg:block hidden font-poppins">
-          {console.log(getUser)}
           {getUser() == null ? (
             <div className="flex items-center gap-8">
               <Link href={"/signup"} className="p-6 py-3 rounded-md bg-primary hover:bg-secondary shadow-lg text-white transition-all duration-200 ease-in-out">
