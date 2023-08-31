@@ -8,20 +8,26 @@ datasource db {
 }
 
 model vehicle {
-  idvehicle          Int             @id @default(autoincrement())
+  idvehicle          Int                  @id @default(autoincrement())
   name               String
-  plate              String          @unique(map: "plate_UNIQUE")
+  plate              String               @unique(map: "plate_UNIQUE")
   detail             String
   year               Int
   price_per_day      Float
   long_description   String
   images             image[]
   specifications     specification[]
-  category           category        @relation(fields: [categoryIdcategory], references: [idcategory])
+  category           category             @relation(fields: [categoryIdcategory], references: [idcategory])
   categoryIdcategory Int
-  model              model?          @relation(fields: [modelIdmodel], references: [idmodel])
+  model              model?               @relation(fields: [modelIdmodel], references: [idmodel])
   modelIdmodel       Int?
+  dealer             dealer?              @relation(fields: [dealerIddealer], references: [iddealer])
+  dealerIddealer     Int?
+  reservation        reservation[]
+  availabilityPeriod availabilityPeriod[]
   deleted            Boolean
+  favorite           favorite?            
+  favoriteIdfavorite Int?
 }
 
 model brand {
@@ -41,24 +47,36 @@ model model {
   deleted      Boolean
 }
 
-model user {
-  iduser           Int     @id @default(autoincrement())
-  first_name       String
-  last_name        String
-  phone            Int     @unique(map: "phone_UNIQUE")
-  email            String  @unique(map: "email_UNIQUE")
-  identification   String  
-  password         String
-  address          String
-  city             String
-  country          String
-  zip_code         Int
-  role             role    @relation(fields: [idrole], references: [idrole])
-  idrole           Int     @default(2)
-  deleted          Boolean
+model dealer {
+  iddealer Int       @id @default(autoincrement())
+  vehicles vehicle[]
+  address  String
+  state    String
+  city     String
+  country  String
+  zip_code Int
 }
 
-
+model user {
+  iduser         Int           @id @default(autoincrement())
+  first_name     String
+  last_name      String
+  phone          Int
+  email          String        @unique(map: "email_UNIQUE")
+  identification String
+  password       String
+  address        String?
+  city           String?
+  state          String?
+  country        String?
+  zip_code       Int?
+  role           role          @relation(fields: [idrole], references: [idrole])
+  idrole         Int           @default(2)
+  reservation    reservation[]
+  favorite       favorite[]
+  deleted        Boolean
+  order          order[]
+}
 
 model role {
   idrole  Int     @id @default(autoincrement())
@@ -90,4 +108,39 @@ model specification {
   vehicle          vehicle @relation(fields: [vehicleIdvehicle], references: [idvehicle])
   vehicleIdvehicle Int
   deleted          Boolean
+}
+
+model favorite {
+  idfavorite Int       @id @default(autoincrement())
+  user       user      @relation(fields: [userIduser], references: [iduser])
+  vehicle    vehicle   @relation(fields: [vehicleIdvehicle], references: [idvehicle])
+  userIduser Int
+  vehicleIdvehicle Int
+  @@unique([vehicleIdvehicle])
+}
+
+model reservation {
+  idreservation    Int      @id @default(autoincrement())
+  checkin_date     DateTime
+  checkout_date    DateTime
+  vehicle          vehicle  @relation(fields: [vehicleIdvehicle], references: [idvehicle])
+  user             user     @relation(fields: [userIduser], references: [iduser])
+  vehicleIdvehicle Int
+  userIduser       Int
+}
+
+model order {
+  idorder    Int   @id @default(autoincrement())
+  days       Int
+  total      Float
+  user       user  @relation(fields: [userIduser], references: [iduser])
+  userIduser Int
+}
+
+model availabilityPeriod {
+  id        Int      @id @default(autoincrement())
+  startDate DateTime
+  endDate   DateTime
+  vehicle   vehicle  @relation(fields: [vehicleId], references: [idvehicle])
+  vehicleId Int
 }

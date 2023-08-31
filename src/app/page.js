@@ -100,7 +100,7 @@ const Category = ({ category }) => {
         key={category.idcategory}
       >
         <Image
-          width={300}
+          width={200}
           height={200}
           className="object-contain rounded-md"
           src={category.url}
