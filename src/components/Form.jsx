@@ -4,8 +4,8 @@ import { toast } from "sonner";
 import { UserContext } from "./context/UserContext";
 
 export const Form = () => {
-  const { isAdmin } = useContext(UserContext)
-  const handlerSubmit = (e) => {
+    const { isAdmin } = useContext(UserContext)
+    const handlerSubmit = (e) => {
     e.preventDefault();
 
     const fields = [
@@ -60,7 +60,7 @@ export const Form = () => {
     if (
       year &&
       year.length !== 0 &&
-      year < 2023 &&
+      year <= 2023 &&
       year > 1886 &&
       brand.id !== 0 &&
       fields[4].state &&
@@ -82,7 +82,7 @@ export const Form = () => {
   const apiUrl = "/api/vehicle";
 
   function createPost() {
-    let parsCategory 
+        let parsCategory 
     if(category){
       parsCategory = JSON.parse(category)
     }

@@ -9,25 +9,24 @@ datasource db {
 
 model vehicle {
   idvehicle          Int                  @id @default(autoincrement())
-  name               String
-  plate              String               @unique(map: "plate_UNIQUE")
+  name               String 
+  plate              String          @unique(map: "plate_UNIQUE")
   detail             String
   year               Int
   price_per_day      Float
   long_description   String
   images             image[]
   specifications     specification[]
-  category           category             @relation(fields: [categoryIdcategory], references: [idcategory])
+  category           category        @relation(fields: [categoryIdcategory], references: [idcategory])
   categoryIdcategory Int
-  model              model?               @relation(fields: [modelIdmodel], references: [idmodel])
+  model              model?          @relation(fields: [modelIdmodel], references: [idmodel])
   modelIdmodel       Int?
   dealer             dealer?              @relation(fields: [dealerIddealer], references: [iddealer])
   dealerIddealer     Int?
   reservation        reservation[]
   availabilityPeriod availabilityPeriod[]
+  favorites          favorite[]
   deleted            Boolean
-  favorite           favorite?            
-  favoriteIdfavorite Int?
 }
 
 model brand {
@@ -73,7 +72,7 @@ model user {
   role           role          @relation(fields: [idrole], references: [idrole])
   idrole         Int           @default(2)
   reservation    reservation[]
-  favorite       favorite[]
+  favorites      favorite[]
   deleted        Boolean
   order          order[]
 }
@@ -111,12 +110,11 @@ model specification {
 }
 
 model favorite {
-  idfavorite Int       @id @default(autoincrement())
-  user       user      @relation(fields: [userIduser], references: [iduser])
-  vehicle    vehicle   @relation(fields: [vehicleIdvehicle], references: [idvehicle])
-  userIduser Int
-  vehicleIdvehicle Int
-  @@unique([vehicleIdvehicle])
+  vehicle          vehicle @relation(fields: [idvehicle], references: [idvehicle])
+  idvehicle        Int
+  user             user @relation(fields: [iduser], references: [iduser])
+  iduser           Int
+  @@id([iduser, idvehicle])
 }
 
 model reservation {

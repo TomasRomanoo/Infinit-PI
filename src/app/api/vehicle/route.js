@@ -92,6 +92,7 @@ export async function GET() {
             brand: true,
           },
         },
+        favorites: true
       },
     });
 
