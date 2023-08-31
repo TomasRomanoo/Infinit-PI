@@ -13,7 +13,7 @@ const Caracteristicas = () => {
     { icon: "⚙️", text: "Advanced Transmission" },
     { icon: "🛡️", text: "Safety Certified" },
   ];
-  
+
 
   useEffect(() => {
     // Función para mezclar aleatoriamente la matriz
