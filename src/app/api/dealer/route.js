@@ -51,6 +51,8 @@ export async function POST(request) {
             brand: true,
           },
         },
+        dealer: true,
+        availabilityPeriod: true,
       },
     });
 

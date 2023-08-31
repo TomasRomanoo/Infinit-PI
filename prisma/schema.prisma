@@ -25,9 +25,8 @@ model vehicle {
   dealerIddealer     Int?
   reservation        reservation[]
   availabilityPeriod availabilityPeriod[]
+  favorites          favorite[]
   deleted            Boolean
-  favorite           favorite?            @relation(fields: [favoriteIdfavorite], references: [idfavorite])
-  favoriteIdfavorite Int?
 }
 
 model brand {
@@ -73,9 +72,9 @@ model user {
   role           role          @relation(fields: [idrole], references: [idrole])
   idrole         Int           @default(2)
   reservation    reservation[]
-  favorite       favorite[]
-  deleted        Boolean
+  favorites      favorite[]
   order          order[]
+  deleted        Boolean
 }
 
 model role {
@@ -111,18 +110,20 @@ model specification {
 }
 
 model favorite {
-  idfavorite Int       @id @default(autoincrement())
-  user       user      @relation(fields: [userIduser], references: [iduser])
-  vehicle    vehicle[]
-  userIduser Int
+  vehicle   vehicle @relation(fields: [idvehicle], references: [idvehicle], onDelete: Cascade)
+  idvehicle Int
+  user      user    @relation(fields: [iduser], references: [iduser], onDelete: Cascade)
+  iduser    Int
+
+  @@id([iduser, idvehicle])
 }
 
 model reservation {
   idreservation    Int      @id @default(autoincrement())
-  checkin_date     DateTime
-  checkout_date    DateTime
-  vehicle          vehicle  @relation(fields: [vehicleIdvehicle], references: [idvehicle])
-  user             user     @relation(fields: [userIduser], references: [iduser])
+  checkin_date     DateTime @db.Date
+  checkout_date    DateTime @db.Date
+  vehicle          vehicle  @relation(fields: [vehicleIdvehicle], references: [idvehicle], onDelete: Cascade)
+  user             user     @relation(fields: [userIduser], references: [iduser], onDelete: Cascade)
   vehicleIdvehicle Int
   userIduser       Int
 }
@@ -137,8 +138,8 @@ model order {
 
 model availabilityPeriod {
   id        Int      @id @default(autoincrement())
-  startDate DateTime
-  endDate   DateTime
-  vehicle   vehicle  @relation(fields: [vehicleId], references: [idvehicle])
+  startDate DateTime @db.Date
+  endDate   DateTime @db.Date
+  vehicle   vehicle  @relation(fields: [vehicleId], references: [idvehicle], onDelete: Cascade)
   vehicleId Int
 }
