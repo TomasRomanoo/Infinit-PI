@@ -26,7 +26,7 @@ import Calendar from "react-calendar";
 import swiperConfig from "@/utils/swiperConfig";
 import { Booking } from "@/components/Booking";
 import Characterist from "./characterist";
-
+import AvailabilityCalendar from "./AvailabilityCalendar";
 
 const Detail = ({params}) => {
   const [vehicle, setVehicle] = useState({});
@@ -100,6 +100,7 @@ const Detail = ({params}) => {
 
         <div className="bg-white rounded-lg w-full h-full shadow-lg py-8 p-4 md:px-12 space-y-8">
           <Booking />
+          <AvailabilityCalendar/>
           <Gallery
             isGalleryOpen={isGalleryOpen}
             openGalleryModal={openGalleryModal}
@@ -113,8 +114,10 @@ const Detail = ({params}) => {
             <p className="text-poppins text-2xl mt-10">Description</p>
 
             <p className="text-gray-400 text-xl">{vehicle.long_description}</p>
-          </div>        
+          </div> 
+                
           <Characterist/>
+         
 
         <div class="flex justify-end">
           <button
