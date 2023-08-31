@@ -14,7 +14,7 @@ function FavoriteButton(props) {
           if (favorite == true) {
             console.log("I clicked unfavorite")
             console.log(props)
-            fetch(`/api/favorite/${props.userId}/vechicle/${vehicleId}`, { method: 'DELETE' })
+            fetch(`/api/favorite/${props.userId}/vehicle/${vehicleId}`, { method: 'DELETE' })
             .then(console.log("This was a favorited vehicle, but now it isnt!"));
 
           }
@@ -27,7 +27,7 @@ function FavoriteButton(props) {
           return !favorite;
         });
     }
-
+    console.log(props)
     return (
         <button
             onClick={() => toggleFavorite(props.vehicleId)}

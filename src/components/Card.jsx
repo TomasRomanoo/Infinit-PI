@@ -24,9 +24,8 @@ export const Card = (props) => {
           />
         </div>
         <div className="flex flex-col items-end">
-          
           {user && typeof user.id != 'undefined' ? (
-            <FavoriteButton favBool={favBool} userId={user.id} vehicleId={props.vehicle.id}/>
+            <FavoriteButton favBool={favBool} userId={user.id} vehicleId={props.vehicle.idvehicle}/>
             ) : (<></>)
           }
           <div className="flex items-start gap-1 font-bold text-lg">
