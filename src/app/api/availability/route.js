@@ -11,11 +11,12 @@ export async function GET() {
     try {
         // traigo la info de la base de datos
         const availability = await prisma.reservation.findMany({
-            where:{vehicleIdvehicle : 2} 
+            // where:{vehicleIdvehicle : 1} 
         });
 
         // aca traigo las fechas en que el auto se reserva
         const entryDates = availability.map(item => ({
+            idvehicle: item.vehicleIdvehicle,
             checkin_date: item.checkin_date,
             checkout_date: item.checkout_date
         })); 
