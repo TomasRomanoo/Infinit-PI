@@ -8,6 +8,7 @@ import { NextResponse } from "next/server";
 
 // export async function GET() {
     
+<<<<<<< HEAD
 //     try {
 //         // traigo la info de la base de datos
 //         const availability = await prisma.reservation.findMany({
@@ -29,6 +30,29 @@ import { NextResponse } from "next/server";
 //         return NextResponse.json({ error: "Unable to fetch availability" },{status:500});
 //         }
 //     }
+=======
+    try {    
+        
+        // traigo la info de la base de datos
+        const availability = await prisma.reservation.findMany();
+
+        // aca traigo las fechas en que el auto se reserva
+        const entryDates = availability.map(item => ({
+            idreservation: item.idreservation,
+            checkin_date: item.checkin_date,
+            checkout_date: item.checkout_date
+        })); 
+
+    
+        console.log("el metodo Get1 se esta ejecutando");
+        return NextResponse.json( entryDates,{ status: 200, message: "Todo está OK" });
+    } catch (error) {
+      // En caso de que ocurra un error, registra el error en la consola y responde con un código de estado 500 y un mensaje de error
+        console.error("Error fetching availability: ", error);
+        return NextResponse.json({ error: "Unable to fetch availability" },{status:500});
+        }
+    }
+>>>>>>> a0ea0064bf55fcf1115ebff83d79cadd3b490414
 
 
 
