@@ -1,9 +1,7 @@
 /** @type {import('next').NextConfig} */
-module.exports = {
-  output: 'export',
+const nextConfig = {
   images: {
-    unoptimized: true ,
-   /*  domains: ["c6-pi-grupo3.s3.amazonaws.com"],
+    domains: ["c6-pi-grupo3.s3.amazonaws.com"],
     domains: ['cdn.pixabay.com'],
     remotePatterns: [
       {
@@ -15,6 +13,7 @@ module.exports = {
     ],
   },
   typescript: {
-    ignoreBuildErrors: true, */
+    ignoreBuildErrors: true,
   },
 };
+module.exports = nextConfig;

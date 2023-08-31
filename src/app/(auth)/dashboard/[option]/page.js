@@ -44,7 +44,7 @@ const DashboardPage = () => {
         case '/dashboard/fleet':
           return vehicles.map((vehicle, index) => { return <DashCard key={index} vehicle={vehicle} /> }).slice(firstIndex, lastIndex)
         case '/dashboard/add':
-          return <Form />;
+                    return <Form />;
         case '/dashboard/delete':
           return vehicles.map((vehicle, index) => { return <DeleteCard key={index} vehicle={vehicle} /> }).slice(firstIndex, lastIndex)
         case '/dashboard/modify':
