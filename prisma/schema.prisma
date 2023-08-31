@@ -21,6 +21,10 @@ model vehicle {
   categoryIdcategory Int
   model              model?          @relation(fields: [modelIdmodel], references: [idmodel])
   modelIdmodel       Int?
+  dealer             dealer?              @relation(fields: [dealerIddealer], references: [iddealer])
+  dealerIddealer     Int?
+  reservation        reservation[]
+  availabilityPeriod availabilityPeriod[]
   favorites          favorite[]
   deleted            Boolean
 }
