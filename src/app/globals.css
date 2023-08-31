@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;500;600;700;800;900;1000&display=swap");
-@import url('https://fonts.googleapis.com/css2?family=Anton&family=Nunito:wght@200;300;400;500;600;700;800;900;1000&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;500;600;700;800;900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Anton&family=Nunito:wght@200;300;400;500;600;700;800;900;1000&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;500;600;700;800;900&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -13,7 +13,7 @@
     margin: 0;
   }
 }
-.errInput{
+.errInput {
   --tw-ring-color: red;
 }
 
@@ -46,12 +46,12 @@
   opacity: 0.1;
 }
 
-.hide-mngmnt{
+.hide-mngmnt {
   display: none;
   transition: 0.5s;
 }
 
-.show-mngmnt{
+.show-mngmnt {
   display: flex;
   position: absolute;
   left: -50%;
@@ -60,13 +60,12 @@
   opacity: 1;
 }
 
-.show-mngmnt-mobile{
+.show-mngmnt-mobile {
   display: flex;
 }
 
-.show-modal-edit{
+.show-modal-edit {
   display: flex;
-
 }
 
 .loading-screen {
@@ -95,9 +94,7 @@
   }
 }
 
-
 .opacity-effect {
   opacity: 0.5; /* Set the desired opacity value */
 }
-
 

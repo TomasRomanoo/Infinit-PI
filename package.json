@@ -38,6 +38,7 @@
     "react-calendar": "^4.6.0",
     "react-dom": "18.2.0",
     "react-icons": "^4.10.1",
+    "react-range-picker": "^1.0.1",
     "sass": "^1.65.1",
     "sharp": "^0.32.5",
     "sonner": "^0.6.2",

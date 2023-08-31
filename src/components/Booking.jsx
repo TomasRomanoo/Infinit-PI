@@ -18,7 +18,7 @@ export const Booking = ({ vehicle }) => {
   });
 
   const hideModal = () => {
-    console.log("Modal hideModal called"); // Add this line
+    console.log("Modal hideModal called");
     setModal(false);
   };
 
@@ -94,8 +94,25 @@ export const Booking = ({ vehicle }) => {
   };
 
   const filterVehicles = () => {
-    console.log("location :>> ", location);
+    console.log("location :>> ", location.city);
     console.log("dates :>> ", dates);
+
+    let object = {
+      city: location.city,
+      startDate: dates.checkin,
+      endDate: dates.checkout,
+    };
+
+    console.log("object :>> ", object);
+
+    axios
+      .post("/api/dealer", object)
+      .then((res) => {
+        console.log("cars location >> ", res.data);
+      })
+      .catch((error) => {
+        console.error("Error: ", error);
+      });
   };
 
   return (
