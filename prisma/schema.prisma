@@ -8,8 +8,8 @@ datasource db {
 }
 
 model vehicle {
-  idvehicle          Int             @id @default(autoincrement())
-  name               String
+  idvehicle          Int                  @id @default(autoincrement())
+  name               String 
   plate              String          @unique(map: "plate_UNIQUE")
   detail             String
   year               Int
@@ -42,22 +42,35 @@ model model {
   deleted      Boolean
 }
 
+model dealer {
+  iddealer Int       @id @default(autoincrement())
+  vehicles vehicle[]
+  address  String
+  state    String
+  city     String
+  country  String
+  zip_code Int
+}
+
 model user {
-  iduser           Int     @id @default(autoincrement())
-  first_name       String
-  last_name        String
-  phone            Int     @unique(map: "phone_UNIQUE")
-  email            String  @unique(map: "email_UNIQUE")
-  identification   String  
-  password         String
-  address          String
-  city             String
-  country          String
-  zip_code         Int
-  role             role    @relation(fields: [idrole], references: [idrole])
-  idrole           Int     @default(2)
-  favorites        favorite[]
-  deleted          Boolean
+  iduser         Int           @id @default(autoincrement())
+  first_name     String
+  last_name      String
+  phone          Int
+  email          String        @unique(map: "email_UNIQUE")
+  identification String
+  password       String
+  address        String?
+  city           String?
+  state          String?
+  country        String?
+  zip_code       Int?
+  role           role          @relation(fields: [idrole], references: [idrole])
+  idrole         Int           @default(2)
+  reservation    reservation[]
+  favorites      favorite[]
+  deleted        Boolean
+  order          order[]
 }
 
 model role {
@@ -98,4 +111,30 @@ model favorite {
   user             user @relation(fields: [iduser], references: [iduser])
   iduser           Int
   @@id([iduser, idvehicle])
+}
+
+model reservation {
+  idreservation    Int      @id @default(autoincrement())
+  checkin_date     DateTime
+  checkout_date    DateTime
+  vehicle          vehicle  @relation(fields: [vehicleIdvehicle], references: [idvehicle])
+  user             user     @relation(fields: [userIduser], references: [iduser])
+  vehicleIdvehicle Int
+  userIduser       Int
+}
+
+model order {
+  idorder    Int   @id @default(autoincrement())
+  days       Int
+  total      Float
+  user       user  @relation(fields: [userIduser], references: [iduser])
+  userIduser Int
+}
+
+model availabilityPeriod {
+  id        Int      @id @default(autoincrement())
+  startDate DateTime
+  endDate   DateTime
+  vehicle   vehicle  @relation(fields: [vehicleId], references: [idvehicle])
+  vehicleId Int
 }
