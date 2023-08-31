@@ -110,9 +110,9 @@ model specification {
 }
 
 model favorite {
-  vehicle          vehicle @relation(fields: [idvehicle], references: [idvehicle])
+  vehicle          vehicle @relation(fields: [idvehicle], references: [idvehicle], onDelete: Cascade)
   idvehicle        Int
-  user             user @relation(fields: [iduser], references: [iduser])
+  user             user @relation(fields: [iduser], references: [iduser], onDelete: Cascade)
   iduser           Int
   @@id([iduser, idvehicle])
 }
@@ -121,8 +121,8 @@ model reservation {
   idreservation    Int      @id @default(autoincrement())
   checkin_date     DateTime
   checkout_date    DateTime
-  vehicle          vehicle  @relation(fields: [vehicleIdvehicle], references: [idvehicle])
-  user             user     @relation(fields: [userIduser], references: [iduser])
+  vehicle          vehicle  @relation(fields: [vehicleIdvehicle], references: [idvehicle], onDelete: Cascade)
+  user             user     @relation(fields: [userIduser], references: [iduser], onDelete: Cascade)
   vehicleIdvehicle Int
   userIduser       Int
 }
@@ -139,6 +139,6 @@ model availabilityPeriod {
   id        Int      @id @default(autoincrement())
   startDate DateTime
   endDate   DateTime
-  vehicle   vehicle  @relation(fields: [vehicleId], references: [idvehicle])
+  vehicle   vehicle  @relation(fields: [vehicleId], references: [idvehicle], onDelete: Cascade)
   vehicleId Int
 }
