@@ -3,15 +3,16 @@ import { NextResponse } from "next/server";
 const prisma = new PrismaClient();
 
 export async function POST(request) {
-  console.log("The POST function has been called.");
+  console.log("The POST CATEGORY function has been called.");
   try {
     const body = await request.json();
-    const { name, url } = body;
+    const { name, url,deleted } = body;
 
     const brand = await prisma.category.create({
       data: {
         name,
         url,
+        deleted
       },
     });
 

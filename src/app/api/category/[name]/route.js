@@ -43,3 +43,47 @@ export async function GET(req, context) {
     }
   }
 }
+
+
+export async function DELETE(request) {
+  try {
+    const urlParts = request.url.split("/");
+    const name = urlParts[urlParts.length - 1];
+    if (!name) {
+      return NextResponse.json(
+        { error: "Debes proporcionar el nombre de la categoria" },
+        { status: 400 }
+      );
+    }
+
+    const category = await prisma.category.findUnique({
+      where: {
+        name,
+      },
+    });
+
+    if (!category) {
+      return NextResponse.json(
+        { error: "Categoria no encontrada" },
+        { status: 404 }
+      );
+    }
+
+    await prisma.category.delete({
+      where: {
+        name,
+      },
+    });
+
+    return NextResponse.json(
+      { message: "Categoria eliminado correctamente" },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json(
+      { Error: "Error al eliminar el categoria" },
+      { status: 500 }
+    );
+  }
+}
