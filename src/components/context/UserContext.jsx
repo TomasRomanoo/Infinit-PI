@@ -1,38 +1,61 @@
 "use client";
 
-import { createContext, useState } from "react";
-export const UserContext = createContext();
+import { createContext, useEffect, useState } from "react";
 import jwt from "jsonwebtoken";
 
-export const UserProvider = ({ children }) => {
-  const [user, setUser] = useState("");
+export const UserContext = createContext();
 
-  const loginUser = (token) => {
+export const UserProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(null);
+
+  //* Lo mande con use effect pq en la consola me tiraba
+  //* error si lo inicializaba con el localStorage (pero funcionaba)
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const token = JSON.parse(localStorage.getItem("token"));
+      setUser(token);
+
+
+      const admin = JSON.parse(localStorage.getItem("admin"));
+      setIsAdmin(admin);
+    }
+  }, []);
+
+  const loginUser = (token, admin) => {
+
+    localStorage.setItem("token",JSON.stringify(token));
     setUser(token);
-    // Set the session ID as an HTTP cookie with appropriate attributes
-    document.cookie = `sessionID=${token}; path=/; secure; HttpOnly`;
+    getUser();
+    console.log("User",user)
+
+
+    localStorage.setItem("admin",JSON.stringify(admin));
+    setIsAdmin(admin)
   };
+  
   const getUser = () => {
     try {
-      const sessionID = document.cookie
-        .split("; ")
-        .find((row) => row.startsWith("sessionID="))
-        .split("=")[1];
-
-      const decodedUser = jwt.verify(sessionID, "your-secret-key");
+      const decodedUser = jwt.decode(user);
       return decodedUser;
     } catch (error) {
+      console.error("Error decoding token:", error);
       return null;
     }
   };
+
   const signoutUser = () => {
-    setUser("");
+    setUser('');
+    setIsAdmin('');
+    localStorage.removeItem("token");
+    localStorage.removeItem("admin");
     document.cookie =
       "sessionID=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; secure; HttpOnly";
   };
 
   const userContextValue = {
     user,
+    isAdmin,
     loginUser,
     signoutUser,
     getUser,

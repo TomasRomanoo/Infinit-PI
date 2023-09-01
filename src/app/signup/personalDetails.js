@@ -6,26 +6,76 @@ export default function PersonalDetails({ onBack, onNext, data }) {
   const [firstName, setFirstName] = useState(data.firstName || "");
   const [lastName, setLastName] = useState(data.lastName || "");
   const [phone, setPhone] = useState(data.phone || "");
-  const [address, setAddress] = useState(data.address || "");
+  /*     const [address, setAddress] = useState(data.address || "");
   const [city, setCity] = useState(data.city || "");
   const [zipCode, setZipCode] = useState(data.setZipCode || "");
-  const [country, setCountry] = useState(data.country || "");
+  const [country, setCountry] = useState(data.country || ""); */
+  const [identification, setIdentification] = useState(data.country || "");
+
+  const [address, setAddress] = useState({
+    street: "",
+    city: "",
+    zipCode: null,
+    country: "",
+  });
+
   const [countries, setCountries] = useState([]);
+
+  const [phoneError, setPhoneError] = useState("");
+  const [identificationError, setIdentificationError] = useState("");
+
+  const validatePhone = (inputValue) => {
+    if (/^[0-9]{10}$/.test(inputValue)) {
+      setPhoneError("");
+    } else {
+      setPhoneError("Invalid phone number.");
+    }
+  };
+
+  const validateIdentification = (inputValue) => {
+    if (inputValue.trim() !== "") {
+      setIdentificationError("");
+    } else {
+      setIdentificationError("Identification is required.");
+    }
+  };
+
+  const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onNext({ firstName, lastName, phone, address, country });
+
+    if (phoneError) {
+      return;
+    }
+    if (identificationError) {
+      return;
+    }
+
+    onNext({
+      firstName,
+      lastName,
+      phone,
+      address,
+      identification,
+    });
+    setSubmitted(true);
   };
 
   const isButtonDisabled =
     firstName.trim() === "" ||
     lastName.trim() === "" ||
     phone.trim() === "" ||
-    address.trim() === "";
-  city.trim() === "";
+    /*  address.city.trim() === "" ||
+    address.zipCode.trim() === "" ||
+    address.country.trim() === "" ||
+    address.address.trim() === "" || */
+    identification.trim() === "";
+
+  /* city.trim() === "";
   zipCode.trim() === "";
 
-  country.selected;
+  country.selected; */
 
   useEffect(() => {
     const fetchCountries = async () => {
@@ -73,23 +123,54 @@ export default function PersonalDetails({ onBack, onNext, data }) {
           <div className="flex flex-col">
             <label>Phone Number</label>
             <input
-              type="text"
-              className="px-2 py-1.5 border-black border-2 rounded-md"
+              type="number"
+              className={`px-2 py-1.5 border-black border-2 rounded-md ${
+                submitted && phoneError ? "border-red-500" : ""
+              }`}
               value={phone}
               onChange={(e) => {
-                setPhone(e.target.value);
+                const inputValue = e.target.value;
+                validatePhone(inputValue);
+                setPhone(inputValue);
               }}
             />
+            {phoneError && (
+              <p className="text-red-500">{phoneError}</p>
+            )}
+          </div>
+          <div className="flex flex-col">
+            <label>ID/Passport</label>
+            <input
+              type="text"
+              className={`px-2 py-1.5 border-black border-2 rounded-md ${
+                identificationError ? "border-red-500" : ""
+              }`}
+              value={identification}
+              onChange={(e) => {
+                const inputValue = e.target.value;
+                validateIdentification(inputValue);
+                setIdentification(inputValue);
+              }}
+            />
+            {submitted && identificationError && (
+              <p className="text-red-500">{identificationError}</p>
+            )}
           </div>
           <div className="flex flex-col">
             <label>Country</label>
             <select
               id="country"
               name="country"
+              className="px-2 py-1.5 border-black border-2 rounded-md"
               onChange={(e) => {
-                setCountry(e.target.options[e.target.selectedIndex].value);
+                const selectedCountry = e.target.value;
+                setAddress((prevState) => ({
+                  ...prevState,
+                  country: selectedCountry,
+                }));
               }}
             >
+              <option selected>Select your country</option>
               {countries.map((country, index) => (
                 <option key={index} value={country.name}>
                   {country.name}
@@ -97,14 +178,18 @@ export default function PersonalDetails({ onBack, onNext, data }) {
               ))}
             </select>
           </div>
+
           <div className="flex flex-col">
-            <label>Address</label>
+            <label>Street</label>
             <input
               type="text"
               className="px-2 py-1.5 border-black border-2 rounded-md"
-              value={address}
+              value={address.street}
               onChange={(e) => {
-                setAddress(e.target.value);
+                setAddress((prevState) => ({
+                  ...prevState,
+                  street: e.target.value,
+                }));
               }}
             />
           </div>
@@ -112,21 +197,29 @@ export default function PersonalDetails({ onBack, onNext, data }) {
             <label>City</label>
             <input
               type="text"
+              name="city"
               className="px-2 py-1.5 border-black border-2 rounded-md"
-              value={city}
+              value={address.city}
               onChange={(e) => {
-                setCity(e.target.value);
+                setAddress((prevState) => ({
+                  ...prevState,
+                  city: e.target.value,
+                }));
               }}
             />
           </div>
+
           <div className="flex flex-col">
             <label>Zip Code</label>
             <input
               type="text"
               className="px-2 py-1.5 border-black border-2 rounded-md"
-              value={zipCode}
+              value={address.zipCode}
               onChange={(e) => {
-                setZipCode(e.target.value);
+                setAddress((prevState) => ({
+                  ...prevState,
+                  zipCode: e.target.value,
+                }));
               }}
             />
           </div>

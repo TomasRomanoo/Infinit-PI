@@ -1,6 +1,5 @@
 "use client";
 import React from "react";
-
 import { GoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import Swal from "sweetalert2/dist/sweetalert2.js";
@@ -8,50 +7,61 @@ import "sweetalert2/src/sweetalert2.scss";
 import Link from "next/link";
 import { useContext, useState } from "react";
 import { UserContext } from "@/components/context/UserContext";
-import jwt from "jsonwebtoken";
 import { Infinit } from "@/components/Infinit";
+import { useRouter } from 'next/navigation';
+
 
 export default function Login() {
   const [userData, setUserData] = useState({ email: "", password: "" });
-  const [response, setResponse] = useState(null);
   const [submitted, setSubmitted] = useState(false);
+  const userContext = useContext(UserContext);
 
-  const user = useContext(UserContext);
+  const { push } = useRouter();
+
+  const Toast = Swal.mixin({
+    toast: true,
+    position: "top-start",
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+  });
 
   const fetchUser = () => {
-    const Toast = Swal.mixin({
-      toast: true,
-      position: "top-end",
-      showConfirmButton: false,
-      timer: 3000,
-      timerProgressBar: true,
-    });
     axios
-      .post("/api/user", userData)
+      .post("/api/auth/login", userData)
       .then((res) => {
+        userContext.loginUser(res.data.token, res.data.isAdmin );
+        console.log(res.data);
         Toast.fire({
           icon: "success",
           title: res.data.msg,
         }).then(() => {
-          const token = jwt.sign(res.data.user, "your-secret-key", {
-            algorithm: "HS256",
-          });
-          user.loginUser(token);
-          window.location.href = "/";
+          push("/")
         });
       })
       .catch((error) => {
         Toast.fire({
           icon: "error",
-          title: error.response.data.error,
+          title: error.response.data.msg,
         });
       });
   };
 
   const handleUserLogin = (e) => {
     e.preventDefault();
-    setResponse(null);
     setSubmitted(true);
+
+    if (userData.email.length <= 0 || userData.password.length <= 0) {
+      Toast.fire({
+        icon: "error",
+        title: "You must complete all fields",
+      });
+      return;
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userData.email)) {
+      return;
+    }
 
     fetchUser();
   };
@@ -74,8 +84,10 @@ export default function Login() {
               <input
                 type="text"
                 className={`px-2 py-1.5 border-black border-2 rounded-md ${
-                  submitted == true && userData.email === ""
+                  submitted === true && userData.email === ""
                     ? "border-red-500"
+                    : /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userData.email)
+                    ? ""
                     : ""
                 }`}
                 onChange={(e) =>
@@ -85,9 +97,16 @@ export default function Login() {
                   }))
                 }
               />
-              {submitted && userData.email === "" && (
-                <p className="text-red-500">Email is required.</p>
-              )}
+              <div className="flex items-center">
+                {submitted && userData.email === "" && (
+                  <p className="text-red-500">Email is required.</p>
+                )}
+                {submitted &&
+                  userData.email !== "" &&
+                  !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userData.email) && (
+                    <p className="text-red-500">Invalid email address.</p>
+                  )}
+              </div>
             </div>
 
             <div className="flex flex-col">
@@ -119,7 +138,7 @@ export default function Login() {
               )}
             </div>
 
-            <button className="w-full hover:bg-primary shadow-md bg-black text-white transition all duration-300 font-medium text-white text-sm px-8 py-2 rounded-md">
+            <button className="w-full hover:bg-primary shadow-md bg-black  transition all duration-300 font-medium text-white text-sm px-8 py-2 rounded-md">
               Sign in
             </button>
           </form>

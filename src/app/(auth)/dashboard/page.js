@@ -1,8 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
-import { Form } from "@/components/Form";
-import { Toaster } from "sonner";
+import React, { useContext, useEffect, useState } from "react";
 
 import {
   AiOutlineClose,
@@ -13,58 +11,96 @@ import {
 
 import { FaPencilAlt } from "react-icons/fa";
 import { SiGoogleanalytics } from "react-icons/si";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
+import { UserContext } from "@/components/context/UserContext";
+import { MdNoAccounts, MdOutlineMobileOff } from "react-icons/md";
+import { HiMiniArrowSmallLeft } from "react-icons/hi2";
+import LoadingScreenDashboard from "./loading";
 
-const Dashboard = () => {
-  const [form, setForm] = useState(false);
 
-  const renderComponent = (option) => {
-    setForm(option);
-  };
+export default function dashboard(){
+  const path  = usePathname();
+  const {isAdmin} = useContext(UserContext)
+  let screenWidth;
+  if (typeof window !== "undefined") {
+    screenWidth = window.innerWidth;
+  }
 
-  return (
-    <div className="flex items-center justify-evenly h-full">
-      <Sidebar renderComponent={renderComponent} />
-      <div className="lg:w-4/6 w-full pt-10 mb-10 lg:mx-10 h-auto rounded-2xl shadow-md font-poppins content-around flex-col bg-white">
-        <Toaster position="bottom-right" richColors expand={false} />
-        {form && <Form />}
-      </div>
-    </div>
-  );
-};
 
-const Sidebar = ({ renderComponent }) => {
   return (
     <>
-      <div className="w-[200px] ml-12  bg-primary h-full rounded-lg">
+      {/* <LoadingScreenDashboard > */}
+      { isAdmin?
+        <>
+        { screenWidth >= 1080?
+                  <div className="flex items-center">
+                  <Sidebar/>
+                  {path === "/dashboard" &&
+                  <div className="flex flex-col justify-center items-center w-9/12 ml-12 text-center font-bold text-5xl">
+                    <p>Select one option</p>
+                    <HiMiniArrowSmallLeft className="w-12"/>
+                  </div>}
+                </div> 
+                :
+                <div className='w-full mt-52 mb-40 px-10 flex flex-col items-center text-center font-bold text-6xl'>
+                <p>Sorry!</p>
+                <p className='text-3xl mt-5'>This section isn't available for this device </p>
+                <MdOutlineMobileOff className='text-center w-32 h-32 mt-8'/>
+              </div>
+        }
+        </>
+        :
+        <div className='w-full mt-52 mb-40 px-10 flex flex-col items-center text-center font-bold text-6xl'>
+        You don't have acces to this page!
+        <MdNoAccounts className='text-center w-32 h-32 mt-8'/>
+      </div>}
+      {/* </LoadingScreenDashboard> */}
+    </>
+  )
+} 
+
+const Sidebar = () => {
+  return (
+    <>
+        <div className="w-[200px] ml-12  bg-primary h-full rounded-lg">
         <ul className="flex flex-col gap-2 font-secondary mt-4">
           <li className="font-bold p-4  w-full ">
-            <button className="flex items-center gap-4 text-black bg-white w-full p-4 rounded-lg  ">
+            <Link
+            href="/dashboard/[path]" 
+            as="/dashboard/fleet"
+            className="flex items-center gap-4 text-black bg-white w-full p-4 rounded-lg  ">
               <AiOutlineCar size={25} />
               <p>Fleet</p>
-            </button>
+            </Link>
           </li>
           <li className="font-bold p-4  w-full ">
-            <button
+            <Link 
+            href="/dashboard/[path]" 
+            as="/dashboard/add"
               className="flex items-center gap-4 text-black bg-white w-full p-4 rounded-lg  "
-              onClick={() => {
-                renderComponent(true);
-              }}
             >
               <AiOutlinePlus size={25} />
               <p>New car</p>
-            </button>
+            </Link>
           </li>
           <li className="font-bold p-4  w-full ">
-            <button className="flex items-center gap-4 text-black bg-white w-full p-4 rounded-lg  ">
+            <Link
+            href="/dashboard/[path]" 
+            as="/dashboard/delete"
+            className="flex items-center gap-4 text-black bg-white w-full p-4 rounded-lg  ">
               <AiTwotoneDelete size={25} />
               <p>Delete</p>
-            </button>
+            </Link>
           </li>
           <li className="font-bold p-4  w-full ">
-            <button className="flex items-center gap-4 text-black bg-white w-full p-4 rounded-lg  ">
+            <Link
+            href="/dashboard/[path]" 
+            as="/dashboard/modify"
+            className="flex items-center gap-4 text-black bg-white w-full p-4 rounded-lg  ">
               <FaPencilAlt size={25} />
               <p>Modify a car</p>
-            </button>
+            </Link>
           </li>
           <li className="font-bold p-4  w-full ">
             <button className="flex items-center gap-4 text-black bg-white w-full p-4 rounded-lg  ">
@@ -74,8 +110,8 @@ const Sidebar = ({ renderComponent }) => {
           </li>
         </ul>
       </div>
+
     </>
   );
 };
 
-export default Dashboard;

@@ -64,6 +64,11 @@
   display: flex;
 }
 
+.show-modal-edit{
+  display: flex;
+
+}
+
 .loading-screen {
   display: flex;
   flex-direction: column;
@@ -94,9 +99,5 @@
 .opacity-effect {
   opacity: 0.5; /* Set the desired opacity value */
 }
-
-
-
-
 
 
