@@ -7,7 +7,7 @@ export async function GET({id}) {
     
     try {
         console.log(`GET ${id} parameters`);        
-
+        
         // traigo la info de la base de datos
         const availability = await prisma.reservation.findMany({
             where:{
