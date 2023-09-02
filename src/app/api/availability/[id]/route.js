@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
 const prisma = new PrismaClient();
 
-export async function GET({id}) {
+export async function GET(request) {
     
     try {
         console.log(`GET ${id} parameters`);        
@@ -11,7 +11,7 @@ export async function GET({id}) {
         // traigo la info de la base de datos
         const availability = await prisma.reservation.findMany({
             where:{
-                vehicleIdvehicle : id
+                vehicleIdvehicle : parseInt(id)
             }
         });
 
