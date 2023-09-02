@@ -1,3 +1,57 @@
+// import axios from "axios";
+// import React, { useState } from "react";
+// import { useEffect } from "react";
+// // import { DatePicker } from "antd";
+// import DatePicker from "react-datepicker";
+// import "react-datepicker/dist/react-datepicker.css";
+
+// const AvailabilityCalendar = ({idvehicle}) => {
+//   const [dateRange, setDateRange] = useState();
+//   const [rango,setRango] = useState()
+  
+//   const fetchAvailibity = async () => {
+//     let PowerRange = null;
+//     if (idvehicle) {
+//       PowerRange = await axios(`/api/availability/${idvehicle}`)
+//       console.log(PowerRange.data)
+//     }
+
+//     // setRango(PowerRange.data)
+//     return PowerRange.data
+//   }
+
+//   useEffect(() => {
+//     fetchAvailibity()
+//   }, []);
+
+//   console.log(rango);
+
+//   return (
+//     <div className="availability-calendar-container">
+//       <div className="availability-calendar">
+//         <div className="calendar-label">Select Dates:</div>
+//         <DatePicker
+//           selected={dateRange}
+//           onChange={(date) => setDateRange(date)}          
+//           // highlightDates={[
+//           //   { start: new Date("2023-09-02"), end: new Date("2023-09-07") },
+//           //   { start: new Date("2023-09-29"), end: new Date("2023-10-05")}
+//           // ]}
+//           excludeDateIntervals={ fetchAvailibity()}               
+//           monthsShown={2}          
+//           withPortal
+//           placeholderText="Dates available"
+//         />
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default AvailabilityCalendar;
+
+
+
+// codigo de flavia
 import axios from "axios";
 import React, { useState } from "react";
 import { useEffect } from "react";
@@ -6,14 +60,12 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 const AvailabilityCalendar = ({idvehicle}) => {
-  const [dateRange, setDateRange] = useState();
-  const [startDate, setStartDate] = useState();
-  const [endDate, setEndDate] = useState();
-  
+  const [dateRange, setDateRange] = useState();  
+
   const fetchAvailibity = async () => {
     let PowerRange = null;
     if (idvehicle) {
-      PowerRange = await axios(`/api/availability/${idvehicle}`)
+      PowerRange = (await axios(`/api/availability/${idvehicle}`)).data
       console.log(PowerRange)
     }
 
@@ -24,7 +76,7 @@ const AvailabilityCalendar = ({idvehicle}) => {
     fetchAvailibity()
   }, []);
 
-  
+
 
   return (
     <div className="availability-calendar-container">
@@ -32,13 +84,13 @@ const AvailabilityCalendar = ({idvehicle}) => {
         <div className="calendar-label">Select Dates:</div>
         <DatePicker
           selected={dateRange}
-          onChange={(date) => setDateRange(date)}          
+          onChange={(date) => setDateRange(date)}
           // highlightDates={[
           //   { start: new Date("2023-09-02"), end: new Date("2023-09-07") },
           //   { start: new Date("2023-09-29"), end: new Date("2023-10-05")}
           // ]}
-          excludeDateIntervals={ fetchAvailibity()}               
-          monthsShown={2}          
+          excludeDateIntervals={ fetchAvailibity()}
+          monthsShown={2}
           withPortal
           placeholderText="Dates available"
         />
@@ -48,6 +100,29 @@ const AvailabilityCalendar = ({idvehicle}) => {
 };
 
 export default AvailabilityCalendar;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

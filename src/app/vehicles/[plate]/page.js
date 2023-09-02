@@ -33,6 +33,7 @@ const Detail = ({params}) => {
   const router = useRouter();
   const [isGalleryOpen, setGalleryOpen] = useState(false);
   const [selectedImageId, setSelectedImageId] = useState(null);
+  
 
   const fetchVehicle = async () => {
     const res = await axios("/api/vehicle/"+params.plate);
@@ -57,7 +58,10 @@ const Detail = ({params}) => {
       ]
     }
     setVehicle(res.data);
+    
   };
+
+  console.log("idVehicle>>", vehicle.idvehicle);
 
   useEffect(() => {
     fetchVehicle();
@@ -99,7 +103,7 @@ const Detail = ({params}) => {
         </div>
 
         <div className="bg-white rounded-lg w-full h-full shadow-lg py-8 p-4 md:px-12 space-y-8">
-          <Booking />
+          {/* <Booking /> */}
           <AvailabilityCalendar idvehicle={vehicle.idvehicle}/>
           <Gallery
             isGalleryOpen={isGalleryOpen}
