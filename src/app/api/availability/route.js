@@ -4,8 +4,6 @@ import { message } from "antd";
 import { NextResponse } from "next/server";
 const prisma = new PrismaClient();
 
-
-
 export async function GET() {
     
     try {
@@ -15,10 +13,9 @@ export async function GET() {
         });
 
         // aca traigo las fechas en que el auto se reserva
-        const entryDates = availability.map(item => ({
-            idvehicle: item.vehicleIdvehicle,
-            checkin_date: item.checkin_date,
-            checkout_date: item.checkout_date
+        const entryDates = availability.map(item => ({            
+            start: item.checkin_date,
+            end: item.checkout_date
         })); 
 
     

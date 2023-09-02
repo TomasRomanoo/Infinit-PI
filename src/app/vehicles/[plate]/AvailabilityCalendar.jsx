@@ -1,4 +1,6 @@
+import axios from "axios";
 import React, { useState } from "react";
+import { useEffect } from "react";
 // import { DatePicker } from "antd";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -7,52 +9,18 @@ const AvailabilityCalendar = ({idvehicle}) => {
   const [dateRange, setDateRange] = useState();
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
+  
+  const fetchAvailibity = async () => {
+    const PowerRange = await axios(`api/availability/${idvehicle}`)
 
-  const handleSelect = (range) => {
-    setDateRange(range);
-  };
+    return PowerRange
+  }
 
-  // Ejemplo de datos de disponibilidad (hardcodeado)
-  const availableDates = [
-    new Date("2023-08-31"),
-    new Date("2023-09-01"),
-    new Date("2023-09-02"),
-    new Date("2023-09-03"),
-    new Date("2023-09-04"),
-    new Date("2023-09-05"),
-  ];
+  useEffect(() => {
+    fetchAvailibity()
+  }, []);
 
-  const disabledDates = [
-    
-    new Date("2023-09-02"),
-    new Date("2023-09-03"),
-    new Date("2023-09-04"),
-    new Date("2023-09-05"),
-    new Date("2023-09-06"),
-    new Date("2023-09-07"),
-  ];
-
-  const highlightDates = (date) => {
-    const isAvailable = availableDates.some((availableDate) =>
-      isSameDay(availableDate, date)
-    );
-    const isDisabled = disabledDates.some((disabledDate) =>
-      isSameDay(disabledDate, date)
-    );
-
-    return {
-      available: isAvailable && !isDisabled,
-      disabled: isDisabled,
-    };
-  };
-
-  const isSameDay = (date1, date2) => {
-    return (
-      date1.getDate() === date2.getDate() &&
-      date1.getMonth() === date2.getMonth() &&
-      date1.getFullYear() === date2.getFullYear()
-    );
-  };
+  
 
   return (
     <div className="availability-calendar-container">
@@ -60,14 +28,13 @@ const AvailabilityCalendar = ({idvehicle}) => {
         <div className="calendar-label">Select Dates:</div>
         <DatePicker
           selected={dateRange}
-          onChange={(date) => setDateRange(date)}     
-          // excludeDates={disabledDates}  
-          excludeDateIntervals={[
-          { start: new Date("2023-09-02"), end: new Date("2023-09-07") },
-          { start: new Date("2023-09-29"), end: new Date("2023-10-05")}
-        ]}  
-          
-          monthsShown={2}
+          onChange={(date) => setDateRange(date)}          
+          // highlightDates={[
+          //   { start: new Date("2023-09-02"), end: new Date("2023-09-07") },
+          //   { start: new Date("2023-09-29"), end: new Date("2023-10-05")}
+          // ]}
+          excludeDateIntervals={ fetchAvailibity()}               
+          monthsShown={2}          
           withPortal
           placeholderText="Dates available"
         />
