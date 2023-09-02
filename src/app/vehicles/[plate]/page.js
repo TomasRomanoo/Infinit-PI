@@ -100,7 +100,7 @@ const Detail = ({params}) => {
 
         <div className="bg-white rounded-lg w-full h-full shadow-lg py-8 p-4 md:px-12 space-y-8">
           <Booking />
-          <AvailabilityCalendar/>
+          <AvailabilityCalendar idvehicle={vehicle.idvehicle}/>
           <Gallery
             isGalleryOpen={isGalleryOpen}
             openGalleryModal={openGalleryModal}

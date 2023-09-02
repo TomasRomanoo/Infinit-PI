@@ -11,7 +11,10 @@ const AvailabilityCalendar = ({idvehicle}) => {
   const [endDate, setEndDate] = useState();
   
   const fetchAvailibity = async () => {
-    const PowerRange = await axios(`api/availability/${idvehicle}`)
+    let PowerRange = null;
+    if (idvehicle) {
+      PowerRange = await axios(`/api/availability/${idvehicle}`)
+    }
 
     return PowerRange
   }
