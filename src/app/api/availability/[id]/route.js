@@ -6,8 +6,9 @@ const prisma = new PrismaClient();
 export async function GET(request) {
     
     try {
-        console.log(`GET ${id} parameters`);        
-        
+        const urlParts = request.url.split("/");
+        const id = urlParts[urlParts.length - 1];      
+
         // traigo la info de la base de datos
         const availability = await prisma.reservation.findMany({
             where:{
