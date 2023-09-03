@@ -16,9 +16,9 @@ export async function GET() {
         const entryDates = availability.map(item => ({            
             start: item.checkin_date,
             end: item.checkout_date
-        })); 
-
-    
+        }));
+        
+        
         console.log("el metodo Get se esta ejecutando");
         return NextResponse.json( entryDates,{ status: 200, message: "Todo está OK" });
     } catch (error) {

@@ -17,7 +17,8 @@ export async function GET(request) {
         });
 
         // aca traigo las fechas en que el auto se reserva
-        const entryDates = availability.map(item => ({            
+        const entryDates = availability.map(item => ({
+            
             start: item.checkin_date,
             end: item.checkout_date
         }));

@@ -1,84 +1,37 @@
-// import axios from "axios";
-// import React, { useState } from "react";
-// import { useEffect } from "react";
-// // import { DatePicker } from "antd";
-// import DatePicker from "react-datepicker";
-// import "react-datepicker/dist/react-datepicker.css";
-
-// const AvailabilityCalendar = ({idvehicle}) => {
-//   const [dateRange, setDateRange] = useState();
-//   const [rango,setRango] = useState()
-  
-//   const fetchAvailibity = async () => {
-//     let PowerRange = null;
-//     if (idvehicle) {
-//       PowerRange = await axios(`/api/availability/${idvehicle}`)
-//       console.log(PowerRange.data)
-//     }
-
-//     // setRango(PowerRange.data)
-//     return PowerRange.data
-//   }
-
-//   useEffect(() => {
-//     fetchAvailibity()
-//   }, []);
-
-//   console.log(rango);
-
-//   return (
-//     <div className="availability-calendar-container">
-//       <div className="availability-calendar">
-//         <div className="calendar-label">Select Dates:</div>
-//         <DatePicker
-//           selected={dateRange}
-//           onChange={(date) => setDateRange(date)}          
-//           // highlightDates={[
-//           //   { start: new Date("2023-09-02"), end: new Date("2023-09-07") },
-//           //   { start: new Date("2023-09-29"), end: new Date("2023-10-05")}
-//           // ]}
-//           excludeDateIntervals={ fetchAvailibity()}               
-//           monthsShown={2}          
-//           withPortal
-//           placeholderText="Dates available"
-//         />
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default AvailabilityCalendar;
-
-
-
-
-// codigo de flavia
 import axios from "axios";
 import React, { useState } from "react";
 import { useEffect } from "react";
-// import { DatePicker } from "antd";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 const AvailabilityCalendar = ({idvehicle}) => {
   const [dateRange, setDateRange] = useState();  
+  const [AvailableDates, setAvailableDates] = useState()  
 
-  const fetchAvailibity = async () => {
-    let PowerRange = null;
-    if (idvehicle) {
-      PowerRange = (await axios(`/api/availability/${idvehicle}`)).data
-      console.log(PowerRange)
-    }
+  const fetchAvailability = async () => {
+    try {
+      if (idvehicle) {
+        const response = await axios(`/api/availability/${idvehicle}`);
+        console.log("res.data",response.data);
+        const opciones = {year: 'numeric', month: 'numeric', day: 'numeric'   }
+        const powerRange = response.data.map((dateRange) => ({      
 
-    return PowerRange
-  }
+          start: new Date(dateRange.start.split("T")[0]).toLocaleDateString("es-AR"), 
+          end: new Date(dateRange.end.split("T")[0]).toLocaleDateString("es-AR")    
 
+        }));
+        setAvailableDates(powerRange);    
+        
+      }    
+    } catch (error) {
+      console.error("Error fetching availability: ", error);
+      setError("Unable to fetch availability. Please try again later.");      
+    }      
+  } 
   useEffect(() => {
-    fetchAvailibity()
-  }, []);
-
-
-
+    fetchAvailability()   
+  }, []); 
+  console.log("Availability dates", AvailableDates);
   return (
     <div className="availability-calendar-container">
       <div className="availability-calendar">
@@ -86,13 +39,12 @@ const AvailabilityCalendar = ({idvehicle}) => {
         <DatePicker
           selected={dateRange}
           onChange={(date) => setDateRange(date)}
-          // highlightDates={[
-          //   { start: new Date("2023-09-02"), end: new Date("2023-09-07") },
-          //   { start: new Date("2023-09-29"), end: new Date("2023-10-05")}
-          // ]}
+          // excludeDateIntervals={[
+          //   { start: new Date("2023/09/05"), end: new Date("2023/09/12") },
+          //   { start: new Date("2023/09/29"), end: new Date("2023/10/05")}
+          // ]}   
           
-          dateFormat="dd/MM/yyyy"
-          excludeDateIntervals={ fetchAvailibity()}
+          excludeDateIntervals={ AvailableDates}
           monthsShown={2}
           withPortal
           placeholderText="Dates available"
