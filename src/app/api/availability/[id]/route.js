@@ -3,23 +3,24 @@ import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
 const prisma = new PrismaClient();
 
-export async function GET({id}) {
+export async function GET(request) {
     
     try {
-        console.log(`GET ${id} parameters`);        
+        const urlParts = request.url.split("/");
+        const id = urlParts[urlParts.length - 1];      
 
         // traigo la info de la base de datos
         const availability = await prisma.reservation.findMany({
-            where:{vehicleIdvehicle : id} 
+            where:{
+                vehicleIdvehicle : parseInt(id)
+            }
         });
 
         // aca traigo las fechas en que el auto se reserva
-        const entryDates = availability.map(item => ({
-            idreservation: item.idreservation,
-            checkin_date: item.checkin_date,
-            checkout_date: item.checkout_date
-        })); 
-
+        const entryDates = availability.map(item => ({            
+            start: item.checkin_date,
+            end: item.checkout_date
+        }));
     
         console.log("el metodo Get2 se esta ejecutando",id);
         return NextResponse.json( entryDates,{ status: 200, message: "Todo está OK" });
