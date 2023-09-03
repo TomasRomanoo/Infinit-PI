@@ -13,48 +13,41 @@ const AvailabilityCalendar = ({idvehicle}) => {
     try {
       if (idvehicle) {
         const response = await axios(`/api/availability/${idvehicle}`);
-        console.log("res.data",response.data);
-        const opciones = {year: 'numeric', month: 'numeric', day: 'numeric'   }
-        const powerRange = response.data.map((dateRange) => ({      
-
-          start: new Date(dateRange.start.split("T")[0]).toLocaleDateString("es-AR"), 
-          end: new Date(dateRange.end.split("T")[0]).toLocaleDateString("es-AR")    
+        console.log("res.data",response.data);        
+        const powerRange = response.data.map((dateRange) => ({
+          start: new Date(dateRange.start.split("T")[0]), 
+          end: new Date(dateRange.end.split("T")[0])    
 
         }));
-        setAvailableDates(powerRange);    
-        
+        setAvailableDates(powerRange);        
       }    
     } catch (error) {
       console.error("Error fetching availability: ", error);
-      setError("Unable to fetch availability. Please try again later.");      
+      setError("Unable to fetch availability. Please try again later.");       
     }      
   } 
   useEffect(() => {
     fetchAvailability()   
-  }, []); 
+  }, [idvehicle]); 
   console.log("Availability dates", AvailableDates);
+  
   return (
     <div className="availability-calendar-container">
       <div className="availability-calendar">
         <div className="calendar-label">Select Dates:</div>
         <DatePicker
           selected={dateRange}
-          onChange={(date) => setDateRange(date)}
-          // excludeDateIntervals={[
-          //   { start: new Date("2023/09/05"), end: new Date("2023/09/12") },
-          //   { start: new Date("2023/09/29"), end: new Date("2023/10/05")}
-          // ]}   
-          
+          onChange={(date) => setDateRange(date)}                 
           excludeDateIntervals={ AvailableDates}
           monthsShown={2}
           withPortal
-          placeholderText="Dates available"
+          showIcon          
+          placeholderText="show availability" 
         />
       </div>
     </div>
   );
 };
-
 export default AvailabilityCalendar;
 
 
