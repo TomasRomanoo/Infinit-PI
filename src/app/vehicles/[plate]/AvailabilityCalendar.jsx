@@ -7,6 +7,7 @@ import "react-datepicker/dist/react-datepicker.css";
 const AvailabilityCalendar = ({idvehicle}) => {
   const [dateRange, setDateRange] = useState();  
   const [AvailableDates, setAvailableDates] = useState()  
+  const [error, setError] = useState()
 
   const fetchAvailability = async () => {
     try {
