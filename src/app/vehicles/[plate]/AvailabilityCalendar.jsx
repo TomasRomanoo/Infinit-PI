@@ -51,6 +51,7 @@
 
 
 
+
 // codigo de flavia
 import axios from "axios";
 import React, { useState } from "react";
@@ -89,6 +90,8 @@ const AvailabilityCalendar = ({idvehicle}) => {
           //   { start: new Date("2023-09-02"), end: new Date("2023-09-07") },
           //   { start: new Date("2023-09-29"), end: new Date("2023-10-05")}
           // ]}
+          
+          dateFormat="dd/MM/yyyy"
           excludeDateIntervals={ fetchAvailibity()}
           monthsShown={2}
           withPortal
@@ -100,6 +103,7 @@ const AvailabilityCalendar = ({idvehicle}) => {
 };
 
 export default AvailabilityCalendar;
+
 
 
 
