@@ -13,7 +13,7 @@ const AvailabilityCalendar = ({idvehicle}) => {
   const fetchAvailability = async () => {
     try {
       if (idvehicle) {
-        const response = await axios(`/api/availability/${idvehicle}`);
+        const response = await axios(`/api/availability/${idvehicl}`);
         console.log("res.data",response.data);        
         const powerRange = response.data.map((dateRange) => ({
           
