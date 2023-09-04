@@ -118,9 +118,9 @@ export const Category = ({ setShowCategory }) => {
                     <AiOutlineClose className="w-5 h-5" />
                 </button>
             </div>
-            <div className={`flex-col ${showOptions ? "flex" : "hidden"}`}>
+            <div className={`flex-row w-full ${showOptions ? "flex" : "hidden"}`}>
                 <button
-                    className="bg-primary flex text-neutral-50 items-center justify-evenly text-lg font-semibold rounded-xl px-2 py-3 w-full my-5"
+                    className="bg-primary flex text-neutral-50 items-center justify-evenly text-lg font-semibold rounded-3xl px-2 py-6 w-full m-5"
                     onClick={() => {
                         setShowOptions(false);
                         setShowAdd(true);
@@ -130,7 +130,7 @@ export const Category = ({ setShowCategory }) => {
                     Add category
                 </button>
                 <button
-                    className="bg-primary flex text-neutral-50 items-center justify-evenly text-lg font-semibold rounded-xl px-3 py-3 w-full my-8"
+                    className="bg-neutral-50  flex text-primary border-solid border-2 border-primary items-center justify-evenly text-lg font-semibold rounded-3xl px-2 py-5 w-full m-5"
                     onClick={handlerDeleteButton}
                 >
                     <TiDelete className="w-10 h-10" />
