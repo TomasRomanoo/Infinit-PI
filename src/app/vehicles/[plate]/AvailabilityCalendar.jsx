@@ -5,12 +5,9 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Swal from 'sweetalert2';
 
-
-
 const AvailabilityCalendar = ({idvehicle}) => {
   const [dateRange, setDateRange] = useState();  
-  const [AvailableDates, setAvailableDates] = useState()   
-  const [Error, setError] = useState()
+  const [AvailableDates, setAvailableDates] = useState()
   const [isError, setIsError] = useState(false)
 
   const fetchAvailability = async () => {
@@ -28,17 +25,14 @@ const AvailabilityCalendar = ({idvehicle}) => {
         setIsError(false)       
       }    
       } catch (error) {
-          console.error("Error fetching availability: ", error);
-          setError("Unable to fetch availability. Please try again later.");
+          console.error("Error fetching availability: ", error);          
           setIsError(true)
 
           Swal.fire({
             icon: 'error',
-            title: 'Unable to fetch availability. Please try again later...',
-            
+            title: 'Unable to fetch availability. Please try again later...',            
           });
-        }   
-      
+        }         
   } 
   useEffect(() => {
     fetchAvailability()   
