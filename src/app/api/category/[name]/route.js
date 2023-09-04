@@ -62,6 +62,19 @@ export async function DELETE(request) {
       },
     });
 
+    const vehicles = await prisma.vehicle.findMany({
+      where: {
+        categoryId: category.id,
+      },
+    });
+
+    vehicles.map((vehicle) =>
+      prisma.vehicle.update({
+        where: { id: vehicle.id },
+        data: { categoryId: null },
+      })
+    )
+
     if (!category) {
       return NextResponse.json(
         { error: "Categoria no encontrada" },

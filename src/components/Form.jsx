@@ -495,7 +495,7 @@ export const Form = () => {
       className={` z-50 min-h-full  justify-center items-center p-0 fixed inset-0 ${
           showCategory ? "flex" : "hidden"
         }`} >
-        <Category categories={categories}/>
+        <Category categories={categories} setShowCategory={() => setShowCategory()}/>
       </div>
     </>
   );

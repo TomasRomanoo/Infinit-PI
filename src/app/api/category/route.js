@@ -8,12 +8,17 @@ export async function POST(request) {
     const body = await request.json();
     const { name, url,deleted } = body;
 
+    const data = {
+      name,
+      deleted
+    }
+
+    if (url != null) {
+      data.url = url;
+    }
+
     const brand = await prisma.category.create({
-      data: {
-        name,
-        url,
-        deleted
-      },
+      data
     });
 
     return NextResponse.json(
@@ -22,7 +27,7 @@ export async function POST(request) {
     );
   } catch (error) {
     console.error(error);
-    return NextResponse.json({ Error: "Error" }, { status: 500 });
+    return NextResponse.json({ Error: error.message }, { status: 500 });
   }
 }
 
