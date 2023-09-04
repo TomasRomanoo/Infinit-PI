@@ -60,7 +60,6 @@ const Detail = ({params}) => {
     setVehicle(res.data);
     
   };
-
   console.log("idVehicle>>", vehicle.idvehicle);
 
   useEffect(() => {
@@ -121,7 +120,7 @@ const Detail = ({params}) => {
           </div> 
                 
           <Characterist/>
-         
+          
 
         <div class="flex justify-end">
           <button
