@@ -101,9 +101,7 @@
 }
 
 
-.availa {
-  background-color: aqua;
-}
+
 /* Estilos para el mensaje de carga */
 .loading-message {
   font-size: 16px;
@@ -134,12 +132,16 @@
 .calendar-label {
   font-size: 18px;
   font-weight: bold;
-  color: #333; /* Color de texto deseado */
+  color: #faf6f6; /* Color de texto deseado */
   margin-bottom: 10px; /* Espacio inferior */
 }
-
+.react-datepicker__view-calendar-icon input{
+  border-radius: 9px;
+}
 
 .availability-calendar-container {
-  background-color: #f0f0f0; /* Cambia el color de fondo a tu elección */
+  background-color: #00243f; 
+  border-radius: 10px;
+    /* Cambia el color de fondo a tu elección */
   /* Otras propiedades de estilo si las necesitas */
 }
