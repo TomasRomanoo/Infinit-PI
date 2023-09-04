@@ -42,23 +42,24 @@ const AvailabilityCalendar = ({idvehicle}) => {
   return (
     <div className="availability-calendar-container">
       <div className="availability-calendar">
-        <div className="calendar-label">Display of availability and busy dates:
+        <div className="calendar-label">
+          Display of availability and busy dates:
+          {
+            isError ? 
+              <p className="bg-white text-gray-400 w-60 rounded-lg mt-2 py-2 px-3  ">
+              Please try again later...
+              </p>
+            :
+            <DatePicker                              
+            excludeDateIntervals={ AvailableDates}
+            monthsShown={2}
+            withPortal          
+            showIcon         
+            placeholderText="show availability"
+            />
+            
+          }       
         </div>
-        {
-          isError ? 
-          <p>Please try again later...</p>
-          :
-          <DatePicker
-          selected={dateRange}
-          onChange={(date) => setDateRange(date)}                     
-          excludeDateIntervals={ AvailableDates}
-          monthsShown={2}
-          withPortal          
-          showIcon         
-          placeholderText="show availability"
-        />
-        }       
-        
       </div>
     </div>
   );
