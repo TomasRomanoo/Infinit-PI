@@ -3,13 +3,20 @@ import { NextResponse } from "next/server";
 const prisma = new PrismaClient();
 
 export async function GET(req, context) {
-  console.log("context.params.category :>> ", context.params.name);
+
   try {
-    console.log("entra aca");
+
     const vehicles = await prisma.vehicle.findMany({
       where: {
         category: {
-          name: context.params.name,
+          AND: [
+            {
+              name: context.params.name,
+            },
+            {
+              deleted: false,
+            },
+          ],
         },
       },
       include: {
@@ -23,7 +30,6 @@ export async function GET(req, context) {
       },
     });
 
-    console.log("vehicles :>> ", vehicles);
 
     return NextResponse.json(vehicles, { status: 200, data: vehicles });
   } catch (error) {
@@ -62,18 +68,19 @@ export async function DELETE(request) {
       },
     });
 
-    const vehicles = await prisma.vehicle.findMany({
-      where: {
-        categoryId: category.id,
-      },
-    });
+    // const vehicles = await prisma.vehicle.findMany({
+    //   where: {
+    //     categoryIdcategory: category.idcategory,
+    //   },
+    // });
 
-    vehicles.map((vehicle) =>
-      prisma.vehicle.update({
-        where: { id: vehicle.id },
-        data: { categoryId: null },
-      })
-    )
+
+    // vehicles.map((vehicle) =>
+    // prisma.vehicle.update({
+    //   where: { idvehicle: vehicle.idvehicle },
+    //   data: { categoryIdcategory: undefined },
+    // })
+    // )
 
     if (!category) {
       return NextResponse.json(
@@ -82,11 +89,21 @@ export async function DELETE(request) {
       );
     }
 
-    await prisma.category.delete({
+    // await prisma.category.delete({
+    //   where: {
+    //     name,
+    //   },
+    // });`
+
+        await prisma.category.update({
       where: {
-        name,
+        idcategory: category.idcategory,
       },
+      data:{
+        deleted:true,
+      }
     });
+
 
     return NextResponse.json(
       { message: "Categoria eliminado correctamente" },

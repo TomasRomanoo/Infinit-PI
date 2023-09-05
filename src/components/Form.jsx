@@ -12,8 +12,6 @@ export const Form = () => {
   const categoryHandler = (e) => {
     e.preventDefault()
     setShowCategory(!showCategory)
-
-  
   }
 
   const handlerSubmit = (e) => {

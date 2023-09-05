@@ -6,12 +6,14 @@ import { GrClose } from "react-icons/gr";
 import axios from "axios";
 import { toast } from "sonner";
 import { UserContext } from "./context/UserContext";
+import { MdEdit } from "react-icons/md";
+import { Category } from "./Category";
 
 
 export const ModCar = ({ vehicles, firstIndex, lastIndex }) => {
   const apiUrl = "http://localhost:3000/api/vehicle/";
   const [showModal, setShowModal] = useState(false);
-  const {isAdmin} = useContext(UserContext)
+  const { isAdmin } = useContext(UserContext)
 
   //* Controled inputs states
   const [id, setId] = useState("");
@@ -43,6 +45,13 @@ export const ModCar = ({ vehicles, firstIndex, lastIndex }) => {
     setCategories(res.data);
   };
 
+  const [showCategory, setShowCategory] = useState(false)
+  const categoryHandler = (e) => {
+    e.preventDefault()
+    setShowCategory(!showCategory)
+  }
+
+
   useEffect(() => {
     fetchCategories();
   }, []);
@@ -54,11 +63,11 @@ export const ModCar = ({ vehicles, firstIndex, lastIndex }) => {
     axios.get(`/api/vehicle/${plate}`).then(function (response) {
       setId(response.data.idvehcle);
       setBrand(JSON.stringify(response.data.model.brand));
-      setBrandName(response.data.model.brand.name)
+      setBrandName(response.data.model?.brand?.name)
 
       setModel(JSON.stringify(response.data.model));
       setModelName(response.data.model.name)
-      
+
       setPrice(response.data.price_per_day);
       setPlate(response.data.plate);
       setYear(response.data.year);
@@ -104,15 +113,14 @@ export const ModCar = ({ vehicles, firstIndex, lastIndex }) => {
       document.querySelector("#yearInput").classList.remove("errInput");
     }
 
-    if (isAdmin) {
-      if(!category) {
-        setCategoryErr(true);
-        document.querySelector("#categoryInput").classList.add("errInput");
-      } else {
-        setCategoryErr(false)
-        document.querySelector("#categoryInput").classList.remove("errInput");
-      }
+    if (!category) {
+      setCategoryErr(true);
+      document.querySelector("#categoryInput").classList.add("errInput");
+    } else {
+      setCategoryErr(false)
+      document.querySelector("#categoryInput").classList.remove("errInput");
     }
+
 
     if (
       year &&
@@ -124,12 +132,12 @@ export const ModCar = ({ vehicles, firstIndex, lastIndex }) => {
       fields[1].state &&
       fields[0].state
     ) {
-      if(isAdmin){
+      if (isAdmin) {
         if (category) {
           handlerSubmit()
           setShowModal(!showModal);
         }
-      }else{
+      } else {
         handlerSubmit()
         setShowModal(!showModal);
       }
@@ -138,8 +146,8 @@ export const ModCar = ({ vehicles, firstIndex, lastIndex }) => {
 
   const handlerSubmit = async () => {
 
-    let parsCategory 
-    if(category){
+    let parsCategory
+    if (category) {
       parsCategory = JSON.parse(category)
     }
     let parsModel = JSON.parse(model)
@@ -186,8 +194,8 @@ export const ModCar = ({ vehicles, firstIndex, lastIndex }) => {
         error: "Error while editing",
       }
     );
-  
-      
+
+
   }
 
   return (
@@ -207,7 +215,7 @@ export const ModCar = ({ vehicles, firstIndex, lastIndex }) => {
                 <div className="flex flex-col items-end">
                   <div className="flex items-start gap-1 font-bold text-lg">
                     <p className="text-start truncate ">
-                      {vehicle.model.brand.name}
+                      {vehicle.model?.brand?.name}
                     </p>
                   </div>
 
@@ -239,16 +247,14 @@ export const ModCar = ({ vehicles, firstIndex, lastIndex }) => {
 
       {/* ------------------------------- EDIT MODAL ------------------------------- */}
       <div
-        className={`fixed inset-0 z-30 bg-gray-500 bg-opacity-75 transition-opacity ${
-          showModal ? "flex" : "hidden"
-        }`}
+        className={`fixed inset-0 z-30 bg-gray-500 bg-opacity-75 transition-opacity ${showModal ? "flex" : "hidden"
+          }`}
         id="modalBg"
       ></div>
       <div
         id="modal"
-        className={` z-50 min-h-full  justify-center items-center p-0 fixed inset-0  ${
-          showModal ? "flex" : "hidden"
-        }`}
+        className={` z-50 min-h-full  justify-center items-center p-0 fixed inset-0  ${showModal ? "flex" : "hidden"
+          }`}
       >
         <div className="flex flex-col m-5 px-10 pt-5 max-w-2xl flex-auto overflow-hidden rounded-3xl bg-white text-sm leading-6 shadow-lg ring-1 ring-gray-900/5">
           <button
@@ -474,48 +480,51 @@ export const ModCar = ({ vehicles, firstIndex, lastIndex }) => {
                 </div>
 
                 {isAdmin
-              ?
-              (<div className="m-3">
-                <label className="block text-sm font-medium leading-6 text-gray-900">
-                  Category
-                </label>
-                <select
-                  id="categoryInput"
-                  value={category}
-                  onChange={(e) => {
-                    setCategory(e.target.value);
-                    console.log("category :>> ", category);
-                  }}
-                  type="text"
-                  className="block mt-2 w-full cursor-pointer rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 focus:outline-none sm:text-sm sm:leading-6 transition ease-in-out duration-300"
-                >
-                  <option value="" disabled selected>
-                    Select some category
-                  </option>
-                  {categories.map((category) => {
-                    return (
-                      <option
-                        value={JSON.stringify(category)}
-                        key={category.categoryId}
+                  ?
+                  (<div className="m-3">
+                    <label className="block text-sm font-medium leading-6 text-gray-900">
+                      Category
+                    </label>
+                    <div className="flex items-center	mt-2">
+                      <select
+                        id="categoryInput"
+                        value={category}
+                        onChange={(e) => {
+                          setCategory(e.target.value);
+                          console.log("category :>> ", category);
+                        }}
+                        type="text"
+                        className="block mt-2 w-full cursor-pointer rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 focus:outline-none sm:text-sm sm:leading-6 transition ease-in-out duration-300"
                       >
-                        {category.name}
+                        <option value="" disabled selected>
+                          Select some category
+                        </option>
+                        {categories.map((category) => {
+                          return (
+                            <option
+                              value={JSON.stringify(category)}
+                              key={category.categoryId}
+                            >
+                              {category.name}
 
-                      </option>
-                    );
-                  })}
-                </select>
-                {categoryErr ? (
-                  <span className="flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1">
-                    You must choose the category of your car
-                  </span>
-                ) : (
+                            </option>
+                          );
+                        })}
+                      </select>
+                      <button onClick={categoryHandler} className="bg-primary text-neutral-50 rounded-xl p-2 ml-2">
+                        <MdEdit />
+                      </button>
+                    </div>
+                    {categoryErr && (
+                      <span className="flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1">
+                        You must choose the category of your car
+                      </span>
+                    )}
+                  </div>
+                  )
+                  :
                   <></>
-                )}
-              </div>
-              )
-              :
-              <></>
-            }
+                }
               </div>
             </div>
 
@@ -525,6 +534,17 @@ export const ModCar = ({ vehicles, firstIndex, lastIndex }) => {
               </button>
             </div>
           </form>
+
+          <div
+            className={`fixed inset-0 z-30 bg-gray-500 bg-opacity-75 transition-opacity ${showCategory ? "flex" : "hidden"
+              }`}
+            id="modalBg"
+          ></div>
+          <div id="categoryModal"
+            className={` z-50 min-h-full  justify-center items-center p-0 fixed inset-0 ${showCategory ? "flex" : "hidden"
+              }`} >
+            <Category categories={categories} setShowCategory={() => setShowCategory()} />
+          </div>
         </div>
       </div>
     </>

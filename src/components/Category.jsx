@@ -6,6 +6,7 @@ import { TiDelete } from "react-icons/ti";
 import { BsArrowLeftShort } from "react-icons/bs";
 import { AiOutlineClose } from "react-icons/ai";
 import axios from "axios";
+import { Pagination } from "./Pagination";
 
 export const Category = ({ setShowCategory }) => {
     const [name, setName] = useState("");
@@ -17,6 +18,15 @@ export const Category = ({ setShowCategory }) => {
     const [showDelete, setShowDelete] = useState(false);
 
     const [errNameCategory, setErrNameCategory] = useState(false);
+
+    const CATEGORIES_PER_PAGE = 6;
+    const [currentPage, setCurrentPage] = useState(1);
+    const [categoriesPerPage, setCategoriesPerPage] = useState(CATEGORIES_PER_PAGE);
+    const totalcategories = categories.length;
+
+    const lastIndex = currentPage * categoriesPerPage;
+    const firstIndex = lastIndex - categoriesPerPage;
+
 
     const resetStates = () => {
         setShowAdd(false);
@@ -181,10 +191,12 @@ export const Category = ({ setShowCategory }) => {
                     Select one category <br /> to delete
                 </h1>
                 <div className="flex flex-wrap justify-center my-10">
+
+
                     {categories.map((category) => {
                         return (
                             <div
-                                className={`flex flex-col items-center justify-between relative border-solid border-2 w-44 hover:scale-110 h-24 bg-cover bg-center border-stone-950 hover:border-red-800 hover:bg-red-600 hover:font-bold rounded m-2 ease-out duration-300
+                                className={`flex flex-col items-center justify-between relative border-solid border-2 w-44 hover:scale-110 h-24 bg-cover bg-center border-stone-950 hover:border-red-800 hover:bg-red-600 hover:font-bold rounded-xl m-2 ease-out duration-300
                                 before:bg-black before:hover:bg-red-600 before:content-{''} before:w-full before:h-full before:absolute before:opacity-30 before:hover:opacity-50`}
                                 id={category.id}
                                 onClick={() => handlerDelete(category.name)}
@@ -192,13 +204,20 @@ export const Category = ({ setShowCategory }) => {
                                     backgroundImage: `url(${category.url})`,
                                 }}
                             >
-                                <p className="font-poppins text-lg capitalize absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white drop-shadow-lg z-10 ">
+                                <p className="font-poppins text-lg capitalize absolute bottom-1/2 translate-y-1/2 left-1/2 -translate-x-1/2 text-white drop-shadow-lg z-10 ">
                                     {category.name}
                                 </p>
                             </div>
                         );
-                    })}
+                    }).slice(firstIndex, lastIndex)}
+
                 </div>
+                    <Pagination
+                        currentPage={currentPage}
+                        vehiclesPerPage={categoriesPerPage}
+                        setCurrentPage={setCurrentPage}
+                        totalVehicles={totalcategories}
+                    />
             </div>
         </div>
     );
