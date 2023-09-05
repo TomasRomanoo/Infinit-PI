@@ -6,10 +6,11 @@ export async function POST(request) {
   console.log("The POST CATEGORY function has been called.");
   try {
     const body = await request.json();
-    const { name, url,deleted } = body;
+    const { name,description,url,deleted } = body;
 
     const data = {
       name,
+      description,
       deleted
     }
 

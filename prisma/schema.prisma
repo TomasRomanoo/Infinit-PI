@@ -93,11 +93,12 @@ model image {
 }
 
 model category {
-  idcategory Int       @id @default(autoincrement())
-  name       String    @unique(map: "category_UNIQUE")
-  url        String
-  vehicles   vehicle[]
-  deleted    Boolean
+  idcategory    Int       @id @default(autoincrement())
+  name          String    @unique(map: "category_UNIQUE")
+  description   String
+  url           String
+  vehicles      vehicle[]
+  deleted       Boolean
 }
 
 model specification {

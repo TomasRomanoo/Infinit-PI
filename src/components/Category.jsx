@@ -10,6 +10,7 @@ import { Pagination } from "./Pagination";
 
 export const Category = ({ setShowCategory }) => {
     const [name, setName] = useState("");
+    const [description, setDescription] = useState("");
     const [img, setImg] = useState("");
     const [categories, setCategories] = useState([]);
 
@@ -18,6 +19,7 @@ export const Category = ({ setShowCategory }) => {
     const [showDelete, setShowDelete] = useState(false);
 
     const [errNameCategory, setErrNameCategory] = useState(false);
+    const [errDescriptionCategory, setErrDescriptionCategory] = useState(false);
 
     const CATEGORIES_PER_PAGE = 6;
     const [currentPage, setCurrentPage] = useState(1);
@@ -33,7 +35,9 @@ export const Category = ({ setShowCategory }) => {
         setShowDelete(false);
         setShowOptions(true);
         setErrNameCategory(false)
+        setErrDescriptionCategory(false)
         setName('')
+        setDescription('')
         setImg('')
     }
 
@@ -51,10 +55,17 @@ export const Category = ({ setShowCategory }) => {
             setErrNameCategory(false)
         }
 
-        if (!(name == null || !name || name.length === 0)) {
+        if (description == null || !description || description.length === 0) {
+            setErrDescriptionCategory(true)
+        } else {
+            setErrDescriptionCategory(false)
+        }
+
+        if (!(name == null || !name || name.length === 0) && !(description == null || !description || description.length === 0)) {
             e.preventDefault();
             toast.promise(axios.post("/api/category", {
                 name: name,
+                description: description,
                 url: img,
                 deleted: false,
             }),
@@ -168,6 +179,21 @@ export const Category = ({ setShowCategory }) => {
                     </div>
                     <div className="my-5">
                         <label className="block text-sm font-medium leading-6 text-gray-900">
+                            Short description
+                        </label>
+                        <textarea
+                            className={`block mt-2 w-full max-h-24 rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-black focus:outline-none transition ease-in-out duration-300 ${errDescriptionCategory ? 'ring-red-600' : 'ring-gray-300'} `}
+                            value={description}
+                            maxlength="45"
+                            onChange={()=> setDescription(event.target.value)}
+                        />
+                        {errDescriptionCategory &&
+                            <span className="flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1">
+                                You must enter a name to be able to create the category
+                            </span>}
+                    </div>
+                    <div className="my-5">
+                        <label className="block text-sm font-medium leading-6 text-gray-900">
                             Category image
                         </label>
                         <input
@@ -197,7 +223,7 @@ export const Category = ({ setShowCategory }) => {
                         return (
                             <div
                                 className={`flex flex-col items-center justify-between relative border-solid border-2 w-44 hover:scale-110 h-24 bg-cover bg-center border-stone-950 hover:border-red-800 hover:bg-red-600 hover:font-bold rounded-xl m-2 ease-out duration-300
-                                before:bg-black before:hover:bg-red-600 before:content-{''} before:w-full before:h-full before:absolute before:opacity-30 before:hover:opacity-50`}
+                                before:bg-black before:hover:bg-red-600 before:content-{''} before:w-full before:h-full before:absolute before:opacity-30 before:hover:opacity-50 before:rounded-xl`}
                                 id={category.id}
                                 onClick={() => handlerDelete(category.name)}
                                 style={{
