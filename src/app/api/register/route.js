@@ -20,16 +20,9 @@ export async function POST(request) {
   const body = await request.json();
 
   const {
-    firstName,
-    lastName,
-    address,
-    identification,
-    phone,
     email,
     password,
   } = body;
-
-  const { country, city, zipCode, street } = address;
 
   console.log("body", body);
 
@@ -47,15 +40,7 @@ export async function POST(request) {
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = await prisma.user.create({
       data: {
-        first_name: firstName,
-        last_name: lastName,
-        phone: parseInt(phone),
         email,
-        address: street,
-        country,
-        city,
-        zip_code: parseInt(zipCode),
-        identification,
         password: hashedPassword,
         role: {
           connect: { idrole: 2 },
@@ -69,10 +54,10 @@ export async function POST(request) {
       from: "noreply@infinit.com",
       to: email,
       subject: "Confirmación de registro",
-      text: `Hola ${firstName}, gracias por registrarte en INFINIT. Por favor, haz clic en el siguiente enlace para confirmar tu dirección de correo electrónico.`,
+      text: `Hola ${email}, gracias por registrarte en INFINIT. Por favor, haz clic en el siguiente enlace para confirmar tu dirección de correo electrónico.`,
       html: `<div style="background-color: #f0f0f0; padding: 20px;">
         <h1 style="color: #333333; font-family: Arial, sans-serif;">Bienvenido/a a INFINIT</h1>
-        <p style="color: #333333; font-family: Arial, sans-serif;">Hola <strong>${firstName}</strong>, gracias por registrarte en INFINIT. Estamos encantados de tenerte con nosotros.</p>
+        <p style="color: #333333; font-family: Arial, sans-serif;">Hola <strong>${email}</strong>, gracias por registrarte en INFINIT. Estamos encantados de tenerte con nosotros.</p>
         <p style="color: #333333; font-family: Arial, sans-serif;">Para completar tu registro, solo tienes que hacer clic en el siguiente botón y confirmar tu dirección de correo electrónico.</p>
         <a href="#" style="display: inline-block; background-color: #0078d4; color: white; padding: 10px 20px; text-decoration: none; font-family: Arial, sans-serif;">Confirmar correo electrónico</a>
         <p style="color: #333333; font-family: Arial, sans-serif;">Si tienes alguna pregunta o sugerencia, no dudes en contactarnos.</p>

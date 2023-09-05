@@ -1,15 +1,12 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 
-export default function PersonalDetails({ onBack, onNext, data }) {
+export default function UserDetails({ callback, data, loading, ready }) {
   const [firstName, setFirstName] = useState(data.firstName || "");
   const [lastName, setLastName] = useState(data.lastName || "");
   const [phone, setPhone] = useState(data.phone || "");
-  /*     const [address, setAddress] = useState(data.address || "");
-  const [city, setCity] = useState(data.city || "");
-  const [zipCode, setZipCode] = useState(data.setZipCode || "");
-  const [country, setCountry] = useState(data.country || ""); */
   const [identification, setIdentification] = useState(data.country || "");
 
   const [address, setAddress] = useState({
@@ -51,33 +48,28 @@ export default function PersonalDetails({ onBack, onNext, data }) {
     if (identificationError) {
       return;
     }
-
-    onNext({
+    loading();
+    axios.put(`/api/user/${data.email}`, {
       firstName,
       lastName,
       phone,
       address,
       identification,
+    }).then(function(response) {
+      ready();
+      callback();
+      setSubmitted(true);
+    }).finally(function(){
+      ready();
     });
-    setSubmitted(true);
   };
 
   const isButtonDisabled =
     firstName.trim() === "" ||
     lastName.trim() === "" ||
     phone.trim() === "" ||
-    /*  address.city.trim() === "" ||
-    address.zipCode.trim() === "" ||
-    address.country.trim() === "" ||
-    address.address.trim() === "" || */
     identification.trim() === "";
 
-  /* city.trim() === "";
-  zipCode.trim() === "";
-
-  country.selected; */
-
-  useEffect(() => {
     const fetchCountries = async () => {
       try {
         const response = await fetch("https://restcountries.com/v2/all");
@@ -89,6 +81,48 @@ export default function PersonalDetails({ onBack, onNext, data }) {
       }
     };
 
+    const fetchUser = async () => {
+      if (data) {
+        loading();
+        axios.get(`/api/user/${data.email}`).then(function(response) {
+          let needsUpdate = false;
+          if (response.data.first_name) {
+            setFirstName(response.data.first_name)
+          } else {
+            needsUpdate = true;
+          }
+          if (response.data.last_name) {
+            setLastName(response.data.last_name)
+          } else {
+            needsUpdate = true;
+          }
+          if (response.data.phone) {
+            setPhone(response.data.phone+'')
+          } else {
+            needsUpdate = true;
+          }
+          if (response.data.identification) {
+            setIdentification(response.data.identification)
+          } else {
+            needsUpdate = true;
+          }
+          if (response.data.address) {
+            setAddress({
+              street: response.data.address,
+              city: response.data.city,
+              zipCode: response.data.zip_code,
+              country: response.data.country,
+            })
+          } else {
+            needsUpdate = true;
+          }
+          ready();
+        })
+      }
+    }
+
+  useEffect(() => {
+    fetchUser();
     fetchCountries();
   }, []);
 
@@ -226,12 +260,6 @@ export default function PersonalDetails({ onBack, onNext, data }) {
         </div>
 
         <div className="flex items-center gap-8 mt-6">
-          <button
-            onClick={onBack}
-            className="w-full shadow-md bg-black hover:bg-primary transition all duration-300 font-medium text-white text-sm px-8 py-2 rounded-md"
-          >
-            Back
-          </button>
           <button
             onClick={handleSubmit}
             className={`w-full shadow-md transition-all duration-300 font-medium text-white text-sm px-8 py-2 rounded-md ${

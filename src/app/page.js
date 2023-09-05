@@ -94,19 +94,19 @@ const Hero = () => {
 
 const Category = ({ category }) => {
   return (
-    <Link href={`/fleet/${category.name}`}>
+    <Link href={`/fleet/${category.name}`}
+      className="w-48 h-24 rounded-xl bg-cover bg-center relative 
+      before:bg-black before:content-{''} before:w-full before:h-full before:absolute before:opacity-20"
+      style={{
+        backgroundImage: `url(${category.url})`,
+      }}
+    >
       <div
-        className="flex flex-col items-center justify-between "
+        className="absolute bottom-1/2 translate-y-1/2 left-1/2 -translate-x-1/2 text-white"
         key={category.idcategory}
       >
-        <Image
-          width={200}
-          height={200}
-          className="object-contain rounded-md"
-          src={category.url}
-          alt="category"
-        />
-        <p className="font-poppins text-lg font-bold capitalize">
+
+        <p className="font-poppins text-lg font-bold capitalize shadow-md"  style={{ textShadow:  '-2px 2px 5px rgba(0,0,0,1)' }}>
           {category.name}
         </p>
       </div>

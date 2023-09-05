@@ -58,11 +58,11 @@ model dealer {
 
 model user {
   iduser         Int           @id @default(autoincrement())
-  first_name     String
-  last_name      String
-  phone          Int
+  first_name     String?
+  last_name      String?
+  phone          Int?
   email          String        @unique(map: "email_UNIQUE")
-  identification String
+  identification String?
   password       String
   address        String?
   city           String?
