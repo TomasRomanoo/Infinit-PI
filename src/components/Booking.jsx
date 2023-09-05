@@ -1,12 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useContext, useState } from "react";
 
 import { MdOutlineLocationOn, MdMyLocation } from "react-icons/md";
 import { BiDirections } from "react-icons/bi";
 import { BsCalendar3 } from "react-icons/bs";
+import Swal from "sweetalert2";
+import withReactContent from 'sweetalert2-react-content';
 import { motion } from "framer-motion";
 import axios from "axios";
+import UserDetails from "./UserDetails";
+import { UserContext } from "./context/UserContext";
 
 export const Booking = ({ vehicle }) => {
+  
+  const userContext = useContext(UserContext);
+  let user = userContext.getUser()
+
   const [modal, setModal] = useState(false);
 
   const [locations, setLocations] = useState([{}]);
@@ -16,6 +24,7 @@ export const Booking = ({ vehicle }) => {
     checkout: "",
     qty: 0,
   });
+  const MySwal = withReactContent(Swal)
 
   const hideModal = () => {
     console.log("Modal hideModal called"); // Add this line
@@ -93,7 +102,20 @@ export const Booking = ({ vehicle }) => {
     }
   };
 
+  const checkUserData = () => {
+
+    MySwal.fire({
+      title: <p>Please, check your data before continuing</p>,
+      showCancelButton: false, // There won't be any cancel button
+      showConfirmButton: false,
+      html: <UserDetails callback={filterVehicles} data={user} ready={MySwal.hideLoading}  loading={MySwal.showLoading}></UserDetails>,
+    }).then(() => {
+      return MySwal.close()
+    })
+  }
+
   const filterVehicles = () => {
+    MySwal.close()
     console.log("location :>> ", location);
     console.log("dates :>> ", dates);
   };
@@ -189,7 +211,7 @@ export const Booking = ({ vehicle }) => {
 
       <button
         onClick={() => {
-          filterVehicles();
+          checkUserData();
         }}
         className="bg-white text-black font-bold py-4 rounded-lg w-full lg:w-[20%] hover:bg-gray-200 transition-all duration-200"
       >

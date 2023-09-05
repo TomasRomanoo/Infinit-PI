@@ -1,35 +1,20 @@
 "use client";
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 
 import DataDetails from "./dataDetails";
-import PersonalDetails from "./personalDetails";
 import Success from "./success";
 import { Infinit } from "@/components/Infinit";
 
 export default function Registration() {
   const [step, setStep] = useState(1);
   const [dataDetails, setDataDetails] = useState({});
-  const [personalDetails, setPersonalDetails] = useState({});
 
   const handleDataDetailsNext = (data) => {
     setDataDetails(data);
-    setStep(step + 1);
-  };
-
-  const handlePersonalDetailsNext = (data) => {
-    setPersonalDetails(data);
-
-    let completeObject = {
-      ...dataDetails,
-      ...data,
-    };
-
-    console.log('completeObject :>> ', completeObject);
-
     axios
-      .post("/api/register", completeObject)
+      .post("/api/register", data)
       .then((res) => {
         console.log("res :>> ", res);
         setStep(step + 1);
@@ -37,24 +22,6 @@ export default function Registration() {
       .catch((error) => {
         console.log("error :>> ", error);
       });
-
-    /*  toast.promise(axios.post("/api/register", completeObject), {
-      loading: "Loading...",
-      success: (data) => {
-      
-        return `User has been created successfully`;
-      },
-      error: (error) => {
-        console.log(error);
-        if (error.response && error.response.data) {
-          return error.response.data.message;
-        }
-      },
-    }); */
-  };
-
-  const handleConfirmationBack = () => {
-    setStep(step - 1);
   };
 
   return (
@@ -71,15 +38,8 @@ export default function Registration() {
       {step === 1 && (
         <DataDetails onNext={handleDataDetailsNext} data={dataDetails} />
       )}
-      {step === 2 && (
-        <PersonalDetails
-          onBack={handleConfirmationBack}
-          onNext={handlePersonalDetailsNext}
-          data={personalDetails}
-        />
-      )}
 
-      {step === 3 && <Success />}
+      {step === 2 && <Success />}
     </div>
   );
 }
