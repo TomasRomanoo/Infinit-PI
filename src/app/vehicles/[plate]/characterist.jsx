@@ -14,6 +14,7 @@ const Caracteristicas = () => {
     { icon: "🛡️", text: "Safety Certified" },
   ];
 
+
   useEffect(() => {
     // Función para mezclar aleatoriamente la matriz
     const shuffleArray = (array) => {

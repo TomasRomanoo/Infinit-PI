@@ -42,6 +42,7 @@ export default function Home() {
         animate={{ opacity: 1, y: 0, transition: { duration: 0.3 } }}
       >
         <Booking />
+        
       </motion.div>
       <Hero />
       <div className="flex flex-wrap justify-center items-center gap-4 mt-20">
