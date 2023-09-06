@@ -184,7 +184,7 @@ export const Category = ({ setShowCategory }) => {
                         <textarea
                             className={`block mt-2 w-full max-h-24 rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-black focus:outline-none transition ease-in-out duration-300 ${errDescriptionCategory ? 'ring-red-600' : 'ring-gray-300'} `}
                             value={description}
-                            maxlength="45"
+                            maxlength="100"
                             onChange={()=> setDescription(event.target.value)}
                         />
                         {errDescriptionCategory &&
