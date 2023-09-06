@@ -111,12 +111,13 @@ model specification {
 }
 
 model favorite {
-  idfavorite Int     @id @default(autoincrement())
-  vehicle    vehicle @relation(fields: [idvehicle], references: [idvehicle], onDelete: Cascade)
-  idvehicle  Int
-  user       user    @relation(fields: [iduser], references: [iduser], onDelete: Cascade)
-  iduser     Int
+  vehicle          vehicle @relation(fields: [idvehicle], references: [idvehicle], onDelete: Cascade)
+  idvehicle        Int
+  user             user @relation(fields: [iduser], references: [iduser], onDelete: Cascade)
+  iduser           Int
+  @@id([iduser, idvehicle])
 }
+
 
 model reservation {
   idreservation    Int      @id @default(autoincrement())
