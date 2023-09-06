@@ -3,16 +3,23 @@ import { NextResponse } from "next/server";
 const prisma = new PrismaClient();
 
 export async function POST(request) {
-  console.log("The POST function has been called.");
+  console.log("The POST CATEGORY function has been called.");
   try {
     const body = await request.json();
-    const { name, url } = body;
+    const { name,description,url,deleted } = body;
+
+    const data = {
+      name,
+      description,
+      deleted
+    }
+
+    if (url != null) {
+      data.url = url;
+    }
 
     const brand = await prisma.category.create({
-      data: {
-        name,
-        url,
-      },
+      data
     });
 
     return NextResponse.json(
@@ -21,7 +28,7 @@ export async function POST(request) {
     );
   } catch (error) {
     console.error(error);
-    return NextResponse.json({ Error: "Error" }, { status: 500 });
+    return NextResponse.json({ Error: error.message }, { status: 500 });
   }
 }
 

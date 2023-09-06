@@ -17,8 +17,8 @@ model vehicle {
   long_description   String
   images             image[]
   specifications     specification[]
-  category           category        @relation(fields: [categoryIdcategory], references: [idcategory])
-  categoryIdcategory Int
+  category           category?        @relation(fields: [categoryIdcategory], references: [idcategory], onDelete: SetNull)
+  categoryIdcategory Int?
   model              model?          @relation(fields: [modelIdmodel], references: [idmodel])
   modelIdmodel       Int?
   dealer             dealer?              @relation(fields: [dealerIddealer], references: [iddealer])
@@ -93,11 +93,12 @@ model image {
 }
 
 model category {
-  idcategory Int       @id @default(autoincrement())
-  name       String    @unique(map: "category_UNIQUE")
-  url        String
-  vehicles   vehicle[]
-  deleted    Boolean
+  idcategory    Int       @id @default(autoincrement())
+  name          String    @unique(map: "category_UNIQUE")
+  description   String
+  url           String
+  vehicles      vehicle[]
+  deleted       Boolean
 }
 
 model specification {
@@ -110,11 +111,11 @@ model specification {
 }
 
 model favorite {
-  vehicle          vehicle @relation(fields: [idvehicle], references: [idvehicle], onDelete: Cascade)
-  idvehicle        Int
-  user             user @relation(fields: [iduser], references: [iduser], onDelete: Cascade)
-  iduser           Int
-  @@id([iduser, idvehicle])
+  idfavorite Int     @id @default(autoincrement())
+  vehicle    vehicle @relation(fields: [idvehicle], references: [idvehicle], onDelete: Cascade)
+  idvehicle  Int
+  user       user    @relation(fields: [iduser], references: [iduser], onDelete: Cascade)
+  iduser     Int
 }
 
 model reservation {
