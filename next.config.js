@@ -2,6 +2,8 @@
 const nextConfig = {
   images: {
     
+    output: "export",
+
     domains: [
       'upload.wikimedia.org',
       'c6-pi-grupo3.s3.amazonaws.com',
