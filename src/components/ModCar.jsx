@@ -56,8 +56,8 @@ export const ModCar = ({ vehicles, firstIndex, lastIndex }) => {
     fetchCategories();
   }, []);
   useEffect(() => {
-    console.log(category);
-  }, [category]);
+    fetchCategories();
+  }, [showCategory]);
 
   const handlerModal = (vehicle, plate) => {
     axios.get(`/api/vehicle/${plate}`).then(function (response) {

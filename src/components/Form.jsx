@@ -174,6 +174,10 @@ export const Form = () => {
   };
 
   useEffect(() => {
+    fetchCategories();
+  }, [showCategory]);
+
+  useEffect(() => {
     fetchBrands();
     fetchCategories();
   }, []);
