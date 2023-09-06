@@ -120,10 +120,6 @@ export const Navbar = () => {
             <Link href="/services">Services</Link>
           </li>
           <li className="text-lg link-item">
-            <Link href="/favorites">Favorites</Link>
-          </li>
-
-          <li className="text-lg link-item">
             <Link href="/about">About</Link>
           </li>
         {  isAdmin === true ?
