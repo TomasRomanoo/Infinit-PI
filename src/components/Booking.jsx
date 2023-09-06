@@ -12,6 +12,7 @@ import { DatePicker } from "antd";
 import Link from "next/link";
 import Swal from "sweetalert2/dist/sweetalert2.js";
 import "sweetalert2/src/sweetalert2.scss";
+import swiperConfig from "@/utils/swiperConfig";
 
 export const Booking = () => {
   const [modal, setModal] = useState(false);
@@ -25,8 +26,8 @@ export const Booking = () => {
 
   const [locations, setLocations] = useState([{}]);
 
-  const [startDate, setStartDate] = useState(new Date("2014/02/08"));
-  const [endDate, setEndDate] = useState(new Date("2014/02/10"));
+  const [startDate, setStartDate] = useState();
+  const [endDate, setEndDate] = useState();
 
   useEffect(() => {
     const maxDisplayCount = showAllVehicles ? vehicles.length : 2;
@@ -40,7 +41,6 @@ export const Booking = () => {
   }, [vehiclesModal]);
 
   const hideModal = () => {
-    console.log("Modal hideModal called");
     setModal(false);
   };
 
@@ -60,9 +60,7 @@ export const Booking = () => {
           setModal(false);
         }
       })
-      .catch((error) => {
-        console.log("error :>> ", error);
-      });
+      .catch((error) => {});
   };
   const debounce = (func, delay) => {
     let timeout;
@@ -93,38 +91,29 @@ export const Booking = () => {
       timerProgressBar: true,
     });
 
+    console.log("location :>> ", location.city);
+    console.log("dates :>> ", startDate, endDate);
+
     let object = {
       city: location.city,
       startDate: startDate,
       endDate: endDate,
     };
 
-    console.log("location :>> ", location.city);
-    console.log("dates :>> ", startDate, endDate);
-
-    /*   if (location == undefined) {
+    if (object.city == undefined) {
       Toast.fire({
-        icon: "info",
+        icon: "error",
         title: "You must enter a location",
       });
       return;
     }
 
-    if (startDate == undefined || endDate == undefined) {
-      Toast.fire({
-        icon: "info",
-        title: "You must enter a location",
-      });
-      return;
-    } */
-
-    if (vehicles.length > 0) {
-      setVehiclesModal(true);
-    } else {
+    if (object.startDate == undefined || object.endDate == undefined) {
       Toast.fire({
         icon: "error",
-        title: "Cannot find vehicles in that location",
+        title: "You must enter a range of dates",
       });
+      return;
     }
 
     console.log("object :>> ", object);
@@ -133,9 +122,18 @@ export const Booking = () => {
       .post("/api/dealer", object)
       .then((res) => {
         console.log("cars location >> ", res.data);
-        setVehicles(res.data);
+        if (res.data.length > 0) {
+          setVehicles(res.data);
+          setVehiclesModal(true);
+        }
       })
       .catch((error) => {
+        setVehiclesModal(false);
+        Toast.fire({
+          icon: "error",
+          title: "Cannot find vehicles in that location",
+        });
+
         console.error("Error: ", error);
       });
   };
@@ -381,7 +379,6 @@ const Modal = ({ locations, setLocation, query, hideModal }) => {
             <li
               key={location.id}
               onClick={() => {
-                console.log("Location clicked"); // Add this line
                 setLocation(location);
                 hideModal();
               }}

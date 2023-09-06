@@ -21,8 +21,8 @@ export async function POST(request) {
       );
     } */
 
-    const formattedStartDate = new Date(startDate);
-    const formattedEndDate = new Date(endDate);
+/*     const formattedStartDate = new Date(startDate);
+    const formattedEndDate = new Date(endDate); */
 
     const carsInCityAndDateRange = await prisma.vehicle.findMany({
       where: {
