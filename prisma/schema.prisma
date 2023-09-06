@@ -17,8 +17,8 @@ model vehicle {
   long_description   String
   images             image[]
   specifications     specification[]
-  category           category        @relation(fields: [categoryIdcategory], references: [idcategory])
-  categoryIdcategory Int
+  category           category?        @relation(fields: [categoryIdcategory], references: [idcategory], onDelete: SetNull)
+  categoryIdcategory Int?
   model              model?          @relation(fields: [modelIdmodel], references: [idmodel])
   modelIdmodel       Int?
   dealer             dealer?              @relation(fields: [dealerIddealer], references: [iddealer])

@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import { log } from "console";
 import { NextResponse } from "next/server";
 const prisma = new PrismaClient();
 
@@ -50,70 +51,39 @@ export async function GET(req, context) {
   }
 }
 
-
-export async function DELETE(request) {
-  try {
-    const urlParts = request.url.split("/");
-    const name = urlParts[urlParts.length - 1];
-    if (!name) {
-      return NextResponse.json(
-        { error: "Debes proporcionar el nombre de la categoria" },
-        { status: 400 }
-      );
-    }
+export async function DELETE(req,context) {
+  console.log("The DELETE function has been called.");
+  try {    
+    const name = context.params.name
 
     const category = await prisma.category.findUnique({
       where: {
-        name,
+        name: name,
       },
     });
 
-    // const vehicles = await prisma.vehicle.findMany({
-    //   where: {
-    //     categoryIdcategory: category.idcategory,
-    //   },
-    // });
-
-
-    // vehicles.map((vehicle) =>
-    // prisma.vehicle.update({
-    //   where: { idvehicle: vehicle.idvehicle },
-    //   data: { categoryIdcategory: undefined },
-    // })
-    // )
 
     if (!category) {
       return NextResponse.json(
-        { error: "Categoria no encontrada" },
+        { message: "Category not found" },
         { status: 404 }
       );
     }
 
-    // await prisma.category.delete({
-    //   where: {
-    //     name,
-    //   },
-    // });`
-
-        await prisma.category.update({
-      where: {
-        idcategory: category.idcategory,
-      },
-      data:{
-        deleted:true,
-      }
-    });
-
+    await prisma.$transaction([
+      prisma.vehicle.updateMany({
+        where: { categoryIdcategory: category.idcategory },
+        data: { categoryIdcategory: null },
+      }),
+      prisma.category.delete({ where: { idcategory: category.idcategory } }),
+    ]);
 
     return NextResponse.json(
-      { message: "Categoria eliminado correctamente" },
+      { message: "Category deleted successfully" },
       { status: 200 }
     );
   } catch (error) {
     console.error(error);
-    return NextResponse.json(
-      { Error: "Error al eliminar el categoria" },
-      { status: 500 }
-    );
+    return NextResponse.json({ Error: "Error" }, { status: 500 });
   }
 }
