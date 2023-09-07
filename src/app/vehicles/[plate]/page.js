@@ -28,15 +28,28 @@ import { Booking } from "@/components/Booking";
 import Characterist from "./characterist";
 import AvailabilityCalendar from "./AvailabilityCalendar";
 
-const Detail = ({params}) => {
+const Detail = ({ params }) => {
   const [vehicle, setVehicle] = useState({});
   const router = useRouter();
   const [isGalleryOpen, setGalleryOpen] = useState(false);
   const [selectedImageId, setSelectedImageId] = useState(null);
-  
+
+  const [showMessage, setShowMessage] = useState(false);
+  const [messageContent, setMessageContent] = useState("");
+
+  const handleShowMessage = (message) => {
+    setMessageContent(message);
+    setShowMessage(true);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleCloseMessage = () => {
+    setShowMessage(false);
+  };
+
 
   const fetchVehicle = async () => {
-    const res = await axios("/api/vehicle/"+params.plate);
+    const res = await axios("/api/vehicle/" + params.plate);
     //mocking images until DB is ready
     if (!res.data.images || !res.data.images.length) {
       res.data.images = [
@@ -58,7 +71,7 @@ const Detail = ({params}) => {
       ]
     }
     setVehicle(res.data);
-    
+
   };
   console.log("idVehicle>>", vehicle.idvehicle);
 
@@ -84,13 +97,12 @@ const Detail = ({params}) => {
         />
       )}
       <div
-        className={`flex flex-col gap-4 ${
-          isGalleryOpen ? "opacity-10" : "opacity-100"
-        }`}
+        className={`flex flex-col gap-4 ${isGalleryOpen ? "opacity-10" : "opacity-100"
+          }`}
         id="detail"
       >
         <div className="flex items-center justify-between">
-          <p className="text-2xl font-poppins font-semibold capitalize">{vehicle.model?.brand?.name +'  ' + vehicle.model?.name + '  '+vehicle.plate}</p>
+          <p className="text-2xl font-poppins font-semibold capitalize">{vehicle.model?.brand?.name + '  ' + vehicle.model?.name + '  ' + vehicle.plate}</p>
           {/* <button
             onClick={() => {
               router.back();
@@ -103,7 +115,7 @@ const Detail = ({params}) => {
 
         <div className="bg-white rounded-lg w-full h-full shadow-lg py-8 p-4 md:px-12 space-y-8">
           {/* <Booking /> */}
-          <AvailabilityCalendar idvehicle={vehicle.idvehicle}/>
+          <AvailabilityCalendar idvehicle={vehicle.idvehicle} />
           <Gallery
             isGalleryOpen={isGalleryOpen}
             openGalleryModal={openGalleryModal}
@@ -117,22 +129,92 @@ const Detail = ({params}) => {
             <p className="text-poppins text-2xl mt-10">Description</p>
 
             <p className="text-gray-400 text-xl">{vehicle.long_description}</p>
-          </div> 
-                
-          <Characterist/>
-          
+          </div>
 
-        <div class="flex justify-end">
-          <button
-            onClick={() => {
-              router.back();
-            }}
-            // className="text-xl text-blue-700 hover:text-purple-600"
-            className="w-1/6 bg-primary text-white p-4 rounded-md hover:bg-secondary transition-all duration-200"
-          >
-            Go back
-          </button>
-        </div>
+          <Characterist />
+
+
+          <div class="flex justify-end">
+            <button
+              onClick={() => {
+                router.back();
+              }}
+              // className="text-xl text-blue-700 hover:text-purple-600"
+              className="w-1/6 bg-primary text-white p-4 rounded-md hover:bg-secondary transition-all duration-200"
+            >
+              Go back
+            </button>
+          </div>
+          <div>
+            <div className="flex justify-end space-x-4">
+              <button
+                onClick={() => handleShowMessage(<div className="policy-list">
+                  <div className="policy-container" tabIndex="-1">
+                    <h2 className="policy-title">PRODUCT POLICES</h2>
+                    
+                      <div className="policy-list">
+                        <div className="policy">
+                          <h3 className="policy-subtitle">Extended warranty:</h3>
+                          <p className="policy-description">
+                            High-end cars often come with an extended warranty that covers mechanical and electronic components for a longer period than standard vehicles. This can provide homeowners peace of mind and cover costly repairs.
+                          </p>
+                        </div>
+                        <div className="policy">
+                          <h3 className="policy-subtitle">Roadside Assistance Programs:  </h3>
+                          <p className="policy-description">
+                            High-end cars often come with roadside assistance programs that provide help in the event of problems such as a dead battery, flat tires, or the need to tow.
+                          </p>
+                        </div>
+                        <div className="policy">
+                          <h3 className="policy-subtitle">Genuine Parts Replacement Policy: </h3>
+                          <p className="policy-description">
+                            Some manufacturers offer service packages that cover regular maintenance for the first few years of ownership. This can include oil changes, inspections, and other maintenance tasks, making life easier for the owner and ensuring the vehicle is kept in top condition.
+                          </p>
+                     
+                      </div>
+                      <div className="policy">
+                        <h3 className="policy-subtitle">Access to Exclusive Events: </h3>
+                        <p className="policy-description">
+                          High-end car owners can receive invitations to exclusive events such as new model launches, track driving events, and other brand-related events.
+                        </p>
+                      </div>
+                      <div className="policy">
+                        <h3 className="policy-subtitle">Premium Customer Service:</h3>
+                        <p className="policy-description">
+                          High-end brands often offer a higher level of customer service, including more personalized treatment and access to dedicated service representatives.
+                        </p>
+                      </div>
+                      <div className="policy">
+                        <h3 className="policy-subtitle">Special Financing Programs:  </h3>
+                        <p className="policy-description">
+                          Some manufacturers offer preferential interest rates or exclusive financing programs for high-end vehicles.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>)}
+                className="w-1/6 bg-primary text-white p-4 rounded-md hover:bg-secondary transition-all duration-200 mx-auto autoFocus"
+              >
+                Policy product
+              </button>
+            </div>
+            {showMessage && (
+              <div className="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center  bg-black bg-opacity-50">
+                <div
+                  className="policy-list"
+                >
+                  {messageContent} {/* Muestra el contenido del mensaje */}
+                  <button
+                    onClick={() => setShowMessage(false)}
+                    className="mt-2 bg-primary text-white px-3 py-1 rounded-md hover:bg-secondary"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            )}
+          </div >
         </div>
       </div>
     </>
@@ -184,8 +266,11 @@ const Gallery = ({
             See more
           </button>
         </div>
+
       </div>
+
     </div>
+
   );
 };
 
