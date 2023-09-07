@@ -55,7 +55,7 @@ const AvailabilityCalendar = ({idvehicle}) => {
             monthsShown={2}
             withPortal          
             showIcon         
-            placeholderText="show availability"
+            placeholderText="Show availability"
             />
             
           }       

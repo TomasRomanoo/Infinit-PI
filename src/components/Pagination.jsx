@@ -79,7 +79,7 @@ export const Pagination = ({ currentPage, vehiclesPerPage, setCurrentPage, total
             </div>
             {   
                 totalPages > 5 &&
-                <p className="h-12">total pages {totalPages}</p>
+                <p className="h-12 mt-2">Total pages: {totalPages}</p>
             }
         </div>
     );

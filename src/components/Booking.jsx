@@ -85,16 +85,22 @@ export const Booking = () => {
   };
 
   const checkUserData = () => {
-
     MySwal.fire({
       title: <p>Please, check your data before continuing</p>,
       showCancelButton: false, // There won't be any cancel button
       showConfirmButton: false,
-      html: <UserDetails callback={filterVehicles} data={user} ready={MySwal.hideLoading}  loading={MySwal.showLoading}></UserDetails>,
+      html: (
+        <UserDetails
+          callback={filterVehicles}
+          data={user}
+          ready={MySwal.hideLoading}
+          loading={MySwal.showLoading}
+        ></UserDetails>
+      ),
     }).then(() => {
-      return MySwal.close()
-    })
-  }
+      return MySwal.close();
+    });
+  };
 
   const filterVehicles = () => {
     const Toast = Swal.mixin({
@@ -156,8 +162,8 @@ export const Booking = () => {
     <>
       <div className="w-full p-6 bg-[#00243f] relative flex flex-col lg:flex-row items-center justify-around rounded-md shadow-md gap-4 mb-12">
         {/* Location */}
-         {/* Location */}
-         <div
+        {/* Location */}
+        <div
           className="flex flex-col lg:flex-row items-center w-full relative "
           onClick={() => {
             searchLocations();
@@ -316,8 +322,8 @@ export const Booking = () => {
               <Swiper {...swiperConfig}>
                 {vehicles.map((vehicle) => {
                   return (
-                    <SwiperSlide>
-                      <div className="flex flex-col justify-between p-2 shadow-md rounded-lg gap-6">
+                    <SwiperSlide className="">
+                      <div className="flex  w-screen flex-col justify-between p-2 shadow-md rounded-lg gap-6">
                         <div>
                           <Image
                             src={honda}
