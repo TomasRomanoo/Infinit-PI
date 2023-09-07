@@ -156,7 +156,8 @@ export const Booking = () => {
     <>
       <div className="w-full p-6 bg-[#00243f] relative flex flex-col lg:flex-row items-center justify-around rounded-md shadow-md gap-4 mb-12">
         {/* Location */}
-        <div
+         {/* Location */}
+         <div
           className="flex flex-col lg:flex-row items-center w-full relative "
           onClick={() => {
             searchLocations();
@@ -393,6 +394,7 @@ const Modal = ({ locations, setLocation, query, hideModal }) => {
             <li
               key={location.id}
               onClick={() => {
+                console.log("Location clicked"); // Add this line
                 setLocation(location);
                 hideModal();
               }}

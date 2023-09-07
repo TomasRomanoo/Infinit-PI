@@ -21,6 +21,7 @@ export async function GET(req, context) {
         OR: [
           { address: { contains: name } },
           { city: { contains: name } },
+          { state: { contains: name } },
           { country: { contains: name } },
         ],
       },
