@@ -147,7 +147,6 @@ const Detail = ({ params }) => {
                 onClick={() => handleShowMessage(<div className="policy-list">
                   <div className="policy-container" tabIndex="-1">
                     <h2 className="policy-title">PRODUCT POLICES</h2>
-                    
                       <div className="policy-list">
                         <div className="policy">
                           <h3 className="policy-subtitle">Extended warranty:</h3>
@@ -166,7 +165,6 @@ const Detail = ({ params }) => {
                           <p className="policy-description">
                             Some manufacturers offer service packages that cover regular maintenance for the first few years of ownership. This can include oil changes, inspections, and other maintenance tasks, making life easier for the owner and ensuring the vehicle is kept in top condition.
                           </p>
-                     
                       </div>
                       <div className="policy">
                         <h3 className="policy-subtitle">Access to Exclusive Events: </h3>
@@ -186,9 +184,20 @@ const Detail = ({ params }) => {
                           Some manufacturers offer preferential interest rates or exclusive financing programs for high-end vehicles.
                         </p>
                       </div>
-                    </div>
-                  </div>
-
+                      <div className="policy">
+                        <h3 className="policy-subtitle">Continuous Upgrade Program:  </h3>
+                        <p className="policy-description">
+                       In an effort to keep our high-end vehicles at the forefront of technology and performance, we offer a continuous upgrade program. This allows owners to trade in their current models for the latest versions with an attractive discount. We want you to always drive the latest and the best.
+                        </p>
+                      </div>
+                      <div className="policy">
+                        <h3 className="policy-subtitle">Exclusive Driving Experience:  </h3>
+                        <p className="policy-description">
+                        As the owner of a high-end luxury car from our brand, you will have exclusive access to unique driving experiences. This includes track driving events, exclusive scenic routes, and the opportunity to test drive our newest models before anyone else. We want you to fully enjoy your driving experience.
+                        </p>
+                        </div>
+                      </div>
+                    </div>          
                 </div>)}
                 className="w-1/6 bg-primary text-white p-4 rounded-md hover:bg-secondary transition-all duration-200 mx-auto autoFocus"
               >
