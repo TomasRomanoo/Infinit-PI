@@ -9,17 +9,17 @@ datasource db {
 
 model vehicle {
   idvehicle          Int                  @id @default(autoincrement())
-  name               String
-  plate              String               @unique(map: "plate_UNIQUE")
+  name               String 
+  plate              String          @unique(map: "plate_UNIQUE")
   detail             String
   year               Int
   price_per_day      Float
   long_description   String
   images             image[]
   specifications     specification[]
-  category           category             @relation(fields: [categoryIdcategory], references: [idcategory])
-  categoryIdcategory Int
-  model              model?               @relation(fields: [modelIdmodel], references: [idmodel])
+  category           category?        @relation(fields: [categoryIdcategory], references: [idcategory], onDelete: SetNull)
+  categoryIdcategory Int?
+  model              model?          @relation(fields: [modelIdmodel], references: [idmodel])
   modelIdmodel       Int?
   dealer             dealer?              @relation(fields: [dealerIddealer], references: [iddealer])
   dealerIddealer     Int?
@@ -58,11 +58,11 @@ model dealer {
 
 model user {
   iduser         Int           @id @default(autoincrement())
-  first_name     String
-  last_name      String
-  phone          Int
+  first_name     String?
+  last_name      String?
+  phone          Int?
   email          String        @unique(map: "email_UNIQUE")
-  identification String
+  identification String?
   password       String
   address        String?
   city           String?
@@ -73,8 +73,8 @@ model user {
   idrole         Int           @default(2)
   reservation    reservation[]
   favorites      favorite[]
-  order          order[]
   deleted        Boolean
+  order          order[]
 }
 
 model role {
@@ -93,11 +93,12 @@ model image {
 }
 
 model category {
-  idcategory Int       @id @default(autoincrement())
-  name       String    @unique(map: "category_UNIQUE")
-  url        String
-  vehicles   vehicle[]
-  deleted    Boolean
+  idcategory    Int       @id @default(autoincrement())
+  name          String    @unique(map: "category_UNIQUE")
+  description   String
+  url           String
+  vehicles      vehicle[]
+  deleted       Boolean
 }
 
 model specification {
@@ -110,18 +111,18 @@ model specification {
 }
 
 model favorite {
-  vehicle   vehicle @relation(fields: [idvehicle], references: [idvehicle], onDelete: Cascade)
-  idvehicle Int
-  user      user    @relation(fields: [iduser], references: [iduser], onDelete: Cascade)
-  iduser    Int
-
+  vehicle          vehicle @relation(fields: [idvehicle], references: [idvehicle], onDelete: Cascade)
+  idvehicle        Int
+  user             user @relation(fields: [iduser], references: [iduser], onDelete: Cascade)
+  iduser           Int
   @@id([iduser, idvehicle])
 }
 
+
 model reservation {
   idreservation    Int      @id @default(autoincrement())
-  checkin_date     DateTime @db.Date
-  checkout_date    DateTime @db.Date
+  checkin_date     DateTime
+  checkout_date    DateTime
   vehicle          vehicle  @relation(fields: [vehicleIdvehicle], references: [idvehicle], onDelete: Cascade)
   user             user     @relation(fields: [userIduser], references: [iduser], onDelete: Cascade)
   vehicleIdvehicle Int
@@ -138,8 +139,8 @@ model order {
 
 model availabilityPeriod {
   id        Int      @id @default(autoincrement())
-  startDate DateTime @db.Date
-  endDate   DateTime @db.Date
+  startDate DateTime
+  endDate   DateTime
   vehicle   vehicle  @relation(fields: [vehicleId], references: [idvehicle], onDelete: Cascade)
   vehicleId Int
 }

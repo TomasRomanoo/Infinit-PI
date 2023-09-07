@@ -21,6 +21,7 @@ export async function GET(request) {
         email,
       },
       select: {
+        email: true,
         first_name: true,
         last_name: true,
         phone: true,
@@ -67,9 +68,19 @@ export async function PUT(request) {
         { status: 404 }
       );
     }
+    const { country, city, zipCode, street } = body.address;
     const updatedUser = await prisma.user.update({
       where: { email },
-      data: body,
+      data: {
+        first_name: body.firstName,
+        last_name: body.lastName,
+        phone: parseInt(body.phone),
+        address: street,
+        country,
+        city,
+        zip_code: parseInt(zipCode),
+        identification: body.identification,
+      },
     });
     return NextResponse.json(updatedUser, { status: 200 });
   } catch (error) {

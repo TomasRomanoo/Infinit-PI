@@ -1,9 +1,15 @@
 /** @type {import('next').NextConfig} */
-module.exports = {
+const nextConfig = {
   images: {
-    unoptimized: true,
-    /*  domains: ["c6-pi-grupo3.s3.amazonaws.com"],
-    domains: ['cdn.pixabay.com'],
+    
+    output: "export",
+
+    domains: [
+      'upload.wikimedia.org',
+      'c6-pi-grupo3.s3.amazonaws.com',
+      'cdn.pixabay.com',
+      'assets.example.com',
+    ],
     remotePatterns: [
       {
         protocol: "https",
@@ -14,6 +20,7 @@ module.exports = {
     ],
   },
   typescript: {
-    ignoreBuildErrors: true, */
+    ignoreBuildErrors: true,
   },
 };
+module.exports = nextConfig;

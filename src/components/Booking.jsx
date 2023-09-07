@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useContext, useState } from "react";
 
 import { MdOutlineLocationOn, MdMyLocation } from "react-icons/md";
 import { motion } from "framer-motion";
@@ -83,6 +83,18 @@ export const Booking = () => {
       debounce(searchLocations(newQuery), 300);
     }
   };
+
+  const checkUserData = () => {
+
+    MySwal.fire({
+      title: <p>Please, check your data before continuing</p>,
+      showCancelButton: false, // There won't be any cancel button
+      showConfirmButton: false,
+      html: <UserDetails callback={filterVehicles} data={user} ready={MySwal.hideLoading}  loading={MySwal.showLoading}></UserDetails>,
+    }).then(() => {
+      return MySwal.close()
+    })
+  }
 
   const filterVehicles = () => {
     const Toast = Swal.mixin({

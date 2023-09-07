@@ -4,9 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build && next export -o build",
+    "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "deploy": "aws s3 sync out/ s3://c6-pi-grupo3 --acl public-read"
   },
   "prisma": {
     "seed": "node --loader ts-node/esm prisma/seed.ts"
@@ -14,7 +15,11 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.391.0",
     "@aws-sdk/lib-storage": "^3.391.0",
-    "@prisma/client": "^5.1.1",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.14.7",
+    "@mui/material": "^5.14.7",
+    "@prisma/client": "^5.2.0",
     "@react-oauth/google": "^0.11.1",
     "@react-three/drei": "^9.80.3",
     "@react-three/fiber": "^8.13.7",
@@ -36,20 +41,21 @@
     "postcss": "8.4.27",
     "react": "18.2.0",
     "react-calendar": "^4.6.0",
+    "react-datepicker": "^4.16.0",
     "react-dom": "18.2.0",
     "react-icons": "^4.10.1",
-    "react-range-picker": "^1.0.1",
     "sass": "^1.65.1",
     "sharp": "^0.32.5",
     "sonner": "^0.6.2",
     "sweetalert2": "^11.7.22",
+    "sweetalert2-react-content": "^5.0.7",
     "swiper": "^9.4.0",
     "tailwindcss": "3.3.3",
     "three": "^0.155.0"
   },
   "devDependencies": {
     "@types/node": "^20.5.0",
-    "prisma": "^5.1.1",
+    "prisma": "^5.2.0",
     "ts-node": "^10.9.1",
     "typescript": "^5.1.6"
   }

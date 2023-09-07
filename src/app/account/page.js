@@ -39,7 +39,7 @@ export default function Account(){
                 setFirstName(response.data.first_name)
                 setLastName(response.data.last_name)
                 setPhone(response.data.phone)
-                setEmail(response.data.address)
+                setEmail(response.data.email)
                 setIdentification(response.data.identification)
                 setAddres(response.data.address)
                 setCity(response.data.city)

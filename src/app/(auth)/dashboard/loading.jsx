@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { Loading } from "@/components/Loading";
-export default function LoadingScreen() {
+export default function LoadingScreenDashboard({children}) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -16,6 +16,6 @@ export default function LoadingScreen() {
     return <Loading />;
   }
 
+  return children
 
-  
 }

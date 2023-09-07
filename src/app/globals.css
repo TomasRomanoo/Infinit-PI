@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;500;600;700;800;900;1000&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Anton&family=Nunito:wght@200;300;400;500;600;700;800;900;1000&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;500;600;700;800;900&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Nunito:wght@200;300;400;500;600;700;800;900;1000&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;500;600;700;800;900&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -13,7 +13,7 @@
     margin: 0;
   }
 }
-.errInput {
+.errInput{
   --tw-ring-color: red;
 }
 
@@ -46,12 +46,12 @@
   opacity: 0.1;
 }
 
-.hide-mngmnt {
+.hide-mngmnt{
   display: none;
   transition: 0.5s;
 }
 
-.show-mngmnt {
+.show-mngmnt{
   display: flex;
   position: absolute;
   left: -50%;
@@ -60,12 +60,13 @@
   opacity: 1;
 }
 
-.show-mngmnt-mobile {
+.show-mngmnt-mobile{
   display: flex;
 }
 
-.show-modal-edit {
+.show-modal-edit{
   display: flex;
+
 }
 
 .loading-screen {
@@ -94,7 +95,69 @@
   }
 }
 
+
 .opacity-effect {
   opacity: 0.5; /* Set the desired opacity value */
 }
 
+
+
+/* Estilos para el mensaje de carga */
+.loading-message {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333; /* Color de texto deseado */
+  background-color: #f5f5f5; /* Fondo de color deseado */
+}
+
+/* Estilos para el mensaje de error */
+.error-message {
+  font-size: 16px;
+  font-weight: bold;
+  color: #ff0000; /* Color de texto para errores */
+  background-color: #f8d7da; /* Fondo de color para errores */
+}
+
+/* Estilos para el calendario de disponibilidad */
+.availability-calendar {  
+  margin-top: 20px; /* Espacio superior */
+  font-size: 23px;
+  padding: 17px;
+  margin: 14px;
+  
+  background-size: cover; /* Escalar la imagen de fondo para cubrir todo el elemento */
+}
+
+/* Estilos para la etiqueta "Available Dates" */
+.calendar-label {
+  
+  font-size: 20px;
+  font-weight: bold;
+  color: #faf6f6; /* Color de texto deseado */
+  margin: 5px 0 5px 0; /* Espacio inferior */
+}
+svg.react-datepicker__calendar-icon{ 
+  margin-top: 15px;
+  margin-left: 10px;
+  font-size: 37px;
+  align-content: center;
+  
+}
+
+div.react-datepicker__input-container.react-datepicker__view-calendar-icon input{ 
+  margin-left: 10px; 
+  margin-top: 10px;
+  padding: 8px 0 8px 40px;  
+  border-radius: 10px;
+  width: 220px;
+  cursor: pointer ;
+  color: black;
+}
+
+.availability-calendar-container {
+  
+  background-color: #00243f; 
+  border-radius: 10px;
+    /* Cambia el color de fondo a tu elección */
+  /* Otras propiedades de estilo si las necesitas */
+}

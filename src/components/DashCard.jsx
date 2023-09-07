@@ -18,7 +18,7 @@ export const DashCard = (props) => {
         </div>
         <div className="flex flex-col items-end">
           <div className="flex items-start gap-1 font-bold text-lg">
-            <p className="text-start truncate ">{props.vehicle.model.brand.name}</p>
+            {/* <p className="text-start truncate ">{props.vehicle.model.brand.name}</p> */}
           </div>
 
           <div>
@@ -34,7 +34,7 @@ export const DashCard = (props) => {
           <span className="text-gray-400">/day</span>
         </p>
         <button className="bg-primary font-semibold text-white px-8 py-3 rounded-tl-2xl hover:bg-tertiary transition-all duration-300 ease-in-out">
-          <Link href={`/vehicle/${props.vehicle.name}`} passHref>
+          <Link href={`/vehicles/${props.vehicle.plate}`} passHref>
             Details
           </Link>
         </button>
