@@ -33,20 +33,16 @@ const Detail = ({ params }) => {
   const router = useRouter();
   const [isGalleryOpen, setGalleryOpen] = useState(false);
   const [selectedImageId, setSelectedImageId] = useState(null);
-
   const [showMessage, setShowMessage] = useState(false);
   const [messageContent, setMessageContent] = useState("");
-
   const handleShowMessage = (message) => {
     setMessageContent(message);
     setShowMessage(true);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
-
   const handleCloseMessage = () => {
     setShowMessage(false);
   };
-
 
   const fetchVehicle = async () => {
     const res = await axios("/api/vehicle/" + params.plate);
