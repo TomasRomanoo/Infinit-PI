@@ -7,68 +7,36 @@ export async function POST(request) {
   try {
     const body = await request.json();
 
-    const { city, startDate, endDate } = body;
+    const { startDate, endDate } = body;
 
-    console.log(body);
-
-/*     if (!city || !startDate || !endDate) {
+    if (!startDate || !endDate) {
       return NextResponse.json(
-        {
-          error:
-            "Debes proporcionar la ciudad, fecha de inicio y fecha de finalización",
-        },
+        { message: "startDate and endDate are required" },
         { status: 400 }
-      );
-    } */
-
-/*     const formattedStartDate = new Date(startDate);
-    const formattedEndDate = new Date(endDate); */
-
-    const carsInCityAndDateRange = await prisma.vehicle.findMany({
-      where: {
-        dealer: {
-          city,
-        },
-   /*      availabilityPeriod: {
-          some: {
-            startDate: {
-              gte: formattedStartDate,
-            },
-            endDate: {
-              lte: formattedEndDate,
-            },
-          },
-        }, */
-      },
-      include: {
-        category: true,
-        specifications: true,
-        images: true,
-        model: {
-          include: {
-            brand: true,
-          },
-        },
-        dealer: true,
-        availabilityPeriod: true,
-      },
-    });
-
-    if (!carsInCityAndDateRange.length) {
-      return NextResponse.json(
-        {
-          error:
-            "No se encontraron autos en esa ciudad para el rango de fechas proporcionado",
-        },
-        { status: 404 }
       );
     }
 
-    return NextResponse.json(carsInCityAndDateRange, { status: 200 });
+    const vehicles = await prisma.vehicle.findMany({
+      where: {
+        dealer: {
+          city: { equals: body.city }, 
+        },
+        reservation: {
+          none: {
+            AND: [
+              { checkout_date: { gte: new Date(startDate) } },
+              { checkin_date: { lte: new Date(endDate) } },
+            ],
+          },
+        },
+      },
+    });
+
+    return NextResponse.json(vehicles, { status: 200 });
   } catch (error) {
     console.error(error);
     return NextResponse.json(
-      { error: "Error al obtener los autos" },
+      { message: "Error getting vehicles" },
       { status: 500 }
     );
   }
