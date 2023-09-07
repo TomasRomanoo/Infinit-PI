@@ -14,6 +14,8 @@ import Swal from "sweetalert2/dist/sweetalert2.js";
 import "sweetalert2/src/sweetalert2.scss";
 import swiperConfig from "@/utils/swiperConfig";
 
+import honda from "@/assets/images/honda-civic.png";
+
 export const Booking = () => {
   const [modal, setModal] = useState(false);
 
@@ -245,7 +247,7 @@ export const Booking = () => {
                     <div className="flex flex-row-reverse justify-between p-2 shadow-md rounded-lg gap-6">
                       <div>
                         <Image
-                          src={"https://picsum.photos/500/500"}
+                          src={honda}
                           width={500}
                           height={500}
                           className="w-full object-contain"
@@ -305,7 +307,7 @@ export const Booking = () => {
                       <div className="flex flex-col justify-between p-2 shadow-md rounded-lg gap-6">
                         <div>
                           <Image
-                            src={"https://picsum.photos/500/500"}
+                            src={honda}
                             width={500}
                             height={500}
                             className="w-full object-contain"
