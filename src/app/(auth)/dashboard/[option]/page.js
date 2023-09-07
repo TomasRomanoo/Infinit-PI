@@ -24,13 +24,13 @@ const DashboardPage = () => {
 
 
 
-  const VEHICLES_PER_PAGE = 6;
-
+  
   let screenWidth;
   if (typeof window !== "undefined") {
     screenWidth = window.innerWidth;
   }
-
+  
+  const VEHICLES_PER_PAGE = 6;
   const totalVehicles = vehicles.length;
   const [vehiclesPerPage, setvehiclesPerPage] = useState(VEHICLES_PER_PAGE);
   const [currentPage, setCurrentPage] = useState(1);
