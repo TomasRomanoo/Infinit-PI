@@ -43,8 +43,8 @@ export default function Favorites(){
 
     return(
         <div>
-            <div className="flex flex-col lg:flex-row mb-36 content-center">
-                <h1>My Favorites Vehicles</h1>
+            <div className="flex flex-col mb-36 content-center">
+                <h1>My Favorites vehicles</h1>
                 <CardList vehicles={vehicles} />
             </div>
         </div>
