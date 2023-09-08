@@ -1,63 +1,49 @@
 import React, { useEffect, useContext, useState } from "react";
 
 import { MdOutlineLocationOn, MdMyLocation } from "react-icons/md";
-import { BiDirections } from "react-icons/bi";
-import { BsCalendar3 } from "react-icons/bs";
-import Swal from "sweetalert2";
-import withReactContent from 'sweetalert2-react-content';
 import { motion } from "framer-motion";
 import axios from "axios";
-import UserDetails from "./UserDetails";
-import { UserContext } from "./context/UserContext";
+import { Swiper, SwiperSlide } from "swiper/react";
 
-export const Booking = ({ vehicle }) => {
-  
-  const userContext = useContext(UserContext);
-  let user = userContext.getUser()
+import "swiper/css";
+import "swiper/swiper-bundle.min.css";
+import Image from "next/image";
+import { DatePicker } from "antd";
+import Link from "next/link";
+import Swal from "sweetalert2/dist/sweetalert2.js";
+import "sweetalert2/src/sweetalert2.scss";
+import swiperConfig from "@/utils/swiperConfig";
 
+import honda from "@/assets/images/honda-civic.png";
+
+export const Booking = () => {
   const [modal, setModal] = useState(false);
+
+  const [vehiclesModal, setVehiclesModal] = useState(false);
+
+  const [vehicles, setVehicles] = useState([]);
+
+  const [displayedVehicles, setDisplayedVehicles] = useState([]);
+  const [showAllVehicles, setShowAllVehicles] = useState(false);
 
   const [locations, setLocations] = useState([{}]);
 
-  const [dates, setDates] = useState({
-    checkin: "",
-    checkout: "",
-    qty: 0,
-  });
-  const MySwal = withReactContent(Swal)
+  const [startDate, setStartDate] = useState();
+  const [endDate, setEndDate] = useState();
+
+  useEffect(() => {
+    const maxDisplayCount = showAllVehicles ? vehicles.length : 2;
+    setDisplayedVehicles(vehicles.slice(0, maxDisplayCount));
+  }, [vehicles, showAllVehicles]);
+
+  useEffect(() => {
+    if (!vehiclesModal) {
+      setShowAllVehicles(false);
+    }
+  }, [vehiclesModal]);
 
   const hideModal = () => {
-    console.log("Modal hideModal called"); // Add this line
     setModal(false);
-  };
-
-  const handleCheckinChange = (e) => {
-    const newCheckin = e.target.value;
-    setDates((prevState) => ({
-      ...prevState,
-      checkin: newCheckin,
-      qty: calculateTotalDays(newCheckin, dates.checkout),
-    }));
-  };
-
-  const handleCheckoutChange = (e) => {
-    const newCheckout = e.target.value;
-    setDates((prevState) => ({
-      ...prevState,
-      checkout: newCheckout,
-      qty: calculateTotalDays(dates.checkin, newCheckout),
-    }));
-  };
-
-  const calculateTotalDays = (checkin, checkout) => {
-    if (checkin && checkout) {
-      const checkinDate = new Date(checkin);
-      const checkoutDate = new Date(checkout);
-      const timeDifference = checkoutDate - checkinDate;
-      const totalDays = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
-      return totalDays;
-    }
-    return 0;
   };
 
   const [query, setQuery] = useState("");
@@ -76,9 +62,7 @@ export const Booking = ({ vehicle }) => {
           setModal(false);
         }
       })
-      .catch((error) => {
-        console.log("error :>> ", error);
-      });
+      .catch((error) => {});
   };
   const debounce = (func, delay) => {
     let timeout;
@@ -93,137 +77,310 @@ export const Booking = ({ vehicle }) => {
     setQuery(newQuery);
 
     if (newQuery.trim() === "") {
-      // If the input is empty or only contains whitespace, close the modal
       setModal(false);
     } else {
-      // If there is a query, show the modal and perform the search
       setModal(true);
-      debounce(searchLocations(newQuery), 300); // Delay the API call by 300ms
+      debounce(searchLocations(newQuery), 300);
     }
   };
 
   const checkUserData = () => {
-
     MySwal.fire({
       title: <p>Please, check your data before continuing</p>,
       showCancelButton: false, // There won't be any cancel button
       showConfirmButton: false,
-      html: <UserDetails callback={filterVehicles} data={user} ready={MySwal.hideLoading}  loading={MySwal.showLoading}></UserDetails>,
+      html: (
+        <UserDetails
+          callback={filterVehicles}
+          data={user}
+          ready={MySwal.hideLoading}
+          loading={MySwal.showLoading}
+        ></UserDetails>
+      ),
     }).then(() => {
-      return MySwal.close()
-    })
-  }
+      return MySwal.close();
+    });
+  };
 
   const filterVehicles = () => {
-    MySwal.close()
-    console.log("location :>> ", location);
-    console.log("dates :>> ", dates);
+    const Toast = Swal.mixin({
+      toast: true,
+      position: "top-end",
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+    });
+
+    console.log("location :>> ", location.city);
+    console.log("dates :>> ", startDate, endDate);
+
+    let object = {
+      city: location.city,
+      startDate: startDate,
+      endDate: endDate,
+    };
+
+    if (object.city == undefined) {
+      Toast.fire({
+        icon: "error",
+        title: "You must enter a location",
+      });
+      return;
+    }
+
+    if (object.startDate == undefined || object.endDate == undefined) {
+      Toast.fire({
+        icon: "error",
+        title: "You must enter a range of dates",
+      });
+      return;
+    }
+
+    console.log("object :>> ", object);
+
+    axios
+      .post("/api/dealer", object)
+      .then((res) => {
+        console.log("cars location >> ", res.data);
+        if (res.data.length > 0) {
+          setVehicles(res.data);
+          setVehiclesModal(true);
+        }
+      })
+      .catch((error) => {
+        setVehiclesModal(false);
+        Toast.fire({
+          icon: "error",
+          title: "Cannot find vehicles in that location",
+        });
+
+        console.error("Error: ", error);
+      });
   };
 
   return (
-    <div className="w-full p-6 bg-[#00243f] flex flex-col lg:flex-row items-center justify-around rounded-md shadow-md gap-4 mb-12">
-      {/* Location */}
-      <div
-        className="flex flex-col lg:flex-row items-center w-full relative "
-        onClick={() => {
-          searchLocations();
-        }}
-      >
-        <div className="relative w-full">
-          <label className="absolute left-12 uppercase text-gray-400 top-2 text-[10px] tracking-widest w-full">
-            Origin
-          </label>
-          <button className="absolute top-5 left-3 group">
-            <MdMyLocation className="group-hover:text-purple-600" size={25} />
-          </button>
-          <input
-            type="text"
-            placeholder={`Where are you from? Enter your city, state or country`}
-            value={
-              location
-                ? `${location.city}, ${location.state}, ${location.country}`
-                : query
-            }
-            className="w-full  shadow-md rounded-lg pl-12 text-sm  py-5 pt-7  border-r-[1px] border-gray-300 text-ellipsis font-semibold placeholder:font-normal placeholder:italic focus:outline-2 outline-blue-800 "
-            onChange={handleInputChange}
-            onFocus={() => {
-              setQuery("");
-              setLocation("");
-            }}
-          />
+    <>
+      <div className="w-full p-6 bg-[#00243f] relative flex flex-col lg:flex-row items-center justify-around rounded-md shadow-md gap-4 mb-12">
+        {/* Location */}
+        {/* Location */}
+        <div
+          className="flex flex-col lg:flex-row items-center w-full relative "
+          onClick={() => {
+            searchLocations();
+          }}
+        >
+          <div className="relative w-full">
+            <label className="absolute left-12 uppercase text-gray-400 top-2 text-[10px] tracking-widest w-full">
+              Origin
+            </label>
+            <button className="absolute top-5 left-3 group">
+              <MdMyLocation className="group-hover:text-purple-600" size={25} />
+            </button>
+            <input
+              type="text"
+              placeholder={`Where are you from? Enter your city, state or country`}
+              value={
+                location
+                  ? `${location.city}, ${location.state}, ${location.country}`
+                  : query
+              }
+              className="w-full  shadow-md rounded-lg pl-12 text-sm  py-5 pt-7  border-r-[1px] border-gray-300 text-ellipsis font-semibold placeholder:font-normal placeholder:italic focus:outline-2 outline-blue-800 "
+              onChange={handleInputChange}
+              onFocus={() => {
+                setQuery("");
+                setLocation("");
+              }}
+            />
+          </div>
+
+          {modal && (
+            <Modal
+              locations={locations}
+              setLocation={setLocation}
+              query={query}
+              hideModal={hideModal}
+            />
+          )}
         </div>
 
-        {modal && (
-          <Modal
-            locations={locations}
-            setLocation={setLocation}
-            query={query}
-            hideModal={hideModal}
-          />
+        {/* Calendar */}
+
+        <div className="flex flex-col lg:flex-row items-center w-full">
+          <div className="relative w-full">
+            <label className="absolute left-12 uppercase text-gray-400 top-2 text-[10px] tracking-widest">
+              DATES
+            </label>
+            <DatePicker
+              selected={startDate}
+              onChange={(date) => setStartDate(date)}
+              selectsStart
+              startDate={startDate}
+              endDate={endDate}
+              className="rounded-tl-md rounded-tr-md w-full rounded-b-none   lg:rounded-l-md lg:rounded-r-none p-5  outline-blue-800"
+            />
+          </div>
+
+          <div className="relative w-full">
+            <DatePicker
+              selected={endDate}
+              onChange={(date) => setEndDate(date)}
+              selectsEnd
+              startDate={startDate}
+              endDate={endDate}
+              minDate={startDate}
+              className="w-full rounded-r-md rounded-l-md  lg:rounded-r-md  rounded-t-none p-5 border-gray-200 lg:rounded-l-none  text-ellipsis font-semibold placeholder:font-normal placeholder:italic focus:outline-2 outline-blue-800"
+            />
+          </div>
+        </div>
+
+        <button
+          onClick={() => {
+            filterVehicles();
+          }}
+          className="bg-white text-black font-bold py-4 rounded-lg w-full lg:w-[20%] hover:bg-gray-200 transition-all duration-200"
+        >
+          Continue
+        </button>
+      </div>
+
+      <div>
+        {vehiclesModal && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-white rounded-md shadow-md p-2 my-10"
+          >
+            <button
+              className="hover:text-purple-700 p-2"
+              onClick={() => {
+                setVehiclesModal(false);
+              }}
+            >
+              Close
+            </button>
+
+            <div className="hidden lg:block">
+              <div className="grid grid-cols-2 grid-flow-row auto-rows-auto">
+                {displayedVehicles.map((vehicle) => {
+                  return (
+                    <div className="flex flex-row-reverse justify-between p-2 shadow-md rounded-lg gap-6">
+                      <div>
+                        <Image
+                          src={honda}
+                          width={500}
+                          height={500}
+                          className="w-full object-contain"
+                        />
+                      </div>
+
+                      <div className="flex flex-col justify-between w-full items-start">
+                        <div className="flex flex-col">
+                          <div className="flex items-start gap-1 font-bold text-lg">
+                            <p className="text-start">
+                              {vehicle.model?.brand?.name}
+                            </p>
+                            <p>{vehicle.model?.name}</p>
+                            <p className="text-gray-400 font-semibold">
+                              {vehicle.year}
+                            </p>
+                          </div>
+                          <p className="font-poppins">
+                            {vehicle.long_description}
+                          </p>
+                        </div>
+                        <div className="flex items-end justify-between w-full">
+                          <div>
+                            <span className="font-semibold">
+                              ${vehicle.price_per_day}
+                            </span>
+                            <span className="text-gray-400">/day</span>
+                          </div>
+                          <button className="bg-primary font-semibold text-white px-8 py-3 hover:bg-tertiary transition-all duration-300 ease-in-out rounded-md">
+                            <Link href={`/vehicles/${vehicle.plate}`} passHref>
+                              Details
+                            </Link>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+              {!showAllVehicles && (
+                <div className="text-center mt-4">
+                  <button
+                    className="bg-primary text-white px-6 py-2 rounded-md hover:bg-tertiary"
+                    onClick={() => setShowAllVehicles(true)}
+                  >
+                    View More
+                  </button>
+                </div>
+              )}
+            </div>
+
+            <div className="block lg:hidden">
+              <Swiper {...swiperConfig}>
+                {vehicles.map((vehicle) => {
+                  return (
+                    <SwiperSlide className="">
+                      <div className="flex  w-screen flex-col justify-between p-2 shadow-md rounded-lg gap-6">
+                        <div>
+                          <Image
+                            src={honda}
+                            width={500}
+                            height={500}
+                            className="w-full object-contain"
+                          />
+                        </div>
+
+                        <div className="flex flex-col justify-between w-full items-start">
+                          <div className="flex flex-col">
+                            <div className="flex items-start gap-1 font-bold text-lg">
+                              <p className="text-start">
+                                {vehicle.model?.brand?.name}
+                              </p>
+                              <p>{vehicle.model?.name}</p>
+                              <p className="text-gray-400 font-semibold">
+                                {vehicle.year}
+                              </p>
+                            </div>
+                            <p className="font-poppins">
+                              {vehicle.long_description}
+                            </p>
+                          </div>
+                          <div className="flex items-end justify-between w-full">
+                            <div>
+                              <span className="font-semibold">
+                                ${vehicle.price_per_day}
+                              </span>
+                              <span className="text-gray-400">/day</span>
+                            </div>
+                            <button className="bg-primary font-semibold text-white px-8 py-3 hover:bg-tertiary transition-all duration-300 ease-in-out rounded-md">
+                              <Link
+                                href={`/vehicles/${vehicle.plate}`}
+                                passHref
+                              >
+                                Details
+                              </Link>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </SwiperSlide>
+                  );
+                })}
+              </Swiper>
+            </div>
+          </motion.div>
         )}
-
-        {/*   <div className="relative w-full">
-          <button className="hidden lg:block absolute top-3 -left-[18px] bg-white border-gray-200 border-2 rounded-md p-1">
-            <BiDirections size={25} />
-          </button>
-          <label className="absolute left-12 uppercase text-gray-400 top-2 text-[10px] tracking-widest  group-focus:top-12">
-            Destiny
-          </label>
-
-          <MdOutlineLocationOn
-            className="absolute top-5 left-3 lg:left-5"
-            size={25}
-          />
-
-          <input
-            type="text"
-            placeholder="Your destination?"
-            className="truncate w-full rounded-r-md shadow-md lg:rounded-r-md rounded-l-md   text-sm rounded-t-none  pl-12 lg:pl-12 border-t-2 lg:border-t-0 border-gray-200 lg:rounded-l-none  py-3 pt-6 border-l-[1px] lg:border-gray-300  font-semibold placeholder:font-normal placeholder:italic focus:outline-2 outline-blue-800"
-          />
-        </div> */}
       </div>
-
-      {/* Calendar */}
-
-      <div className="flex flex-col lg:flex-row items-center w-full">
-        <div className="relative w-full">
-          <label className="absolute left-12 uppercase text-gray-400 top-2 text-[10px] tracking-widest">
-            DATES
-          </label>
-          <button className="absolute top-5 left-3 group">
-            <BsCalendar3 className="group-hover:text-purple-600" size={25} />
-          </button>
-          <input
-            type="date"
-            className="rounded-tl-md rounded-tr-md w-full   lg:rounded-l-md lg:rounded-r-none  pl-12 pr-2 py-4 pt-6 border-r-[1px] border-gray-300 text-ellipsis font-semibold placeholder:font-normal placeholder:italic focus:outline-2 outline-blue-800"
-            onChange={handleCheckinChange}
-          />
-        </div>
-
-        <div className="relative w-full">
-          <input
-            type="date"
-            className="w-full rounded-r-md rounded-l-md  lg:rounded-r-md  rounded-t-none  pl-10 lg:pl-4 pr-2  border-t-2 lg:border-t-0 border-gray-200 lg:rounded-l-none py-4 pt-6 border-l-[1px] lg:border-gray-300 text-ellipsis font-semibold placeholder:font-normal placeholder:italic focus:outline-2 outline-blue-800"
-            onChange={handleCheckoutChange}
-          />
-        </div>
-      </div>
-
-      <button
-        onClick={() => {
-          checkUserData();
-        }}
-        className="bg-white text-black font-bold py-4 rounded-lg w-full lg:w-[20%] hover:bg-gray-200 transition-all duration-200"
-      >
-        Continue
-      </button>
-    </div>
+    </>
   );
 };
 
 const Modal = ({ locations, setLocation, query, hideModal }) => {
   return (
-    <div className="absolute w-full top-20 bg-white shadow-md rounded-md z-40">
+    <div className="absolute w-full top-20 bg-white shadow-md rounded-md z-30">
       <p className="p-2 bg-gray-200 font-poppins uppercase text-lg font-semibold">
         Results
       </p>

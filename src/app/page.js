@@ -1,5 +1,5 @@
 "use client";
-import {shuffle} from "@/utils/arrayUtilities"
+import { shuffle } from "@/utils/arrayUtilities";
 import { Footer } from "@/components/Footer";
 import Image from "next/image";
 import bluecar from "@/assets/images/blue-car.jpg";
@@ -10,7 +10,6 @@ import { useEffect, useState } from "react";
 import { Booking } from "@/components/Booking.jsx";
 import { CardList } from "@/components/CardList";
 import PorscheCanvas from "@/components/canvas/Porsche";
-
 
 import Link from "next/link";
 
@@ -114,3 +113,6 @@ const Category = ({ category }) => {
     </Link>
   );
 };
+
+
+
