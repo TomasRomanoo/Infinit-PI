@@ -84,7 +84,7 @@ const Detail = ({ params }) => {
     setGalleryOpen(false);
   };
   return (
-    <>
+    <div >
       {isGalleryOpen && (
         <GalleryModal
           images={vehicle.images}
@@ -145,26 +145,34 @@ const Detail = ({ params }) => {
             <div className="flex justify-end space-x-4">
               <button
                 onClick={() => handleShowMessage(<div className="policy-list">
-                  <div className="policy-container" tabIndex="-1">
-                    <h2 className="policy-title">PRODUCT POLICES</h2>
-                      <div className="policy-list">
-                        <div className="policy">
-                          <h3 className="policy-subtitle">Extended warranty:</h3>
-                          <p className="policy-description">
-                            High-end cars often come with an extended warranty that covers mechanical and electronic components for a longer period than standard vehicles. This can provide homeowners peace of mind and cover costly repairs.
-                          </p>
-                        </div>
-                        <div className="policy">
-                          <h3 className="policy-subtitle">Roadside Assistance Programs:  </h3>
-                          <p className="policy-description">
-                            High-end cars often come with roadside assistance programs that provide help in the event of problems such as a dead battery, flat tires, or the need to tow.
-                          </p>
-                        </div>
-                        <div className="policy">
-                          <h3 className="policy-subtitle">Genuine Parts Replacement Policy: </h3>
-                          <p className="policy-description">
-                            Some manufacturers offer service packages that cover regular maintenance for the first few years of ownership. This can include oil changes, inspections, and other maintenance tasks, making life easier for the owner and ensuring the vehicle is kept in top condition.
-                          </p>
+                  <div className="relative flex flex-col justify-center content-center" tabIndex="-1">
+                    <button
+                      onClick={() => setShowMessage(false)}
+                      className=" absolute right-0 top-0"
+                    >
+                      <AiOutlineClose className="w-10 h-10" />
+                    </button>
+                    <h2 className="policy-title m-5">PRODUCT POLICES</h2>
+                    <div
+                      className=" p-5 flex flex-row flex-wrap justify-around"
+                    >
+                      <div className="policy">
+                        <h3 className="policy-subtitle">Extended warranty:</h3>
+                        <p className="policy-description">
+                          High-end cars often come with an extended warranty that covers mechanical and electronic components for a longer period than standard vehicles. This can provide homeowners peace of mind and cover costly repairs.
+                        </p>
+                      </div>
+                      <div className="policy">
+                        <h3 className="policy-subtitle">Roadside Assistance Programs:  </h3>
+                        <p className="policy-description">
+                          High-end cars often come with roadside assistance programs that provide help in the event of problems such as a dead battery, flat tires, or the need to tow.
+                        </p>
+                      </div>
+                      <div className="policy">
+                        <h3 className="policy-subtitle">Genuine Parts Replacement Policy: </h3>
+                        <p className="policy-description">
+                          Some manufacturers offer service packages that cover regular maintenance for the first few years of ownership. This can include oil changes, inspections, and other maintenance tasks, making life easier for the owner and ensuring the vehicle is kept in top condition.
+                        </p>
                       </div>
                       <div className="policy">
                         <h3 className="policy-subtitle">Access to Exclusive Events: </h3>
@@ -187,42 +195,42 @@ const Detail = ({ params }) => {
                       <div className="policy">
                         <h3 className="policy-subtitle">Continuous Upgrade Program:  </h3>
                         <p className="policy-description">
-                       In an effort to keep our high-end vehicles at the forefront of technology and performance, we offer a continuous upgrade program. This allows owners to trade in their current models for the latest versions with an attractive discount. We want you to always drive the latest and the best.
+                          In an effort to keep our high-end vehicles at the forefront of technology and performance, we offer a continuous upgrade program. This allows owners to trade in their current models for the latest versions with an attractive discount. We want you to always drive the latest and the best.
                         </p>
                       </div>
                       <div className="policy">
                         <h3 className="policy-subtitle">Exclusive Driving Experience:  </h3>
                         <p className="policy-description">
-                        As the owner of a high-end luxury car from our brand, you will have exclusive access to unique driving experiences. This includes track driving events, exclusive scenic routes, and the opportunity to test drive our newest models before anyone else. We want you to fully enjoy your driving experience.
+                          As the owner of a high-end luxury car from our brand, you will have exclusive access to unique driving experiences. This includes track driving events, exclusive scenic routes, and the opportunity to test drive our newest models before anyone else. We want you to fully enjoy your driving experience.
                         </p>
-                        </div>
                       </div>
-                    </div>          
+                    </div>
+                  </div>
                 </div>)}
-                className="w-1/6 bg-primary text-white p-4 rounded-md hover:bg-secondary transition-all duration-200 mx-auto autoFocus"
+                className="w-36 bg-primary text-white p-4 rounded-md hover:bg-secondary transition-all duration-200 mx-auto  autoFocus"
               >
                 Policy product
               </button>
             </div>
             {showMessage && (
-              <div className="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center  bg-black bg-opacity-50">
+              <>
+              <div className=" fixed left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 opacity-50 bg-black w-screen h-screen z-30" />
+            
                 <div
-                  className="policy-list"
+                  className=" absolute left-1/2 -translate-x-1/2 -top-1/2 translate-y-1/3 my-32 w-11/12 h-auto p-5 flex items-center justify-center  bg-white rounded-xl drop-shadow-lg  z-40"
                 >
-                  {messageContent} {/* Muestra el contenido del mensaje */}
-                  <button
-                    onClick={() => setShowMessage(false)}
-                    className="mt-2 bg-primary text-white px-3 py-1 rounded-md hover:bg-secondary"
+                  <div
+                    className="w-full"
                   >
-                    Close
-                  </button>
+                    {messageContent}
+                  </div>
                 </div>
-              </div>
+              </>
             )}
           </div >
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
