@@ -9,7 +9,6 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Booking } from "@/components/Booking.jsx";
 import { CardList } from "@/components/CardList";
-import PorscheCanvas from "@/components/canvas/Porsche";
 
 import Link from "next/link";
 
@@ -86,7 +85,6 @@ const Hero = () => {
         className="w-full lg:w-[35%]"
       >
         <Image src={bluecar} className="rounded-lg" alt="bluecar" />
-        {/*      <PorscheCanvas /> */}
       </motion.div>
     </div>
   );
