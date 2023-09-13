@@ -110,13 +110,15 @@ model specification {
   deleted          Boolean
 }
 
+
 model favorite {
-  vehicle          vehicle @relation(fields: [idvehicle], references: [idvehicle], onDelete: Cascade)
-  idvehicle        Int
-  user             user @relation(fields: [iduser], references: [iduser], onDelete: Cascade)
-  iduser           Int
-  @@id([iduser, idvehicle])
+  idfavorite Int     @id @default(autoincrement())
+  vehicle    vehicle @relation(fields: [idvehicle], references: [idvehicle], onDelete: Cascade)
+  idvehicle  Int
+  user       user    @relation(fields: [iduser], references: [iduser], onDelete: Cascade)
+  iduser     Int
 }
+
 
 
 model reservation {
