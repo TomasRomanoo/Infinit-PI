@@ -58,7 +58,10 @@ const AvailabilityCalendar = ({idvehicle}) => {
             placeholderText="Show availability"
             />
             
-          }       
+          }     
+             <Link href="./reservation">
+            <a>Ir a la página de reserva</a>
+          </Link>
         </div>
       </div>
     </div>
