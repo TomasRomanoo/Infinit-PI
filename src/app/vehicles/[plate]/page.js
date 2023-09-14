@@ -46,20 +46,37 @@ const Detail = ({ params }) => {
   };
 
   const [ratings, setRatings] = useState([])
-  let ratingAverage = 0;
+  const [ratingAverage,setRatingAverage] = useState(0)
 
   const getRating = () => {
     //Llamar una funcion del back que me traiga todas las valoraciones
-    // setRatings();
+    
+    const ratingsHarcoded = [
+      { "rating": 5, "user": "Alice Johnson", "date": "21/11/23", "description": "Renting this luxury car was an incredible experience. The car was spotless, and the customer service was exceptional. I highly recommend it!" },
+      { "rating": 4, "user": "John Smith", "date": "22/11/23", "description": "The luxury car I rented was great overall. Some minor details could have been better, but overall, it was a good experience." },
+      { "rating": 5, "user": "Emily Davis", "date": "23/11/23", "description": "I have nothing but praise for this luxury car rental service. The vehicle was stunning, and the staff was incredibly accommodating. A perfect experience!" },
+      { "rating": 2, "user": "Michael Wilson", "date": "24/11/23", "description": "Unfortunately, the luxury car rental did not meet my expectations. The vehicle had some issues, and the service was lacking." },
+      { "rating": 1, "user": "Sophia Martinez", "date": "25/11/23", "description": "My experience with this luxury car rental was terrible. The car was not in good condition, and the service was a disappointment." },
+      { "rating": 5, "user": "Daniel Brown", "date": "26/11/23", "description": "Renting this luxury car was the best decision I made. It exceeded all my expectations, and I felt like a VIP throughout the entire experience." },
+      { "rating": 4, "user": "Olivia Harris", "date": "27/11/23", "description": "The luxury car I rented was really good, but there were a few minor issues. Nevertheless, it was an enjoyable experience." },
+      { "rating": 3, "user": "Liam Taylor", "date": "28/11/23", "description": "The luxury car rental could have been better. There were some issues with the vehicle, and the service was just average." },
+      { "rating": 5, "user": "Ava Anderson", "date": "29/11/23", "description": "My experience with this luxury car rental service was amazing! The car was a dream, and the entire process was seamless." },
+      { "rating": 2, "user": "Ethan Clark", "date": "30/11/23", "description": "Renting this luxury car was not worth it. The car had too many problems, and the service was disappointing." },
+    ]
+    setRatings(ratingsHarcoded);
+  }
 
-
-    ratingAverage = Math.floor(4.5)
-
-    const radioElement = document.querySelector(`input[type="radio"][value="${ratingAverage}"]`);
+  useEffect(()=>{
+    let totalRating = 0
+    ratings.forEach((rate)=>{
+      totalRating += rate.rating 
+    })
+    setRatingAverage(totalRating/ratings.length)
+    const radioElement = document.querySelector(`input[type="radio"][value="${Math.floor(totalRating/ratings.length)}"]`);
     if (radioElement) {
       radioElement.checked = true;
     }
-  }
+  },[ratings])
 
   const fetchVehicle = async () => {
     const res = await axios("/api/vehicle/" + params.plate);
@@ -86,7 +103,6 @@ const Detail = ({ params }) => {
     setVehicle(res.data);
 
   };
-  console.log("idVehicle>>", vehicle.idvehicle);
 
   useEffect(() => {
     fetchVehicle();
@@ -367,15 +383,30 @@ const Specs = ({ specifications }) => {
 };
 
 const Rating = ({ratingAverage, ratings}) => {
+  const  [count1Star, setCount1Star] = useState(0)
+  const  [count2Star, setCount2Star] = useState(0)
+  const  [count3Star, setCount3Star] = useState(0)
+  const  [count4Star, setCount4Star] = useState(0)
+  const  [count5Star, setCount5Star] = useState(0)
 
+
+  useEffect(() => {
+    console.log('asddsadas');
+    setCount1Star(ratings?.filter(rate => rate.rating === 1).length)
+    setCount2Star(ratings?.filter(rate => rate.rating === 2 ).length)
+    setCount3Star(ratings?.filter(rate => rate.rating === 3).length)
+    setCount4Star(ratings?.filter(rate => rate.rating === 4).length)
+    setCount5Star(ratings?.filter(rate => rate.rating === 5).length)
+
+  },[ratings])
 
   return (
     <div>
     <h3 className="text-xl font-semibold mb-4">Rating</h3>
-    <div className="w-4/12 m-4">
+    <div className="lg:w-5/12 w-full p-5 lg:p-0 lg:m-4">
       <div>
-        <div className="flex items-center my-4">
-          <p className="text-7xl font-bold mr-4">4,7</p>
+        <div className="flex flex-col sm:flex-row items-center my-4 text-center sm:text-left">
+          <p className="text-7xl font-bold mr-4">{ratingAverage}</p>
           <div>
             <form className={`rating`}>
               <label>
@@ -409,7 +440,7 @@ const Rating = ({ratingAverage, ratings}) => {
                 <span class="icon"><BsStarFill /></span>
               </label>
             </form>
-            <p className="text-slate-700">Total reviews {1}</p>
+            <p className="text-slate-700">Total reviews {ratings.length}</p>
           </div>
           {/* <button onClick={(e)=>{e.preventDefault}}> See more reviews </button> */}
 
@@ -420,48 +451,50 @@ const Rating = ({ratingAverage, ratings}) => {
         <div className="mb-3">
           <div class="flex justify-between mb-1">
             <span class="text-base flex items-center font-bold text-primary">1 <BsStarFill /> </span>
-            <span class="text-sm font-medium text-primary">45%</span>
+          <span class="text-sm font-medium text-primary">
+            { count1Star }
+          </span>
           </div>
           <div class="w-full  rounded-full h-2.5 bg-secondary">
-            <div class="bg-primary h-2.5 rounded-full" style={{ width: "45%" }}></div>
+            <div class="bg-primary h-2.5 rounded-full" style={{ width: `${(count1Star * 100)/ratings.length}%`}}></div>
           </div>
         </div>
         <div  className="mb-3">
           <div class="flex justify-between mb-1">
             <span class="text-base flex items-center font-bold text-primary">2 <BsStarFill /> </span>
-            <span class="text-sm font-medium text-primary">45%</span>
+            <span class="text-sm font-medium text-primary">{count2Star}</span>
           </div>
           <div class="w-full  rounded-full h-2.5 bg-secondary">
-            <div class="bg-primary h-2.5 rounded-full" style={{ width: "45%" }}></div>
+            <div class="bg-primary h-2.5 rounded-full" style={{ width: `${(count2Star * 100)/ratings.length}%`}}></div>
           </div>
         </div>
         <div  className="mb-3">
           <div class="flex justify-between mb-1">
             <span class="text-base flex items-center font-bold text-primary">3 <BsStarFill /> </span>
-            <span class="text-sm font-medium text-primary">45%</span>
+            <span class="text-sm font-medium text-primary">{count3Star}</span>
           </div>
           <div class="w-full  rounded-full h-2.5 bg-secondary">
-            <div class="bg-primary h-2.5 rounded-full" style={{ width: "45%" }}></div>
+            <div class="bg-primary h-2.5 rounded-full" style={{ width: `${(count3Star * 100)/ratings.length}%`}}></div>
           </div>
         </div>
         
         <div  className="mb-3">
           <div class="flex justify-between mb-1">
             <span class="text-base flex items-center font-bold text-primary">4 <BsStarFill /> </span>
-            <span class="text-sm font-medium text-primary">45%</span>
+            <span class="text-sm font-medium text-primary">{count4Star}</span>
           </div>
           <div class="w-full  rounded-full h-2.5 bg-secondary">
-            <div class="bg-primary h-2.5 rounded-full" style={{ width: "45%" }}></div>
+            <div class="bg-primary h-2.5 rounded-full" style={{ width: `${(count4Star * 100)/ratings.length}%`}}></div>
           </div>
         </div>
 
         <div  className="mb-3">
           <div class="flex justify-between mb-1">
             <span class="text-base flex items-center font-bold text-primary">5 <BsStarFill /> </span>
-            <span class="text-sm font-medium text-primary">45%</span>
+            <span class="text-sm font-medium text-primary">{count5Star}</span>
           </div>
           <div class="w-full  rounded-full h-2.5 bg-secondary">
-            <div class="bg-primary h-2.5 rounded-full" style={{ width: "45%" }}></div>
+            <div class="bg-primary h-2.5 rounded-full" style={{ width: `${(count5Star * 100)/ratings.length}%`}}></div>
           </div>
         </div>
       </div>
