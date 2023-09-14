@@ -8,6 +8,7 @@ import "swiper/css";
 import "swiper/swiper-bundle.min.css";
 import swiperConfig from "@/utils/swiperConfig";
 import { BsStarFill } from "react-icons/bs";
+import Slider from 'react-slick';
 
 import { useRouter } from "next/navigation";
 import Image from "next/image";
@@ -46,11 +47,11 @@ const Detail = ({ params }) => {
   };
 
   const [ratings, setRatings] = useState([])
-  const [ratingAverage,setRatingAverage] = useState(0)
+  const [ratingAverage, setRatingAverage] = useState(0)
 
   const getRating = () => {
     //Llamar una funcion del back que me traiga todas las valoraciones
-    
+
     const ratingsHarcoded = [
       { "rating": 5, "user": "Alice Johnson", "date": "21/11/23", "description": "Renting this luxury car was an incredible experience. The car was spotless, and the customer service was exceptional. I highly recommend it!" },
       { "rating": 4, "user": "John Smith", "date": "22/11/23", "description": "The luxury car I rented was great overall. Some minor details could have been better, but overall, it was a good experience." },
@@ -66,17 +67,17 @@ const Detail = ({ params }) => {
     setRatings(ratingsHarcoded);
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     let totalRating = 0
-    ratings.forEach((rate)=>{
-      totalRating += rate.rating 
+    ratings.forEach((rate) => {
+      totalRating += rate.rating
     })
-    setRatingAverage(totalRating/ratings.length)
-    const radioElement = document.querySelector(`input[type="radio"][value="${Math.floor(totalRating/ratings.length)}"]`);
+    setRatingAverage(totalRating / ratings.length)
+    const radioElement = document.querySelector(`input[type="radio"][value="${Math.floor(totalRating / ratings.length)}"]`);
     if (radioElement) {
       radioElement.checked = true;
     }
-  },[ratings])
+  }, [ratings])
 
   const fetchVehicle = async () => {
     const res = await axios("/api/vehicle/" + params.plate);
@@ -163,7 +164,7 @@ const Detail = ({ params }) => {
 
           <Characterist />
 
-          <Rating ratingAverage={ratingAverage} ratings={ratings}/>          
+          <Rating ratingAverage={ratingAverage} ratings={ratings} />
 
           <div class="flex justify-end">
             <button
@@ -382,126 +383,191 @@ const Specs = ({ specifications }) => {
   );
 };
 
-const Rating = ({ratingAverage, ratings}) => {
-  const  [count1Star, setCount1Star] = useState(0)
-  const  [count2Star, setCount2Star] = useState(0)
-  const  [count3Star, setCount3Star] = useState(0)
-  const  [count4Star, setCount4Star] = useState(0)
-  const  [count5Star, setCount5Star] = useState(0)
+const Rating = ({ ratingAverage, ratings }) => {
+  const [count1Star, setCount1Star] = useState(0)
+  const [count2Star, setCount2Star] = useState(0)
+  const [count3Star, setCount3Star] = useState(0)
+  const [count4Star, setCount4Star] = useState(0)
+  const [count5Star, setCount5Star] = useState(0)
 
 
   useEffect(() => {
-    console.log('asddsadas');
     setCount1Star(ratings?.filter(rate => rate.rating === 1).length)
-    setCount2Star(ratings?.filter(rate => rate.rating === 2 ).length)
+    setCount2Star(ratings?.filter(rate => rate.rating === 2).length)
     setCount3Star(ratings?.filter(rate => rate.rating === 3).length)
     setCount4Star(ratings?.filter(rate => rate.rating === 4).length)
     setCount5Star(ratings?.filter(rate => rate.rating === 5).length)
 
-  },[ratings])
+  }, [ratings])
+
+
+  /* -------------------------------------------------------------------------- */
+  /*                              paged for ratings                             */
+  /* -------------------------------------------------------------------------- */
+  const itemsPerPage = 2;
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // Calcular el índice de inicio y final para los elementos en la página actual
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+
+  // Función para ir a la página anterior
+  const goToPreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  // Función para ir a la página siguiente
+  const goToNextPage = () => {
+    if (endIndex < ratings.length) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+  // const pages = [];
+  // for (let i = 0; i < ratings.length; i += itemsPerPage) {
+  //   pages.push(ratings.slice(i, i + itemsPerPage));
+  // }
+  // const settings = {
+  //   dots: true,
+  //   infinite: false,
+  //   speed: 500,
+  //   slidesToShow: 1,
+  //   slidesToScroll: 1,
+  // };
 
   return (
     <div>
-    <h3 className="text-xl font-semibold mb-4">Rating</h3>
-    <div className="lg:w-5/12 w-full p-5 lg:p-0 lg:m-4">
-      <div>
-        <div className="flex flex-col sm:flex-row items-center my-4 text-center sm:text-left">
-          <p className="text-7xl font-bold mr-4">{ratingAverage}</p>
+      <h3 className="text-xl font-semibold mb-4">Rating</h3>
+      <div className="flex justify-around lg:flex-row flex-col ">
+        <div className="lg:w-5/12 w-full 2xl:p-5 p-4 shadow-xl rounded-xl">
           <div>
-            <form className={`rating`}>
-              <label>
-                <input type="radio" name="stars" value="1" />
-                <span class="icon"><BsStarFill /></span>
-              </label>
-              <label>
-                <input type="radio" name="stars" value="2" />
-                <span class="icon"><BsStarFill /></span>
-                <span class="icon"><BsStarFill /></span>
-              </label>
-              <label>
-                <input type="radio" name="stars" value="3" />
-                <span class="icon"><BsStarFill /></span>
-                <span class="icon"><BsStarFill /></span>
-                <span class="icon"><BsStarFill /></span>
-              </label>
-              <label>
-                <input type="radio" name="stars" value="4" />
-                <span class="icon"><BsStarFill /></span>
-                <span class="icon"><BsStarFill /></span>
-                <span class="icon"><BsStarFill /></span>
-                <span class="icon"><BsStarFill /></span>
-              </label>
-              <label>
-                <input type="radio" name="stars" value="5" />
-                <span class="icon"><BsStarFill /></span>
-                <span class="icon"><BsStarFill /></span>
-                <span class="icon"><BsStarFill /></span>
-                <span class="icon"><BsStarFill /></span>
-                <span class="icon"><BsStarFill /></span>
-              </label>
-            </form>
-            <p className="text-slate-700">Total reviews {ratings.length}</p>
+            <div className="flex items-center my-4 text-center sm:text-left">
+              <p className="text-7xl font-bold mr-4">{ratingAverage}</p>
+              <div>
+                <form className={`rating`}>
+                  <label>
+                    <input type="radio" name="stars" value="1" />
+                    <span class="icon"><BsStarFill /></span>
+                  </label>
+                  <label>
+                    <input type="radio" name="stars" value="2" />
+                    <span class="icon"><BsStarFill /></span>
+                    <span class="icon"><BsStarFill /></span>
+                  </label>
+                  <label>
+                    <input type="radio" name="stars" value="3" />
+                    <span class="icon"><BsStarFill /></span>
+                    <span class="icon"><BsStarFill /></span>
+                    <span class="icon"><BsStarFill /></span>
+                  </label>
+                  <label>
+                    <input type="radio" name="stars" value="4" />
+                    <span class="icon"><BsStarFill /></span>
+                    <span class="icon"><BsStarFill /></span>
+                    <span class="icon"><BsStarFill /></span>
+                    <span class="icon"><BsStarFill /></span>
+                  </label>
+                  <label>
+                    <input type="radio" name="stars" value="5" />
+                    <span class="icon"><BsStarFill /></span>
+                    <span class="icon"><BsStarFill /></span>
+                    <span class="icon"><BsStarFill /></span>
+                    <span class="icon"><BsStarFill /></span>
+                    <span class="icon"><BsStarFill /></span>
+                  </label>
+                </form>
+                <p className="text-slate-700">Total reviews {ratings.length}</p>
+              </div>
+            </div>
+
           </div>
-          {/* <button onClick={(e)=>{e.preventDefault}}> See more reviews </button> */}
+          <div className="mt-3 p-2">
+            <div className="mb-3">
+              <div class="flex justify-between mb-1">
+                <span class="text-base flex items-center font-bold text-primary">1 <BsStarFill /> </span>
+                <span class="text-sm font-medium text-primary">
+                  {count1Star}
+                </span>
+              </div>
+              <div class="w-full  rounded-full h-2.5 bg-secondary">
+                <div class="bg-primary h-2.5 rounded-full" style={{ width: `${(count1Star * 100) / ratings.length}%` }}></div>
+              </div>
+            </div>
+            <div className="mb-3">
+              <div class="flex justify-between mb-1">
+                <span class="text-base flex items-center font-bold text-primary">2 <BsStarFill /> </span>
+                <span class="text-sm font-medium text-primary">{count2Star}</span>
+              </div>
+              <div class="w-full  rounded-full h-2.5 bg-secondary">
+                <div class="bg-primary h-2.5 rounded-full" style={{ width: `${(count2Star * 100) / ratings.length}%` }}></div>
+              </div>
+            </div>
+            <div className="mb-3">
+              <div class="flex justify-between mb-1">
+                <span class="text-base flex items-center font-bold text-primary">3 <BsStarFill /> </span>
+                <span class="text-sm font-medium text-primary">{count3Star}</span>
+              </div>
+              <div class="w-full  rounded-full h-2.5 bg-secondary">
+                <div class="bg-primary h-2.5 rounded-full" style={{ width: `${(count3Star * 100) / ratings.length}%` }}></div>
+              </div>
+            </div>
+
+            <div className="mb-3">
+              <div class="flex justify-between mb-1">
+                <span class="text-base flex items-center font-bold text-primary">4 <BsStarFill /> </span>
+                <span class="text-sm font-medium text-primary">{count4Star}</span>
+              </div>
+              <div class="w-full  rounded-full h-2.5 bg-secondary">
+                <div class="bg-primary h-2.5 rounded-full" style={{ width: `${(count4Star * 100) / ratings.length}%` }}></div>
+              </div>
+            </div>
+
+            <div className="mb-3">
+              <div class="flex justify-between mb-1">
+                <span class="text-base flex items-center font-bold text-primary">5 <BsStarFill /> </span>
+                <span class="text-sm font-medium text-primary">{count5Star}</span>
+              </div>
+              <div class="w-full  rounded-full h-2.5 bg-secondary">
+                <div class="bg-primary h-2.5 rounded-full" style={{ width: `${(count5Star * 100) / ratings.length}%` }}></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className=" lg:w-5/12 w-full lg:m-0 mt-10 rounded-xl flex flex-col justify-center items-center overflow-auto" style={{ boxShadow: '0px -1px 29px -20px rgba(0,0,0,0.47) inset', height: '425px' }}>
+          {ratings.slice(startIndex, endIndex).map((oneRating) => {
+            return (
+              <div className="w-10/12 relative h-fit p-4 m-2 shadow-md rounded-xl ">
+                <p className="absolute right-5 top-5 text-sm text-slate-500 ">{oneRating.date}</p>
+                <h1 className="text-black font-bold">{oneRating.user}</h1>
+                <div className="flex">
+                  {(() => {
+                    const stars = [];
+                    for (let i = 0; i < oneRating.rating; i++) {
+                      stars.push(<BsStarFill className='text-yellow-300' key={i} />);
+                      { console.log(stars) }
+                    }
+                    return stars
+                  })()}
+                </div>
+                <p>{oneRating.description}</p>
+              </div>
+            )
+          })}
+          <div className="flex justify-between mt-4">
+            <button onClick={goToPreviousPage} className="bg-blue-500 text-white p-2 rounded" disabled={currentPage === 1}>
+              Anterior
+            </button>
+            <button onClick={goToNextPage} className="bg-blue-500 text-white p-2 rounded" disabled={endIndex >= ratings.length}>
+              Siguiente
+            </button>
+          </div>
 
         </div>
-
       </div>
-      <div className="mt-3">
-        <div className="mb-3">
-          <div class="flex justify-between mb-1">
-            <span class="text-base flex items-center font-bold text-primary">1 <BsStarFill /> </span>
-          <span class="text-sm font-medium text-primary">
-            { count1Star }
-          </span>
-          </div>
-          <div class="w-full  rounded-full h-2.5 bg-secondary">
-            <div class="bg-primary h-2.5 rounded-full" style={{ width: `${(count1Star * 100)/ratings.length}%`}}></div>
-          </div>
-        </div>
-        <div  className="mb-3">
-          <div class="flex justify-between mb-1">
-            <span class="text-base flex items-center font-bold text-primary">2 <BsStarFill /> </span>
-            <span class="text-sm font-medium text-primary">{count2Star}</span>
-          </div>
-          <div class="w-full  rounded-full h-2.5 bg-secondary">
-            <div class="bg-primary h-2.5 rounded-full" style={{ width: `${(count2Star * 100)/ratings.length}%`}}></div>
-          </div>
-        </div>
-        <div  className="mb-3">
-          <div class="flex justify-between mb-1">
-            <span class="text-base flex items-center font-bold text-primary">3 <BsStarFill /> </span>
-            <span class="text-sm font-medium text-primary">{count3Star}</span>
-          </div>
-          <div class="w-full  rounded-full h-2.5 bg-secondary">
-            <div class="bg-primary h-2.5 rounded-full" style={{ width: `${(count3Star * 100)/ratings.length}%`}}></div>
-          </div>
-        </div>
-        
-        <div  className="mb-3">
-          <div class="flex justify-between mb-1">
-            <span class="text-base flex items-center font-bold text-primary">4 <BsStarFill /> </span>
-            <span class="text-sm font-medium text-primary">{count4Star}</span>
-          </div>
-          <div class="w-full  rounded-full h-2.5 bg-secondary">
-            <div class="bg-primary h-2.5 rounded-full" style={{ width: `${(count4Star * 100)/ratings.length}%`}}></div>
-          </div>
-        </div>
 
-        <div  className="mb-3">
-          <div class="flex justify-between mb-1">
-            <span class="text-base flex items-center font-bold text-primary">5 <BsStarFill /> </span>
-            <span class="text-sm font-medium text-primary">{count5Star}</span>
-          </div>
-          <div class="w-full  rounded-full h-2.5 bg-secondary">
-            <div class="bg-primary h-2.5 rounded-full" style={{ width: `${(count5Star * 100)/ratings.length}%`}}></div>
-          </div>
-        </div>
-      </div>
+
     </div>
-
-
-  </div>
   )
 }
 
