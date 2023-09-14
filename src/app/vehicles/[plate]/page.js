@@ -7,6 +7,7 @@ import { Navigation, Pagination } from "swiper";
 import "swiper/css";
 import "swiper/swiper-bundle.min.css";
 import swiperConfig from "@/utils/swiperConfig";
+import { BsStarFill } from "react-icons/bs";
 
 import { useRouter } from "next/navigation";
 import Image from "next/image";
@@ -44,6 +45,22 @@ const Detail = ({ params }) => {
     setShowMessage(false);
   };
 
+  const [ratings, setRatings] = useState([])
+  let ratingAverage = 0;
+
+  const getRating = () => {
+    //Llamar una funcion del back que me traiga todas las valoraciones
+    // setRatings();
+
+
+    ratingAverage = Math.floor(4.5)
+
+    const radioElement = document.querySelector(`input[type="radio"][value="${ratingAverage}"]`);
+    if (radioElement) {
+      radioElement.checked = true;
+    }
+  }
+
   const fetchVehicle = async () => {
     const res = await axios("/api/vehicle/" + params.plate);
     //mocking images until DB is ready
@@ -73,6 +90,7 @@ const Detail = ({ params }) => {
 
   useEffect(() => {
     fetchVehicle();
+    getRating();
   }, []);
 
   const openGalleryModal = (imageId) => {
@@ -129,6 +147,7 @@ const Detail = ({ params }) => {
 
           <Characterist />
 
+          <Rating ratingAverage={ratingAverage} ratings={ratings}/>          
 
           <div class="flex justify-end">
             <button
@@ -141,6 +160,8 @@ const Detail = ({ params }) => {
               Go back
             </button>
           </div>
+
+
           <div>
             <div className="flex justify-end space-x-4">
               <button
@@ -214,8 +235,8 @@ const Detail = ({ params }) => {
             </div>
             {showMessage && (
               <>
-              <div className=" fixed left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 opacity-50 bg-black w-screen h-screen z-30" />
-            
+                <div className=" fixed left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 opacity-50 bg-black w-screen h-screen z-30" />
+
                 <div
                   className=" absolute left-1/2 -translate-x-1/2 -top-1/2 translate-y-1/3 my-32 w-11/12 h-auto p-5 flex items-center justify-center  bg-white rounded-xl drop-shadow-lg  z-40"
                 >
@@ -344,5 +365,111 @@ const Specs = ({ specifications }) => {
     </div>
   );
 };
+
+const Rating = ({ratingAverage, ratings}) => {
+
+
+  return (
+    <div>
+    <h3 className="text-xl font-semibold mb-4">Rating</h3>
+    <div className="w-4/12 m-4">
+      <div>
+        <div className="flex items-center my-4">
+          <p className="text-7xl font-bold mr-4">4,7</p>
+          <div>
+            <form className={`rating`}>
+              <label>
+                <input type="radio" name="stars" value="1" />
+                <span class="icon"><BsStarFill /></span>
+              </label>
+              <label>
+                <input type="radio" name="stars" value="2" />
+                <span class="icon"><BsStarFill /></span>
+                <span class="icon"><BsStarFill /></span>
+              </label>
+              <label>
+                <input type="radio" name="stars" value="3" />
+                <span class="icon"><BsStarFill /></span>
+                <span class="icon"><BsStarFill /></span>
+                <span class="icon"><BsStarFill /></span>
+              </label>
+              <label>
+                <input type="radio" name="stars" value="4" />
+                <span class="icon"><BsStarFill /></span>
+                <span class="icon"><BsStarFill /></span>
+                <span class="icon"><BsStarFill /></span>
+                <span class="icon"><BsStarFill /></span>
+              </label>
+              <label>
+                <input type="radio" name="stars" value="5" />
+                <span class="icon"><BsStarFill /></span>
+                <span class="icon"><BsStarFill /></span>
+                <span class="icon"><BsStarFill /></span>
+                <span class="icon"><BsStarFill /></span>
+                <span class="icon"><BsStarFill /></span>
+              </label>
+            </form>
+            <p className="text-slate-700">Total reviews {1}</p>
+          </div>
+          {/* <button onClick={(e)=>{e.preventDefault}}> See more reviews </button> */}
+
+        </div>
+
+      </div>
+      <div className="mt-3">
+        <div className="mb-3">
+          <div class="flex justify-between mb-1">
+            <span class="text-base flex items-center font-bold text-primary">1 <BsStarFill /> </span>
+            <span class="text-sm font-medium text-primary">45%</span>
+          </div>
+          <div class="w-full  rounded-full h-2.5 bg-secondary">
+            <div class="bg-primary h-2.5 rounded-full" style={{ width: "45%" }}></div>
+          </div>
+        </div>
+        <div  className="mb-3">
+          <div class="flex justify-between mb-1">
+            <span class="text-base flex items-center font-bold text-primary">2 <BsStarFill /> </span>
+            <span class="text-sm font-medium text-primary">45%</span>
+          </div>
+          <div class="w-full  rounded-full h-2.5 bg-secondary">
+            <div class="bg-primary h-2.5 rounded-full" style={{ width: "45%" }}></div>
+          </div>
+        </div>
+        <div  className="mb-3">
+          <div class="flex justify-between mb-1">
+            <span class="text-base flex items-center font-bold text-primary">3 <BsStarFill /> </span>
+            <span class="text-sm font-medium text-primary">45%</span>
+          </div>
+          <div class="w-full  rounded-full h-2.5 bg-secondary">
+            <div class="bg-primary h-2.5 rounded-full" style={{ width: "45%" }}></div>
+          </div>
+        </div>
+        
+        <div  className="mb-3">
+          <div class="flex justify-between mb-1">
+            <span class="text-base flex items-center font-bold text-primary">4 <BsStarFill /> </span>
+            <span class="text-sm font-medium text-primary">45%</span>
+          </div>
+          <div class="w-full  rounded-full h-2.5 bg-secondary">
+            <div class="bg-primary h-2.5 rounded-full" style={{ width: "45%" }}></div>
+          </div>
+        </div>
+
+        <div  className="mb-3">
+          <div class="flex justify-between mb-1">
+            <span class="text-base flex items-center font-bold text-primary">5 <BsStarFill /> </span>
+            <span class="text-sm font-medium text-primary">45%</span>
+          </div>
+          <div class="w-full  rounded-full h-2.5 bg-secondary">
+            <div class="bg-primary h-2.5 rounded-full" style={{ width: "45%" }}></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+  )
+}
 
 export default Detail;
