@@ -1,33 +1,27 @@
-import DatePicker from 'react-datepicker';
-import Link from 'next/link';
+"use client"
 
-function ReservationPage() {
-  const [selectedDate, setSelectedDate] = useState(null);
+import { useState } from 'react';
+import "react-datepicker/dist/react-datepicker.css";
+import DatePicker from "react-datepicker";
 
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
-  };
+function ReservationPage() { 
 
   // Lógica de reserva pendiente de implementación
-
   return (
-    <div>
-      {/* Mostrar información del producto */}
-      <DatePicker
-        selected={selectedDate}
-        onChange={handleDateChange}
-      />
-      <Link href="/confirm-reservation">
-        <a>Reservar</a>
-      </Link>
+    <div className="availability-calendar-container">
+        <div className="availability-calendar">
+            <div className="calendar-label">
+            Display of availability and busy dates:
+                
+                <DatePicker                             
+                // excludeDateIntervals={ AvailableDates}
+                monthsShown={2}   
+                inline                   
+                
+                />
+            </div>
+        </div>
     </div>
   );
 }
-
-useEffect(() => {
-    fetchAvailability()   
-  }, []); 
-
-
-
 export default ReservationPage;

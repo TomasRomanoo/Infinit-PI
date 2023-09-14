@@ -1,4 +1,6 @@
+
 import axios from "axios";
+import Link from "next/link";
 import React, { useState } from "react";
 import { useEffect } from "react";
 import DatePicker from "react-datepicker";
@@ -56,12 +58,13 @@ const AvailabilityCalendar = ({idvehicle}) => {
             withPortal          
             showIcon         
             placeholderText="Show availability"
-            />
-            
-          }     
-             <Link href="./reservation">
-            <a>Ir a la página de reserva</a>
+            />            
+          } 
+                    
+          <Link href={`/reservation`}>            
+            Reservation
           </Link>
+          
         </div>
       </div>
     </div>
