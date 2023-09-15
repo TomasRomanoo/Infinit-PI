@@ -321,3 +321,7 @@ div.react-datepicker__input-container.react-datepicker__view-calendar-icon input
 }
 
 /* --------------------------- Fin Estilos Rating --------------------------- */
+
+.slick-disabled {
+  display: none;
+}

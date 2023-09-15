@@ -8,7 +8,6 @@ import "swiper/css";
 import "swiper/swiper-bundle.min.css";
 import swiperConfig from "@/utils/swiperConfig";
 import { BsStarFill } from "react-icons/bs";
-import Slider from 'react-slick';
 
 import { useRouter } from "next/navigation";
 import Image from "next/image";
@@ -29,6 +28,11 @@ import Calendar from "react-calendar";
 import { Booking } from "@/components/Booking";
 import Characterist from "./characterist";
 import AvailabilityCalendar from "./AvailabilityCalendar";
+
+
+import "slick-carousel/slick/slick.css"; 
+import "slick-carousel/slick/slick-theme.css";
+import Slider from "react-slick";
 
 const Detail = ({ params }) => {
   const [vehicle, setVehicle] = useState({});
@@ -374,6 +378,9 @@ const Specs = ({ specifications }) => {
 };
 
 const Rating = ({ ratingAverage, ratings }) => {
+
+
+
   console.log("ratings -----> ", ratings)
   const [count1Star, setCount1Star] = useState(0)
   const [count2Star, setCount2Star] = useState(0)
@@ -395,37 +402,17 @@ const Rating = ({ ratingAverage, ratings }) => {
   /* -------------------------------------------------------------------------- */
   /*                              paged for ratings                             */
   /* -------------------------------------------------------------------------- */
-  const itemsPerPage = 2;
-  const [currentPage, setCurrentPage] = useState(1);
 
-  // Calcular el índice de inicio y final para los elementos en la página actual
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-
-  // Función para ir a la página anterior
-  const goToPreviousPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
+  const settings = {
+    dots: true,
+    infinite: true,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 2000,
+    pauseOnHover: true,
+    arrows: false
   };
-
-  // Función para ir a la página siguiente
-  const goToNextPage = () => {
-    if (endIndex < ratings.length) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
-  // const pages = [];
-  // for (let i = 0; i < ratings.length; i += itemsPerPage) {
-  //   pages.push(ratings.slice(i, i + itemsPerPage));
-  // }
-  // const settings = {
-  //   dots: true,
-  //   infinite: false,
-  //   speed: 500,
-  //   slidesToShow: 1,
-  //   slidesToScroll: 1,
-  // };
 
   return (
     <div>
@@ -525,18 +512,18 @@ const Rating = ({ ratingAverage, ratings }) => {
             </div>
           </div>
         </div>
-        <div className=" lg:w-5/12 w-full lg:m-0 mt-10 rounded-xl flex flex-col justify-center items-center overflow-auto" style={{ boxShadow: '0px -1px 29px -20px rgba(0,0,0,0.47) inset', height: '425px' }}>
-          {ratings.slice(startIndex, endIndex).map((oneRating) => {
+        
+          <Slider { ...settings} className=" lg:w-5/12 w-full  lg:m-0 mt-10 rounded-xl flex flex-col justify-center " style={{ boxShadow: '0px -1px 29px -20px rgba(0,0,0,0.47) inset'}}>
+          {ratings.map((oneRating) => {
             return (
-              <div className="w-10/12 relative h-fit p-4 m-2 shadow-md rounded-xl ">
-                <p className="absolute right-5 top-5 text-sm text-slate-500 ">{oneRating.date}</p>
-                <h1 className="text-black font-bold">{oneRating.user.first_name + ' ' + oneRating.user.last_name}</h1>
-                <div className="flex">
+              <div className="relative  p-5 rounded-xl lg:text-xl text-lg ">
+                <p className="absolute right-5 top-5 text-sm text-slate-500 ">{oneRating.date.slice(0, 10) }</p>
+                <h1 className="text-black font-bold my-2">{oneRating.user.first_name + ' ' + oneRating.user.last_name}</h1>
+                <div className="flex lg:my-4 my-2">
                   {(() => {
                     const stars = [];
                     for (let i = 0; i < oneRating.rate; i++) {
                       stars.push(<BsStarFill className='text-yellow-300' key={i} />);
-                      { console.log(stars) }
                     }
                     return stars
                   })()}
@@ -545,21 +532,24 @@ const Rating = ({ ratingAverage, ratings }) => {
               </div>
             )
           })}
-          <div className="flex justify-between mt-4">
-            <button onClick={goToPreviousPage} className="bg-blue-500 text-white p-2 rounded" disabled={currentPage === 1}>
-              Anterior
-            </button>
-            <button onClick={goToNextPage} className="bg-blue-500 text-white p-2 rounded" disabled={endIndex >= ratings.length}>
-              Siguiente
-            </button>
-          </div>
+          </Slider>
 
-        </div>
+        
       </div>
 
 
     </div>
   )
 }
+
+const modalRate = () =>{
+  return (
+    <>
+      <div>
+        Hola
+      </div>
+    </>
+  )
+} 
 
 export default Detail;
