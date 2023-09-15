@@ -45,39 +45,22 @@ const Detail = ({ params }) => {
   const handleCloseMessage = () => {
     setShowMessage(false);
   };
-
-  const [ratings, setRatings] = useState([])
   const [ratingAverage, setRatingAverage] = useState(0)
 
-  const getRating = () => {
-    //Llamar una funcion del back que me traiga todas las valoraciones
-
-    const ratingsHarcoded = [
-      { "rating": 5, "user": "Alice Johnson", "date": "21/11/23", "description": "Renting this luxury car was an incredible experience. The car was spotless, and the customer service was exceptional. I highly recommend it!" },
-      { "rating": 4, "user": "John Smith", "date": "22/11/23", "description": "The luxury car I rented was great overall. Some minor details could have been better, but overall, it was a good experience." },
-      { "rating": 5, "user": "Emily Davis", "date": "23/11/23", "description": "I have nothing but praise for this luxury car rental service. The vehicle was stunning, and the staff was incredibly accommodating. A perfect experience!" },
-      { "rating": 2, "user": "Michael Wilson", "date": "24/11/23", "description": "Unfortunately, the luxury car rental did not meet my expectations. The vehicle had some issues, and the service was lacking." },
-      { "rating": 1, "user": "Sophia Martinez", "date": "25/11/23", "description": "My experience with this luxury car rental was terrible. The car was not in good condition, and the service was a disappointment." },
-      { "rating": 5, "user": "Daniel Brown", "date": "26/11/23", "description": "Renting this luxury car was the best decision I made. It exceeded all my expectations, and I felt like a VIP throughout the entire experience." },
-      { "rating": 4, "user": "Olivia Harris", "date": "27/11/23", "description": "The luxury car I rented was really good, but there were a few minor issues. Nevertheless, it was an enjoyable experience." },
-      { "rating": 3, "user": "Liam Taylor", "date": "28/11/23", "description": "The luxury car rental could have been better. There were some issues with the vehicle, and the service was just average." },
-      { "rating": 5, "user": "Ava Anderson", "date": "29/11/23", "description": "My experience with this luxury car rental service was amazing! The car was a dream, and the entire process was seamless." },
-      { "rating": 2, "user": "Ethan Clark", "date": "30/11/23", "description": "Renting this luxury car was not worth it. The car had too many problems, and the service was disappointing." },
-    ]
-    setRatings(ratingsHarcoded);
-  }
-
   useEffect(() => {
-    let totalRating = 0
-    ratings.forEach((rate) => {
-      totalRating += rate.rating
-    })
-    setRatingAverage(totalRating / ratings.length)
-    const radioElement = document.querySelector(`input[type="radio"][value="${Math.floor(totalRating / ratings.length)}"]`);
-    if (radioElement) {
-      radioElement.checked = true;
+    console.log("vehicle -----> ", vehicle)
+    if (vehicle.ratings) {
+      let totalRating = 0
+      vehicle.ratings.forEach((rate) => {
+        totalRating += rate.rate
+      })
+      setRatingAverage(totalRating / vehicle.ratings.length)
+      const radioElement = document.querySelector(`input[type="radio"][value="${Math.floor(totalRating / vehicle.ratings.length)}"]`);
+      if (radioElement) {
+        radioElement.checked = true;
+      }
     }
-  }, [ratings])
+  }, [vehicle])
 
   const fetchVehicle = async () => {
     const res = await axios("/api/vehicle/" + params.plate);
@@ -107,7 +90,6 @@ const Detail = ({ params }) => {
 
   useEffect(() => {
     fetchVehicle();
-    getRating();
   }, []);
 
   const openGalleryModal = (imageId) => {
@@ -164,7 +146,7 @@ const Detail = ({ params }) => {
 
           <Characterist />
 
-          <Rating ratingAverage={ratingAverage} ratings={ratings} />
+          <Rating ratingAverage={ratingAverage} ratings={vehicle.ratings || []} />
 
           <div class="flex justify-end">
             <button
@@ -290,6 +272,8 @@ const Gallery = ({
           <Image
             className="object-contain rounded-lg"
             src={images[0]?.url}
+            width={100}
+            height={100}
             alt="spec"
           />
         </div>
@@ -306,6 +290,8 @@ const Gallery = ({
                   className=" rounded-lg object-contain"
                   src={image.url}
                   alt={`Image ${image.id}`}
+                  width={100}
+                  height={100}
                 />
               </div>
             ))}
@@ -358,6 +344,8 @@ const GalleryModal = ({ selectedImageId, images, close }) => {
                   className=" pointer-events-none object-cover md:aspect-auto h-screen md:h-full"
                   src={image.url}
                   alt="spec"
+                  width={100}
+                  height={100}
                 />
               </SwiperSlide>
             );
@@ -374,7 +362,9 @@ const Specs = ({ specifications }) => {
       {specifications?.map((spec, index) => {
         return (
           <div className="flex items-center gap-4" key={index}>
-            <Image src={spec.image} alt="spec" />
+            <Image src={spec.image} alt="spec"
+                   width={100}
+                   height={100} />
             <p className="font-poppins text-lg">{spec.description}</p>
           </div>
         );
@@ -384,6 +374,7 @@ const Specs = ({ specifications }) => {
 };
 
 const Rating = ({ ratingAverage, ratings }) => {
+  console.log("ratings -----> ", ratings)
   const [count1Star, setCount1Star] = useState(0)
   const [count2Star, setCount2Star] = useState(0)
   const [count3Star, setCount3Star] = useState(0)
@@ -392,11 +383,11 @@ const Rating = ({ ratingAverage, ratings }) => {
 
 
   useEffect(() => {
-    setCount1Star(ratings?.filter(rate => rate.rating === 1).length)
-    setCount2Star(ratings?.filter(rate => rate.rating === 2).length)
-    setCount3Star(ratings?.filter(rate => rate.rating === 3).length)
-    setCount4Star(ratings?.filter(rate => rate.rating === 4).length)
-    setCount5Star(ratings?.filter(rate => rate.rating === 5).length)
+    setCount1Star(ratings?.filter(rate => rate.rate === 1).length)
+    setCount2Star(ratings?.filter(rate => rate.rate === 2).length)
+    setCount3Star(ratings?.filter(rate => rate.rate === 3).length)
+    setCount4Star(ratings?.filter(rate => rate.rate === 4).length)
+    setCount5Star(ratings?.filter(rate => rate.rate === 5).length)
 
   }, [ratings])
 
@@ -539,11 +530,11 @@ const Rating = ({ ratingAverage, ratings }) => {
             return (
               <div className="w-10/12 relative h-fit p-4 m-2 shadow-md rounded-xl ">
                 <p className="absolute right-5 top-5 text-sm text-slate-500 ">{oneRating.date}</p>
-                <h1 className="text-black font-bold">{oneRating.user}</h1>
+                <h1 className="text-black font-bold">{oneRating.user.first_name + ' ' + oneRating.user.last_name}</h1>
                 <div className="flex">
                   {(() => {
                     const stars = [];
-                    for (let i = 0; i < oneRating.rating; i++) {
+                    for (let i = 0; i < oneRating.rate; i++) {
                       stars.push(<BsStarFill className='text-yellow-300' key={i} />);
                       { console.log(stars) }
                     }

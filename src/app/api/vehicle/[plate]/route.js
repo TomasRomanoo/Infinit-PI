@@ -5,7 +5,6 @@ const prisma = new PrismaClient();
 export async function GET(request) {
   console.log("La función GET ha sido llamada.");
   try {
-    console.log(request);
     const urlParts = request.url.split("/");
     const plate = urlParts[urlParts.length - 1];
     if (!plate) {
@@ -23,8 +22,12 @@ export async function GET(request) {
         category: true,
         specifications: true,
         images: true,
+        ratings: {
+          include: {
+            user: true,
+          }
+        },
         model: {
-          include: true,
           include: {
             brand: true,
           },
