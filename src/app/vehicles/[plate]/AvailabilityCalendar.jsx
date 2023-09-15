@@ -72,98 +72,55 @@
 // };
 // export default AvailabilityCalendar;
 
+"use client"
 
-
-import axios from "axios";
-import React, { useState, useEffect, useContext } from "react";
-import DatePicker from "react-datepicker";
+import { useState, useEffect } from 'react';
 import "react-datepicker/dist/react-datepicker.css";
-import Swal from 'sweetalert2';
-// import { UserContext } from "./UserContext";
-import { UserContext } from "@/components/context/UserContext";
+import DatePicker from "react-datepicker";
+import { useRouter } from 'next/router'; // Importa useRouter desde next/router
+import "../globals.css";
 
+function ReservationPage() { 
+  const router = useRouter();
+  const { dates } = router.query;
 
-
-
-const AvailabilityCalendar = ({ idvehicle }) => {
-  
-  const { user } = useContext(UserContext);
-
-  const [dateRange, setDateRange] = useState();
-  const [AvailableDates, setAvailableDates] = useState();
-  const [isError, setIsError] = useState(false);
-
-  const fetchAvailability = async () => {
-    try {
-      if (idvehicle) {
-        const response = await axios(`/api/availability/${idvehicle}`);
-        const powerRange = response.data.map((dateRange) => ({
-          start: new Date(dateRange.start.split("T")[0]),
-          end: new Date(dateRange.end.split("T")[0]),
-        }));
-        setAvailableDates(powerRange);
-        setIsError(false);
-      }
-    } catch (error) {
-      console.error("Error fetching availability: ", error);
-      setIsError(true);
-
-      Swal.fire({
-        icon: 'error',
-        title: 'Unable to fetch availability. Please try again later...',
-      });
-    }
-  };
-
+  // Inicializa availableDates como estado local
+  const [availableDates, setAvailableDates] = useState([]);
   useEffect(() => {
-    fetchAvailability();
-  }, [idvehicle]);
-
-  const handleReservationClick = () => {
-    // Verificar si el usuario está autenticado utilizando el contexto de usuario
-    if (user) {
-      window.location.href = '/reservation';
-    } else {
-      
-      Swal.fire({
-      title: 'Redirecting...',
-      text: 'you need are logged for to get reservation.',
-      icon: 'info',
-      timer: 4000,
-      showConfirmButton: false,
-      timerProgressBar: true,
-      onBeforeOpen: () => {
-        Swal.showLoading()
-      }
-    }).then(() => {
-      window.location.href = '/login';
-    });
+    if (dates) {
+      setAvailableDates(JSON.parse(dates));
     }
-  };
+  }, [dates]);
 
+  const [dateRange, setDateRange] = useState([null, null]);
+  const [startDate, endDate] = dateRange;
+
+  // Lógica de reserva pendiente de implementación
   return (
     <div className="availability-calendar-container">
       <div className="availability-calendar">
         <div className="calendar-label">
           Display of availability and busy dates:
-          {isError ? (
-            <p className="bg-white text-gray-400 w-60 rounded-lg mt-2 py-2 px-3">
-              Please try again later...
-            </p>
-          ) : (
-            <DatePicker
-              excludeDateIntervals={AvailableDates}
-              monthsShown={2}
-              withPortal
-              showIcon
-              placeholderText="Show availability"
-            />
-          )}
-          <button onClick={handleReservationClick}>Reservation</button>
+          <DatePicker
+            excludeDateIntervals={availableDates} // Usa availableDates en lugar de AvailableDates
+            selectsRange={true}
+            startDate={startDate}
+            endDate={endDate}
+            onChange={(update) => {
+              setDateRange(update);
+            }}
+            monthsShown={2}
+            isClearable={true}
+            withPortal
+            showIcon
+            placeholderText="Select a date range"
+          />
         </div>
       </div>
     </div>
   );
-};
+}
 
-export default AvailabilityCalendar;
+export default ReservationPage;
+
+
