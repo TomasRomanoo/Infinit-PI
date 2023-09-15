@@ -75,13 +75,14 @@
 
 
 import axios from "axios";
-import Link from "next/link";
 import React, { useState, useEffect, useContext } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Swal from 'sweetalert2';
 // import { UserContext } from "./UserContext";
 import { UserContext } from "@/components/context/UserContext";
+
+
 
 
 const AvailabilityCalendar = ({ idvehicle }) => {
@@ -121,17 +122,22 @@ const AvailabilityCalendar = ({ idvehicle }) => {
   const handleReservationClick = () => {
     // Verificar si el usuario está autenticado utilizando el contexto de usuario
     if (user) {
-      return (
-        <Link href="/reservation">
-          Reservation
-        </Link>
-      );
+      window.location.href = '/reservation';
     } else {
-      return (
-        <Link href="/signup">
-          Sign Up
-        </Link>
-      );
+      
+      Swal.fire({
+      title: 'Redirecting...',
+      text: 'you need are logged for to get reservation.',
+      icon: 'info',
+      timer: 4000,
+      showConfirmButton: false,
+      timerProgressBar: true,
+      onBeforeOpen: () => {
+        Swal.showLoading()
+      }
+    }).then(() => {
+      window.location.href = '/login';
+    });
     }
   };
 

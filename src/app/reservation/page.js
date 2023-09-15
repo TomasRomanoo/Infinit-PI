@@ -3,8 +3,15 @@
 import { useState } from 'react';
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
+import "../globals.css"
+// import { useHistory } from 'react-router-dom';
+// import AvailableDates from "../AvailabilityCalendar";
+
 
 function ReservationPage() { 
+
+  const [dateRange, setDateRange] = useState([null, null]);
+  const [startDate, endDate] = dateRange;
 
   // Lógica de reserva pendiente de implementación
   return (
@@ -12,13 +19,28 @@ function ReservationPage() {
         <div className="availability-calendar">
             <div className="calendar-label">
             Display of availability and busy dates:
+
                 
-                <DatePicker                             
+                { <DatePicker
+                  // excludeDateIntervals={AvailableDates}
+                  selectsRange={true}
+                  startDate={startDate}
+                  endDate={endDate}
+                  onChange={(update) => {
+                    setDateRange(update);
+                  }}                  
+                  monthsShown={2}  
+                  isClearable={true}
+                  placeholderText='Select a date range'
+                /> }               
+
+
+                
+                {/* <DatePicker                             
                 // excludeDateIntervals={ AvailableDates}
                 monthsShown={2}   
-                inline                   
-                
-                />
+                inline               
+                /> */}
             </div>
         </div>
     </div>
