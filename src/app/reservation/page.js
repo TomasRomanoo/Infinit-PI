@@ -17,11 +17,13 @@ function ReservationPage() {
   return (
     <div className="availability-calendar-container">
         <div className="availability-calendar">
-            <div className="calendar-label">
-            Display of availability and busy dates:
+            <div className="calendar-label" >
+                <p className='mx-1'>
+                  Display of availability and busy dates:
+                </p>
 
                 
-                { <DatePicker
+                <DatePicker className='px-calendar'
                   // excludeDateIntervals={AvailableDates}
                   selectsRange={true}
                   startDate={startDate}
@@ -31,8 +33,10 @@ function ReservationPage() {
                   }}                  
                   monthsShown={2}  
                   isClearable={true}
-                  placeholderText='Select a date range'
-                /> }               
+                  withPortal
+                  showIcon
+                  placeholderText="Select a date range"
+                />                
 
 
                 

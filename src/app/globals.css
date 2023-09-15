@@ -215,7 +215,7 @@ h2.policy-title {
 
 /* Estilos para la etiqueta "Available Dates" */
 
-.calendar-label input { color: black; margin-left: 20px; padding: 5px; border-radius: 10px;}
+/* .calendar-label input { color: black; margin-left: 20px; padding: 5px; border-radius: 10px;} */
 .calendar-label {
   
   font-size: 20px;
@@ -224,7 +224,7 @@ h2.policy-title {
   margin: 5px 0 5px 0; /* Espacio inferior */
 }
 svg.react-datepicker__calendar-icon{ 
-  margin-top: 15px;
+  margin-top: 10px;
   margin-left: 5px;
   font-size: 37px;
   align-content: center;
@@ -234,10 +234,12 @@ svg.react-datepicker__calendar-icon{
 div.react-datepicker__input-container.react-datepicker__view-calendar-icon input{ 
   
   /* margin-left: 10px; */
+  font-size: large;
+  text-align:center ;
   margin-top: 10px;
-  padding: 8px 0 8px 40px;  
+  /* padding: 8px 8px;   */
   border-radius: 10px;
-  width: 220px;
+  width:280px;
   cursor: pointer ;
   color: black;
 }
@@ -248,4 +250,6 @@ div.react-datepicker__input-container.react-datepicker__view-calendar-icon input
   border-radius: 10px;
     /* Cambia el color de fondo a tu elección */
   /* Otras propiedades de estilo si las necesitas */
+}
+.px-calendar{
 }
