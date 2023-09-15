@@ -8,16 +8,9 @@ export async function POST(request) {
   try {
     const body = await request.json();
 
-    console.log("body :>> ", body);
-    /*    const {
-      plate,
-      brand,
-      model,
-      detail,
-      year,
-      price_per_day,
-      long_description,
-    } = body; */
+    console.log('body :>> ', body);
+
+
 
     /*   if (!plate || !model || !price_per_day || price_per_day <= 0) {
       return NextResponse.json(
@@ -54,12 +47,6 @@ export async function POST(request) {
         category: {
           connect: { idcategory: category.idcategory },
         },
-        // specifications: {
-        //   connect: { idspecification: 1 },
-        // },
-        images: {
-          /*  create: images.map((url) => ({ url })), */
-        },
         detail: body.detail,
         year: body.year,
         price_per_day: body.price_per_day,
@@ -67,6 +54,14 @@ export async function POST(request) {
         deleted: false,
       },
     });
+    await prisma.image.createMany({
+      data: body.images.map((url) => ({
+        url: url.image,
+        deleted: false,
+        vehicleIdvehicle: car.idvehicle,
+      })),
+    });
+
     return NextResponse.json(
       { message: "Vehicle registered successfully", car },
       { status: 200 }
@@ -92,7 +87,7 @@ export async function GET() {
             brand: true,
           },
         },
-        favorites: true
+        favorites: true,
       },
     });
 

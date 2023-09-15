@@ -8,14 +8,19 @@ import { Category } from "./Category";
 export const Form = () => {
   const { isAdmin } = useContext(UserContext);
 
-  const [showCategory, setShowCategory] = useState(false)
+  const [showCategory, setShowCategory] = useState(false);
   const categoryHandler = (e) => {
-    e.preventDefault()
-    setShowCategory(!showCategory)
-  }
+    e.preventDefault();
+    setShowCategory(!showCategory);
+  };
+
+  const [images, setImages] = useState([]);
+  const [imagesToUpload, setImagesToUpload] = useState([]);
 
   const handlerSubmit = (e) => {
     e.preventDefault();
+
+    uploadImages();
     const fields = [
       { state: model, setter: setModelErr, id: "#modelInput" },
       { state: price, setter: setPriceErr, id: "#priceInput" },
@@ -87,9 +92,46 @@ export const Form = () => {
     }
   };
 
-  const apiUrl = "/api/vehicle";
+  const handleFileChange = (e) => {
+    const newImages = [...images];
+    const files = e.target.files;
 
-  function createPost() {
+    for (let i = 0; i < files.length; i++) {
+      newImages.push(files[i]);
+    }
+
+    setImages(newImages);
+  };
+
+  const handleDelete = (index) => {
+    const newImages = [...images];
+    newImages.splice(index, 1);
+    setImages(newImages);
+  };
+
+  const handleRearrange = (fromIndex, toIndex) => {
+    const newImages = [...images];
+    const [movedItem] = newImages.splice(fromIndex, 1);
+    newImages.splice(toIndex, 0, movedItem);
+    setImages(newImages);
+  };
+
+  const uploadImages = async () => {
+    try {
+      const formData = new FormData();
+      Array.from(images).forEach((file) => {
+        formData.append("images", file);
+      });
+
+      const response = await axios.post("/api/upload", formData);
+      setImagesToUpload(response.data);
+      console.log("imagesToUpload :>> ", imagesToUpload);
+    } catch (error) {
+      console.error("Error uploading images: ", error);
+    }
+  };
+
+  const createPost = async () => {
     let parsCategory;
     if (category) {
       parsCategory = JSON.parse(category);
@@ -97,44 +139,50 @@ export const Form = () => {
 
     let parsModel = JSON.parse(model);
 
-      toast.promise(
-        axios.post(apiUrl, {
-          name: "",
-          plate: plate,
-          detail: detail,
-          year: +year,
-          price_per_day: +price,
-          long_description: description,
+    const formData = new FormData();
+    Array.from(images).forEach((file) => {
+      formData.append("images", file);
+    });
+
+    const response = await axios.post("/api/upload", formData);
+
+    const object = {
+      name: "",
+      plate: plate,
+      detail: detail,
+      year: +year,
+      price_per_day: +price,
+      long_description: description,
+      deleted: false,
+      category: {
+        idcategory: parsCategory.idcategory,
+        name: parsCategory.name,
+        url: parsCategory.url,
+        deleted: false,
+      },
+      images: response.data,
+      model: {
+        idmodel: parsModel.idmodel,
+        name: parsModel.name,
+        brandIdbrand: parsModel.brandIdbrand,
+        deleted: false,
+        brand: {
+          idbrand: brand.idbrand,
+          name: brand.name,
+          url: brand.url,
           deleted: false,
-          category: {
-            idcategory: parsCategory.idcategory,
-            name: parsCategory.name,
-            url: parsCategory.url,
-            deleted: false,
-          },
-          images: [],
-          model: {
-            idmodel: parsModel.idmodel,
-            name: parsModel.name,
-            brandIdbrand: parsModel.brandIdbrand,
-            deleted: false,
-            brand: {
-              idbrand: brand.idbrand,
-              name: brand.name,
-              url: brand.url,
-              deleted: false,
-            },
-          },
-        }),
-        {
-          loading: "Loading...",
-          success: (data) => {
-            return `Post has been created successfully`;
-          },
-          error: "Error while creating post",
-        }
-      );
-  }
+        },
+      },
+    };
+
+    toast.promise(axios.post("/api/vehicle", object), {
+      loading: "Loading...",
+      success: (data) => {
+        return `Post has been created successfully`;
+      },
+      error: "Error while creating post",
+    });
+  };
 
   //* Controled inputs states
   const [brand, setBrand] = useState({
@@ -181,6 +229,10 @@ export const Form = () => {
     fetchBrands();
     fetchCategories();
   }, []);
+
+  useEffect(() => {
+    console.log("images :>> ", images);
+  }, [images]);
 
   return (
     <>
@@ -245,7 +297,6 @@ export const Form = () => {
                   value={model}
                   onChange={(e) => {
                     setModel(e.target.value);
-                    console.log("model :>> ", model);
                   }}
                   type="text"
                   className="block mt-2 w-full cursor-pointer rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 focus:outline-none sm:text-sm sm:leading-6 transition ease-in-out duration-300"
@@ -257,7 +308,6 @@ export const Form = () => {
                     return (
                       <option value={JSON.stringify(model)} key={model.idmodel}>
                         {model.name}
-                        {console.log(model)}
                       </option>
                     );
                   })}
@@ -332,8 +382,43 @@ export const Form = () => {
                                     file:bg-primary file:text-white
                                     hover:file:bg-secondary file:transition-all duration-200 ease-in-out
                                     "
+                    onChange={handleFileChange}
                   />
+                
                 </label>
+
+                <div>
+                    {images.map((file, index) => (
+                      <div key={index} className="mt-2">
+                        <span>{file.name}</span>
+                        <button
+                          type="button"
+                          onClick={() => handleDelete(index)}
+                          className="ml-2 text-red-500"
+                        >
+                          Delete
+                        </button>
+                        {index > 0 && (
+                          <button
+                            type="button"
+                            onClick={() => handleRearrange(index, index - 1)}
+                            className="ml-2 text-blue-500"
+                          >
+                            Move Up
+                          </button>
+                        )}
+                        {index < images.length - 1 && (
+                          <button
+                            type="button"
+                            onClick={() => handleRearrange(index, index + 1)}
+                            className="ml-2 text-blue-500"
+                          >
+                            Move Down
+                          </button>
+                        )}
+                      </div>
+                    ))}
+                  </div>
               </div>
             </div>
           </div>
@@ -447,7 +532,6 @@ export const Form = () => {
                   value={category}
                   onChange={(e) => {
                     setCategory(e.target.value);
-                    console.log("category :>> ", category);
                   }}
                   type="text"
                   className="block  w-full cursor-pointer rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 focus:outline-none sm:text-sm sm:leading-6 transition ease-in-out duration-300"
@@ -466,8 +550,11 @@ export const Form = () => {
                     );
                   })}
                 </select>
-                <button onClick={categoryHandler} className="bg-primary text-neutral-50 rounded-xl p-2 ml-2">
-                  <MdEdit/>
+                <button
+                  onClick={categoryHandler}
+                  className="bg-primary text-neutral-50 rounded-xl p-2 ml-2"
+                >
+                  <MdEdit />
                 </button>
               </div>
               {categoryErr ? (
@@ -479,7 +566,7 @@ export const Form = () => {
               )}
             </div>
           </div>
-        </div>  
+        </div>
 
         <div className="mt-5  ">
           <button className="rounded-xl py-3 px-5 w-full text-white bg-primary hover:bg-secondary file:transition-all duration-200 ease-in-out">
@@ -493,11 +580,16 @@ export const Form = () => {
         }`}
         id="modalBg"
       ></div>
-      <div id="categoryModal"
-      className={` z-50 min-h-full  justify-center items-center p-0 fixed inset-0 ${
+      <div
+        id="categoryModal"
+        className={` z-50 min-h-full  justify-center items-center p-0 fixed inset-0 ${
           showCategory ? "flex" : "hidden"
-        }`} >
-        <Category categories={categories} setShowCategory={() => setShowCategory()}/>
+        }`}
+      >
+        <Category
+          categories={categories}
+          setShowCategory={() => setShowCategory()}
+        />
       </div>
     </>
   );

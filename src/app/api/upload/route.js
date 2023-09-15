@@ -18,12 +18,15 @@ export async function POST(req, context) {
   try {
     const formData = await req.formData();
 
-    const files = formData.getAll("files");
+
+    const files = formData.getAll("images");
+
+    console.log('files :>> ', files);
+
 
     const uploadUrls = []; // Array to store the URLs
 
     for (const file of files) {
-      console.log("file :>> ", file);
       const { mimetype, name } = file;
 
       const directoryPath = "vehicle";
