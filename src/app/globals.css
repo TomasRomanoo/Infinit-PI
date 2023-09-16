@@ -224,7 +224,7 @@ h2.policy-title {
   margin: 5px 0 5px 0; /* Espacio inferior */
 }
 svg.react-datepicker__calendar-icon{ 
-  margin-top: 10px;
+  margin-top: 12px;
   margin-left: 5px;
   font-size: 37px;
   align-content: center;
@@ -234,7 +234,7 @@ svg.react-datepicker__calendar-icon{
 div.react-datepicker__input-container.react-datepicker__view-calendar-icon input{ 
   
   /* margin-left: 10px; */
-  font-size: large;
+  font-size: inherit;
   text-align:center ;
   margin-top: 10px;
   /* padding: 8px 8px;   */

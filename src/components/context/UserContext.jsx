@@ -8,7 +8,7 @@ export const UserContext = createContext();
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isAdmin, setIsAdmin] = useState(null);
-  const [availableDates, setAvailableDates] = useState([]); 
+  
 
   //* Lo mande con use effect pq en la consola me tiraba
   //* error si lo inicializaba con el localStorage (pero funcionaba)
@@ -56,13 +56,11 @@ export const UserProvider = ({ children }) => {
 
   const userContextValue = {
     user,
-    isAdmin,
-    availableDates, //Agrega el estado de fechas disponibles al contexto
+    isAdmin,    
     loginUser,
     signoutUser,
     getUser,
-    setAvailableDates,// Agrega la función para actualizar fechas disponibles
-  };
+  }
 
   return (
     <UserContext.Provider value={userContextValue}>
