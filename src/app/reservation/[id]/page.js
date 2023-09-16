@@ -46,9 +46,8 @@ function ReservationPage({params}) {
                 <div className="calendar-label" >
                     <p className='mx-1'>
                     Display of availability and busy dates:
-                        </p>
+                        </p>                     
 
-                        
                         <DatePicker className='px-calendar'
                             excludeDateIntervals={AvailableDates}
                             selectsRange={true}
@@ -63,9 +62,7 @@ function ReservationPage({params}) {
                             isClearable={true}                  
                             showIcon
                             placeholderText="Select a date range"
-                        />                
-
-                    
+                        />              
             
                 </div>
             </div>

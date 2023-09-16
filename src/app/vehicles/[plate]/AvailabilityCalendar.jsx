@@ -157,7 +157,7 @@ const AvailabilityCalendar = ({ idvehicle }) => {
                 placeholderText="Show availability"
               />
             )}
-            <button className="bg-white text-black rounded-xl px-2 py-0"
+            <button className="bg-white text-black rounded-xl px-2 py-2 m-2"
             onClick={handleReservationClick}>Go Reservation
             </button>
 
