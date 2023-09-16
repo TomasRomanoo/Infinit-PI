@@ -71,9 +71,6 @@
 //   );
 // };
 // export default AvailabilityCalendar;
-
-
-
 import axios from "axios";
 import React, { useState, useEffect, useContext } from "react";
 import DatePicker from "react-datepicker";
