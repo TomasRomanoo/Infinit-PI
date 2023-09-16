@@ -190,7 +190,7 @@ const Detail = ({ params }) => {
             openGalleryModal={openGalleryModal}
             closeGalleryModal={closeGalleryModal}
             setSelectedImageId={setSelectedImageId}
-        //    images={vehicle.images || []}
+            images={vehicle.images || []}
           />
 
           <Specs />
@@ -368,13 +368,9 @@ const Gallery = ({
         >
           <Image
             className="object-contain rounded-lg"
-<<<<<<< HEAD
-    //        src={images[0]?.url}
-=======
             width={500}
             height={500}
             src={images[1]?.url}
->>>>>>> db00db1dd04fce469e0e44a1b58bd278314fd474
             alt="spec"
           />
         </div>
