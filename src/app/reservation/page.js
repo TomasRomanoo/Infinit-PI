@@ -30,7 +30,8 @@ function ReservationPage() {
                   endDate={endDate}
                   onChange={(update) => {
                     setDateRange(update);
-                  }}                  
+                  }}     
+                  minDate={new Date()}             
                   monthsShown={2}  
                   isClearable={true}
                   withPortal
