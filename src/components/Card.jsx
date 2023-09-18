@@ -36,7 +36,7 @@ export const Card = (props) => {
             <></>
           )}
           <div className="flex items-start gap-1 font-bold text-lg">
-            <p className="text-start truncate ">
+            <p className="text-start truncate capitalize ">
               {props.vehicle.model?.brand?.name}
             </p>
             <p>{props.vehicle.model?.name}</p>

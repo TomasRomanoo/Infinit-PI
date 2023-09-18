@@ -5,12 +5,11 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 function ReservasHistorial() {
-  const [reservas, setReservas] = useState([]);
+  const [reservation, setReservation] = useState([]); // Cambio de 'reservas' a 'reservation'
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Simula una demora de 1 segundo para cargar los datos.
-    setTimeout(async () => {
+    async function fetchReservas() {
       try {
         const userReservas = await prisma.reservation.findMany({
           where: {
@@ -24,12 +23,15 @@ function ReservasHistorial() {
           },
         });
 
-        setReservas(userReservas);
+        setReservation(userReservas); // Cambio de 'setReservas' a 'setReservation'
         setIsLoading(false);
       } catch (error) {
         console.error('Error al cargar las reservas:', error);
       }
-    }, 1000);
+    }
+
+    // Llama a la función para cargar las reservas cuando el componente se monta.
+    fetchReservas();
   }, []);
 
   return (
@@ -39,11 +41,11 @@ function ReservasHistorial() {
         <p>Cargando...</p>
       ) : (
         <ul>
-          {reservas.map((reserva) => (
-            <li key={reserva.idreservation}>
-              <strong>Fecha de Check-in:</strong> {reserva.checkin_date}<br />
-              <strong>Fecha de Check-out:</strong> {reserva.checkout_date}<br />
-              <strong>Vehículo:</strong> {reserva.vehicle.name}<br />
+          {reservation.map((reservation) => (
+            <li key={reservation.idreservation}>
+              <strong>Fecha de Check-in:</strong> {reservation.checkin_date}<br />
+              <strong>Fecha de Check-out:</strong> {reservation.checkout_date}<br />
+              <strong>Vehículo:</strong> {reservation.vehicle.name}<br />
               {/* Otros detalles de la reserva si los tienes en tu modelo de datos */}
               <hr />
             </li>

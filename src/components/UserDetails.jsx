@@ -4,16 +4,16 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 export default function UserDetails({ callback, data, loading, ready }) {
-  const [firstName, setFirstName] = useState(data.firstName || "");
-  const [lastName, setLastName] = useState(data.lastName || "");
+  const [firstName, setFirstName] = useState(data.first_name || "");
+  const [lastName, setLastName] = useState(data.last_name || "");
   const [phone, setPhone] = useState(data.phone || "");
-  const [identification, setIdentification] = useState(data.country || "");
+  const [identification, setIdentification] = useState(data.identification || "");
 
   const [address, setAddress] = useState({
-    street: "",
-    city: "",
-    zipCode: null,
-    country: "",
+    street: data.address?.street || "",
+    city: data.address?.city || "",
+    zipCode: data.address?.zip_code || null,
+    country: data.address?.country || "",
   });
 
   const [countries, setCountries] = useState([]);
@@ -81,48 +81,7 @@ export default function UserDetails({ callback, data, loading, ready }) {
       }
     };
 
-    const fetchUser = async () => {
-      if (data) {
-        loading();
-        axios.get(`/api/user/${data.email}`).then(function(response) {
-          let needsUpdate = false;
-          if (response.data.first_name) {
-            setFirstName(response.data.first_name)
-          } else {
-            needsUpdate = true;
-          }
-          if (response.data.last_name) {
-            setLastName(response.data.last_name)
-          } else {
-            needsUpdate = true;
-          }
-          if (response.data.phone) {
-            setPhone(response.data.phone+'')
-          } else {
-            needsUpdate = true;
-          }
-          if (response.data.identification) {
-            setIdentification(response.data.identification)
-          } else {
-            needsUpdate = true;
-          }
-          if (response.data.address) {
-            setAddress({
-              street: response.data.address,
-              city: response.data.city,
-              zipCode: response.data.zip_code,
-              country: response.data.country,
-            })
-          } else {
-            needsUpdate = true;
-          }
-          ready();
-        })
-      }
-    }
-
   useEffect(() => {
-    fetchUser();
     fetchCountries();
   }, []);
 
@@ -195,6 +154,7 @@ export default function UserDetails({ callback, data, loading, ready }) {
             <select
               id="country"
               name="country"
+              value={address.country}
               className="px-2 py-1.5 border-black border-2 rounded-md"
               onChange={(e) => {
                 const selectedCountry = e.target.value;
@@ -204,7 +164,7 @@ export default function UserDetails({ callback, data, loading, ready }) {
                 }));
               }}
             >
-              <option selected>Select your country</option>
+              <option selected={address.country}>Select your country</option>
               {countries.map((country, index) => (
                 <option key={index} value={country.name}>
                   {country.name}
