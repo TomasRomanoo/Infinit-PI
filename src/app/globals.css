@@ -316,12 +316,80 @@ div.react-datepicker__input-container.react-datepicker__view-calendar-icon input
 }
 
 .rating label input:focus:not(:checked) ~ .icon:last-child {
-  color: #000;
+  color: #ffdf00;
+  text-shadow: 0 0 5px #ffdf00;
+}
+
+/* ------------------------------ rating Modal ------------------------------ */
+
+.ratingModal {
+  display: inline-block;
+  position: relative;
+  height: auto;
+  line-height: 50px;
+  font-size: auto;
+  margin: 10px 10px 10px 0px ;
+}
+
+.ratingModal label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  cursor: pointer;
+}
+
+.ratingModal label:last-child {
+  position: static;
+}
+
+.ratingModal label:nth-child(1) {
+  z-index: 5;
+}
+
+.ratingModal label:nth-child(2) {
+  z-index: 4;
+}
+
+.ratingModal label:nth-child(3) {
+  z-index: 3;
+}
+
+.ratingModal label:nth-child(4) {
+  z-index: 2;
+}
+
+.ratingModal label:nth-child(5) {
+  z-index: 1;
+}
+
+.ratingModal label input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+}
+
+.ratingModal label .iconModal {
+  font-size:40px;
+  float: left;
+  color: transparent;
+}
+
+.ratingModal label:last-child .iconModal {
+  color: gray;
+}
+
+.ratingModal:not(:hover) label input:checked ~ .iconModal,
+.ratingModal:hover label:hover input ~ .iconModal {
+  color: #ffdf00;
+}
+
+.ratingModal label input:focus:not(:checked) ~ .iconModal:last-child {
+  color: #ffdf00;
   text-shadow: 0 0 5px #ffdf00;
 }
 
 /* --------------------------- Fin Estilos Rating --------------------------- */
 
-.slick-disabled {
-  display: none;
-}
+

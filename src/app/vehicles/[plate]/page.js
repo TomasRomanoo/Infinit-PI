@@ -30,7 +30,7 @@ import Characterist from "./characterist";
 import AvailabilityCalendar from "./AvailabilityCalendar";
 
 
-import "slick-carousel/slick/slick.css"; 
+import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 
@@ -59,7 +59,7 @@ const Detail = ({ params }) => {
         totalRating += rate.rate
       })
       setRatingAverage(totalRating / vehicle.ratings.length)
-      const radioElement = document.querySelector(`input[type="radio"][value="${Math.floor(totalRating / vehicle.ratings.length)}"]`);
+      const radioElement = document.querySelector(`input[type="radio"][name="stars-main"][value="${Math.floor(totalRating / vehicle.ratings.length)}"]`);
       if (radioElement) {
         radioElement.checked = true;
       }
@@ -367,8 +367,8 @@ const Specs = ({ specifications }) => {
         return (
           <div className="flex items-center gap-4" key={index}>
             <Image src={spec.image} alt="spec"
-                   width={100}
-                   height={100} />
+              width={100}
+              height={100} />
             <p className="font-poppins text-lg">{spec.description}</p>
           </div>
         );
@@ -378,8 +378,6 @@ const Specs = ({ specifications }) => {
 };
 
 const Rating = ({ ratingAverage, ratings }) => {
-
-
 
   console.log("ratings -----> ", ratings)
   const [count1Star, setCount1Star] = useState(0)
@@ -399,6 +397,13 @@ const Rating = ({ ratingAverage, ratings }) => {
   }, [ratings])
 
 
+  const [showModal, setShowModal] = useState(false)
+
+  const handlerRating = (value) => {
+    setShowModal(!showModal)
+    console.log(value);
+  }
+
   /* -------------------------------------------------------------------------- */
   /*                              paged for ratings                             */
   /* -------------------------------------------------------------------------- */
@@ -417,6 +422,7 @@ const Rating = ({ ratingAverage, ratings }) => {
   return (
     <div>
       <h3 className="text-xl font-semibold mb-4">Rating</h3>
+      <ModalRate showModal={showModal} setShowModal={setShowModal}/>
       <div className="flex justify-around lg:flex-row flex-col ">
         <div className="lg:w-5/12 w-full 2xl:p-5 p-4 shadow-xl rounded-xl">
           <div>
@@ -425,29 +431,29 @@ const Rating = ({ ratingAverage, ratings }) => {
               <div>
                 <form className={`rating`}>
                   <label>
-                    <input type="radio" name="stars" value="1" />
+                    <input type="radio" name="stars-main" value="1" onClick={() => { handlerRating(1) }} />
                     <span class="icon"><BsStarFill /></span>
                   </label>
                   <label>
-                    <input type="radio" name="stars" value="2" />
-                    <span class="icon"><BsStarFill /></span>
-                    <span class="icon"><BsStarFill /></span>
-                  </label>
-                  <label>
-                    <input type="radio" name="stars" value="3" />
-                    <span class="icon"><BsStarFill /></span>
+                    <input type="radio" name="stars-main" value="2" onClick={() => { handlerRating(2) }} />
                     <span class="icon"><BsStarFill /></span>
                     <span class="icon"><BsStarFill /></span>
                   </label>
                   <label>
-                    <input type="radio" name="stars" value="4" />
-                    <span class="icon"><BsStarFill /></span>
+                    <input type="radio" name="stars-main" value="3" onClick={() => { handlerRating(3) }} />
                     <span class="icon"><BsStarFill /></span>
                     <span class="icon"><BsStarFill /></span>
                     <span class="icon"><BsStarFill /></span>
                   </label>
                   <label>
-                    <input type="radio" name="stars" value="5" />
+                    <input type="radio" name="stars-main" value="4" onClick={() => { handlerRating(4) }} />
+                    <span class="icon"><BsStarFill /></span>
+                    <span class="icon"><BsStarFill /></span>
+                    <span class="icon"><BsStarFill /></span>
+                    <span class="icon"><BsStarFill /></span>
+                  </label>
+                  <label>
+                    <input type="radio" name="stars-main" value="5" onClick={() => { handlerRating(5) }} />
                     <span class="icon"><BsStarFill /></span>
                     <span class="icon"><BsStarFill /></span>
                     <span class="icon"><BsStarFill /></span>
@@ -512,12 +518,12 @@ const Rating = ({ ratingAverage, ratings }) => {
             </div>
           </div>
         </div>
-        
-          <Slider { ...settings} className=" lg:w-5/12 w-full  lg:m-0 mt-10 rounded-xl flex flex-col justify-center " style={{ boxShadow: '0px -1px 29px -20px rgba(0,0,0,0.47) inset'}}>
+
+        <Slider {...settings} className=" lg:w-5/12 w-full  lg:m-0 mt-10 rounded-xl flex flex-col justify-center " style={{ boxShadow: '0px -1px 29px -20px rgba(0,0,0,0.47) inset' }}>
           {ratings.map((oneRating) => {
             return (
               <div className="relative  p-5 rounded-xl lg:text-xl text-lg ">
-                <p className="absolute right-5 top-5 text-sm text-slate-500 ">{oneRating.date.slice(0, 10) }</p>
+                <p className="absolute right-5 top-5 text-sm text-slate-500 ">{oneRating.date.slice(0, 10)}</p>
                 <h1 className="text-black font-bold my-2">{oneRating.user.first_name + ' ' + oneRating.user.last_name}</h1>
                 <div className="flex lg:my-4 my-2">
                   {(() => {
@@ -532,9 +538,9 @@ const Rating = ({ ratingAverage, ratings }) => {
               </div>
             )
           })}
-          </Slider>
+        </Slider>
 
-        
+
       </div>
 
 
@@ -542,14 +548,74 @@ const Rating = ({ ratingAverage, ratings }) => {
   )
 }
 
-const modalRate = () =>{
+const ModalRate = ({ showModal, setShowModal }) => {
+const [detail, setDetail] = useState('')
+
+
   return (
-    <>
-      <div>
-        Hola
+    <div className={`${showModal ? 'flex' : 'hidden'}`}>
+      <div
+        className={`fixed inset-0 z-30 bg-gray-500 bg-opacity-75 transition-opacity ${showModal ? "flex" : "hidden"
+          }`}
+        id="modalBg"
+      ></div>
+      <div className={` z-50 min-h-full  justify-center items-center p-0 fixed inset-0 ${showModal ? "flex" : "hidden"
+        }`} >
+        <div className={`flex flex-col items-center m-5 px-10 pb-17 p-10 max-w-2xl flex-auto overflow-hidden rounded-3xl bg-white text-sm leading-6 shadow-lg ring-1 ring-gray-900/5 relative`}>
+          <button className="absolute top-0 right-0 m-5" onClick={()=>setShowModal(false)}><AiOutlineClose className="w-5 h-5" /></button>
+          <h1 className="font-bold text-2xl">How did you find the service?</h1>
+          <form>
+            <div className="ratingModal">
+                  <label>
+                    <input type="radio" name="stars-modal" value="1" />
+                    <span class="iconModal"><BsStarFill /></span>
+                  </label>
+                  <label>
+                    <input type="radio" name="stars-modal" value="2" />
+                    <span class="iconModal"><BsStarFill /></span>
+                    <span class="iconModal"><BsStarFill /></span>
+                  </label>
+                  <label>
+                    <input type="radio" name="stars-modal" value="3" />
+                    <span class="iconModal"><BsStarFill /></span>
+                    <span class="iconModal"><BsStarFill /></span>
+                    <span class="iconModal"><BsStarFill /></span>
+                  </label>
+                  <label>
+                    <input type="radio" name="stars-modal" value="4" />
+                    <span class="iconModal"><BsStarFill /></span>
+                    <span class="iconModal"><BsStarFill /></span>
+                    <span class="iconModal"><BsStarFill /></span>
+                    <span class="iconModal"><BsStarFill /></span>
+                  </label>
+                  <label>
+                    <input type="radio" name="stars-modal" value="5" />
+                    <span class="iconModal"><BsStarFill /></span>
+                    <span class="iconModal"><BsStarFill /></span>
+                    <span class="iconModal"><BsStarFill /></span>
+                    <span class="iconModal"><BsStarFill /></span>
+                    <span class="iconModal"><BsStarFill /></span>
+                  </label>
+            </div>
+            <div>
+            <label className="block text-sm font-medium leading-6 text-gray-900">
+              Describe us your experience!
+              </label>
+              <div className="w-full max-w-sm mx-auto">
+                <textarea
+                  id="detailInput"
+                  className=" block mt-2 h-full w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 focus:outline-none sm:text-sm sm:leading-6 transition ease-in-out duration-300"
+                  placeholder="Write here..."
+                  value={detail}
+                  onChange={() => setDetail(event.target.value)}
+                ></textarea>
+              </div>
+            </div>
+          </form>
+        </div>
       </div>
-    </>
+    </div>
   )
-} 
+}
 
 export default Detail;
