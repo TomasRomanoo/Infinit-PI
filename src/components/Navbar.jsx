@@ -119,11 +119,17 @@ export const Navbar = () => {
             <li className="text-lg link-item">
               <Link href="/favorites">Favorites</Link>
             </li>
-          )}
-
+          )}  
+          
           <li className="text-lg link-item">
             <Link href="/about">About</Link>
           </li>
+          {user && (
+            <li className="text-lg link-item">
+              <Link href="/history">History</Link>
+            </li>
+          )}
+
           {isAdmin === true ? (
             <li className="">
               <div className="relative  ">
