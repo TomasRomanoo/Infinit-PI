@@ -4,11 +4,15 @@ import axios from "axios";
 import { useSearchParams } from 'next/navigation'
 import React, { useEffect, useState } from 'react';
 import { UserContext } from "@/components/context/UserContext";
-import {useContext} from "react";
+import { useContext } from "react";
 import Image from "next/image";
 import Success from "./success";
+import { HiCalendarDays } from "react-icons/hi2";
+import Slider from "react-slick";
+import "~slick-carousel/slick/slick.css"; 
+import "~slick-carousel/slick/slick-theme.css";
 
-function ConfirmationPage({params}) {
+function ConfirmationPage({ params }) {
     const userContext = useContext(UserContext);
     let user = userContext.getUser()
     const searchParams = useSearchParams()
@@ -22,7 +26,7 @@ function ConfirmationPage({params}) {
         end: searchParams.get('end')
     })
     const [saved, setSaved] = useState(false)
-    const vehicleId= params.id;
+    const vehicleId = params.id;
 
     useEffect(() => {
         fetchVehicle()
@@ -50,54 +54,182 @@ function ConfirmationPage({params}) {
                 console.log("error :>> ", error);
             });
     }
-    
+
+    function getMonthName(monthNumber) {
+        var monthNames = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+
+        var monthIndex = monthNumber - 1;
+        return monthNames[monthIndex];
+    }
+
+    let asd = 0
+    function calculateDateDifference(date1, date2) {
+        var dateObject1 = new Date(date1);
+        var dateObject2 = new Date(date2);
+        var differenceInMilliseconds = dateObject2 - dateObject1;
+        var differenceInDays = (differenceInMilliseconds / (1000 * 60 * 60 * 24))+1;
+        asd= differenceInDays
+        return differenceInDays;
+    }
+
+
+    const settings = {
+        customPaging: function(i) {
+          return (
+            <a>
+              <img src={vehicle.images?.length > 1 ? vehicle.images[1]?.url : {i}} />
+            </a>
+          );
+        },
+        dots: true,
+        dotsClass: "slick-dots slick-thumb",
+        infinite: true,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1
+      };
     return (
         <div>
-            {saved === false && (<div className="">
-                <h1>Vehicle data</h1>
-                <div className="flex-row flex lg:flex-row items-center justify-center w-full gap-4">
-                    {/* Main Image */}
-                    <div className="w-full hover:brightness-75 transition-all duration-200 self-stretch flex-column">
-                        <Image
-                            className="object-contain rounded-lg"
-                            width={500}
-                            height={500}
-                            src={vehicle.images?.length > 1 ? vehicle.images[1]?.url : ""}
-                            alt="spec"
-                        />
-                    </div>
-                    <div className="items-right flex-column">
-                        <p>Brand: {vehicle.model?.brand?.name}</p>
-                        <p>Model: {vehicle.model?.name}</p>
-                        <p>Year: {vehicle.year}</p>
-                        <p>Plate: {vehicle.plate}</p>
+            {saved === false ? (<div>
+                <h1 className="m-5 text-3xl font-bold">Rental Confirmation</h1>
+                <div className="shadow-lg p-10 bg-white rounded-xl">
+                    <h2 className="m-5 text-xl">This is the last step. Check if the information is correct before confirming!</h2>
+                    <div className="flex justify-between my-12">
+                        <div className="w-5/12">
+                            <div className="p-4 my-3" >
+                                <h1 className="font-bold text-lg mb-2">Reservator data</h1>
+                                <div>
+                                    <div className="flex justify-between my-2">
+                                        <p>Name: </p>
+                                        <p>{reservator.name}</p>
+                                    </div>
+                                    <div className="flex justify-between my-2">
+                                        <p>Email: </p>
+                                        <p>{reservator.email}</p>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <hr className="border-2 rounded" />
+                            <div className="my-4">
+                                <div className="p-4">
+                                    <h1 className="font-bold text-lg mb-2" >Reservation data</h1>
+                                    <div>
+                                        <div className="my-4">
+                                            <div className="flex justify-between my-2">
+                                                <p>Location: </p>
+                                                <p> {vehicle.dealer?.address + ', ' + vehicle.dealer?.city + ', ' + vehicle.dealer?.state}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <hr className=" rounded border-2"/>
+                                <div className="flex w-full justify-around my-10">
+                                    <div className="flex items-center" >
+                                        <HiCalendarDays className="text-5xl text-primary" />
+                                        <div className="ml-2 font-medium text-primary text-sm">
+                                            <div className="opacity-60">From Date</div>
+                                            <div className="font-bold opacity-80">
+                                                <span>
+                                                    {`${reservation.start.split("-")[2].split("T")[0]}`}
+                                                </span>
+                                                <span>
+                                                    {` ${getMonthName(reservation.start.split("-")[1])}`}
+                                                </span>
+                                                <span>
+                                                    {` ${reservation.start.split("-")[0]}`}
+                                                </span>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                        <div class=" h-12 border-2 border-slate-300 self-center mx-2 rounded"></div>
+
+                                    <div className="flex items-center mr-10 opacity-80" >
+                                        <HiCalendarDays className="text-5xl text-primary" />
+                                        <div className="ml-2 font-medium text-primary text-sm">
+                                            <div className="opacity-60">To Date</div>
+                                            <div className="font-bold opacity-80">
+                                                <span>
+                                                    {`${reservation.end.split("-")[2].split("T")[0]}`}
+                                                </span>
+                                                <span>
+                                                    {` ${getMonthName(reservation.end.split("-")[1])}`}
+                                                </span>
+                                                <span>
+                                                    {` ${reservation.end.split("-")[0]}`}
+                                                </span>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <hr className=" rounded border-2"/>
+
+                            <div className="flex flex-col my-5 items-center">
+                                <p className="font-extrabold text-6xl text-primary my-5"> Total ${(calculateDateDifference(reservation.start, reservation.end)) * vehicle.price_per_day} </p>
+                                <p className="text-slate-500"> (For {asd} days reserve)</p>
+                            </div>
+                        </div>
+                        <div className="w-6/12">
+                            <div className=" flex flex-col ">
+                                        <h1 className="font-bold text-lg mb-2">Vehicle data</h1>
+
+                                        <div className="my-2">
+                                            <p>{vehicle.model?.brand?.name.toUpperCase()} {vehicle.model?.name.toUpperCase()}</p>
+                                        </div>
+                                <div>
+                                    {/* Main Image */}
+                                    <div className="w-full hover:brightness-75 transition-all duration-200 self-stretch flex-column">
+                                        {/* <Image
+                                            className="object-contain rounded-lg"
+                                            layout="fill"
+                                            objectFit="cover"
+                                            src={vehicle.images?.length > 1 ? vehicle.images[1]?.url : ""}
+                                            alt="spec"
+                                        /> */}
+                                    </div>
+                                </div>
+
+                                <hr className="mt-5" />
+
+                                <div className=" p-4 my-3 " >
+                                    <div className="flex justify-between">
+                                        <div className="flex flex-col justify-between items-center my-2">
+                                            <p className="font-medium">Year:</p>
+                                            <p>{vehicle.year}</p>
+                                        </div>
+                                        <div className="flex flex-col justify-between items-center my-2">
+                                            <p className="font-medium">Plate:</p>
+                                            <p>{vehicle.plate}</p>
+                                        </div>
+                                        <div className="flex flex-col justify-between items-center my-2">
+                                            <p className="font-medium">Price:</p>
+                                            <p>${vehicle.price_per_day}<small className="text-xs">/day</small></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <button className="bg-primary text-white font-bold rounded-xl px-2 py-2 m-2"
+                                        onClick={handleReservationClick}>   Confirm
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <p/>
-                <h1>Reservator data</h1>
-                <div className="flex flex-col lg:flex-row w-full gap-4">
-                    <div className="">
-                        <p>Name: {reservator.name}</p>
-                        <p>Email: {reservator.email}</p>
-                    </div>
-                </div>
-                <p/>
-                <h1>Reservation data</h1>
-                <div className="flex flex-col lg:flex-row w-full gap-4">
-                    <div className="">
-                        <p>Start date: {reservation.start.split("T")[0]}</p>
-                        <p>End date: {reservation.end.split("T")[0]}</p>
-                        <p>Location: {vehicle.dealer?.address + ', ' + vehicle.dealer?.city + ', ' + vehicle.dealer?.state}</p>
-                    </div>
-                </div>
-                <div className="flex flex-col lg:flex-row items-center justify-center w-full gap-4">
-                    <button className="bg-white text-black rounded-xl px-2 py-2 m-2"
-                            onClick={handleReservationClick}>Confirm
-                    </button>
-                </div>
-            </div>)}
-            {saved === true && <Success />}
+
+            </div>)
+                :
+                <Success />}
         </div>
     );
-    }
+}
 export default ConfirmationPage;
