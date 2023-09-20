@@ -254,3 +254,6 @@ div.react-datepicker__input-container.react-datepicker__view-calendar-icon input
 }
 .px-calendar{
 }
+.pop{
+  top: 0px !important;
+}

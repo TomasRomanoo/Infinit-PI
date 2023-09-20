@@ -78,12 +78,13 @@ import "react-datepicker/dist/react-datepicker.css";
 import Swal from 'sweetalert2';
 // import { UserContext } from "./UserContext";
 import { UserContext } from "@/components/context/UserContext";
+import LoginForm from "./LoginForm";
 
 const AvailabilityCalendar = ({ idvehicle }) => {
   
   const { user } = useContext(UserContext); 
   const [isError, setIsError] = useState(false);
-
+  const [showLoginModal, setShowLoginModal] = useState(false); // Controla la visibilidad del modal
   const [AvailableDates, setAvailableDates] = useState();
     
 
@@ -132,12 +133,15 @@ const AvailabilityCalendar = ({ idvehicle }) => {
         Swal.showLoading()
       }
     }).then(() => {
-      window.location.href = '/login';
+      setShowLoginModal(true);
     });
     }
   };
 
   return (
+    <>
+    
+    
     <div className="availability-calendar-container">
       <div className="availability-calendar">
         <div className="calendar-label">
@@ -164,7 +168,28 @@ const AvailabilityCalendar = ({ idvehicle }) => {
           </div>
         </div>
       </div>
+
+      
     </div>
+ {showLoginModal && (
+    <div class name="pop" style={{ position: 'fixed', top: '0', left: '0', width: '100%', height: '100%', backgroundColor: 'rgba(0, 0, 0, 0.5)', zIndex: '1000', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+ 
+    <div className="modal" style={{ backgroundColor: 'white', width: '50%',height: '70%', padding: '2px', borderRadius: '8px' }}>
+      <div className="modal-content">
+        <LoginForm
+          onLoginSuccess={() => {
+            setShowLoginModal(false);
+            window.location.href = `/reservation/${idvehicle}`;
+          }}
+        />
+      </div>
+    </div>
+ 
+</div>
+ )}
+
+    </>
+
   );
 };
 
