@@ -99,17 +99,18 @@ function ConfirmationPage({ params }) {
         slidesToScroll: 1,
         autoplay: true,
         autoplaySpeed: 2000,
-        pauseOnHover: true
+        pauseOnHover: true,
+        arrows: false
     };
     return (
         <div>
             {saved === false ? (<div>
                 <h1 className="m-5 text-3xl font-bold">Rental Confirmation</h1>
-                <div className="shadow-lg p-10 bg-white rounded-xl">
+                <div className="shadow-lg sm:p-10 p-5 bg-white rounded-xl">
                     <h2 className="m-5 text-xl md:text-left text-center">This is the last step. Check if the information is correct before confirming!</h2>
                     <div className="flex lg:flex-row flex-col-reverse justify-around my-12 items-center">
-                        <div className="lg:w-5/12 w-full">
-                            <div className="p-4 my-3" >
+                        <div className="lg:w-5/12 w-full flex flex-col">
+                            <div className="pt-4 my-3" >
                                 <h1 className="font-bold text-lg mb-2">Reservator data</h1>
                                 <div>
                                     <div className="flex justify-between my-2">
@@ -123,8 +124,8 @@ function ConfirmationPage({ params }) {
 
                                 </div>
                             </div>
-                            <hr className="border-2 rounded" />
-                            <div className="my-4">
+                            <hr className="border-2 rounded lg:w-full w-11/12 self-center" />
+                            <div className="mt-4 flex flex-col">
                                 <div className="p-4">
                                     <h1 className="font-bold text-lg mb-2" >Reservation data</h1>
                                     <div>
@@ -137,7 +138,7 @@ function ConfirmationPage({ params }) {
                                     </div>
                                 </div>
 
-                                <hr className=" rounded border-2" />
+                                <hr className=" rounded border-2 lg:w-full w-11/12 self-center" />
                                 <div className="flex w-full justify-around my-10 calendars-containers">
                                     <div className="flex items-center first-calendar" >
                                         <HiCalendarDays className="text-5xl text-primary" />
@@ -182,10 +183,10 @@ function ConfirmationPage({ params }) {
                                 </div>
                             </div>
 
-                            <hr className=" rounded border-2" />
+                            <hr className=" rounded border-2 lg:w-full w-11/12 self-center" />
 
                             <div className="flex flex-col my-5 items-center">
-                                <p className="font-extrabold text-6xl text-primary my-5 text-center"> Total ${(calculateDateDifference(reservation.start, reservation.end)) * vehicle.price_per_day} </p>
+                                <p className="font-extrabold text-6xl text-primary my-5  text-center"> Total ${(calculateDateDifference(reservation.start, reservation.end)) * vehicle.price_per_day} </p>
                                 <p className="text-slate-500 text-center"> (For {asd} days reserve)</p>
                             </div>
 

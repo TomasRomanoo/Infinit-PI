@@ -271,6 +271,8 @@ div.react-datepicker__input-container.react-datepicker__view-calendar-icon input
   .calendars-containers {
     flex-direction: column;
     align-items: center;
+    margin-bottom: 20px;
+    margin-top: 20px;
   }
   .hr-ver-calendars{
     display: none;
