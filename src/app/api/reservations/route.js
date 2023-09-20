@@ -52,36 +52,25 @@ export async function POST(request) {
   }
 }
 
-// Método GET
+
+
+// Método GET para obtener todas las reservas
 export async function GET(request) {
   console.log("The GET function has been called.");
   try {
-    const { userId } = request.query;
-
-    if (!userId) {
-      return NextResponse.json(
-        { error: "User ID is required as a query parameter" },
-        { status: 400 }
-      );
-    }
-
-    const userReservas = await prisma.reservation.findMany({
-      where: {
-        userIduser: parseInt(userId),
-      },
+    const reservations = await prisma.reservation.findMany({
       include: {
-        vehicle: true,
-      },
-      orderBy: {
-        checkin_date: 'desc', // Ordena por fecha de check-in descendente.
+        user: true, 
+        vehicle: true, 
       },
     });
 
-    return NextResponse.json({ reservations: userReservas }, { status: 200 });
+    return NextResponse.json(
+      { reservations },
+      { status: 200 }
+    );
   } catch (error) {
     console.error(error);
     return NextResponse.json({ Error: "Error" }, { status: 500 });
   }
 }
-
-
