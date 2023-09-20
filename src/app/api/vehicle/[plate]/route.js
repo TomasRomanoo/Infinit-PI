@@ -5,7 +5,6 @@ const prisma = new PrismaClient();
 export async function GET(request) {
   console.log("La función GET ha sido llamada.");
   try {
-    console.log(request);
     const urlParts = request.url.split("/");
     const plate = urlParts[urlParts.length - 1];
     if (!plate) {
@@ -14,23 +13,43 @@ export async function GET(request) {
         { status: 400 }
       );
     }
+    let car;
 
-    const car = await prisma.vehicle.findUnique({
-      where: {
-        plate,
-      },
-      include: {
-        category: true,
-        specifications: true,
-        images: true,
-        model: {
-          include: true,
-          include: {
-            brand: true,
+    //This means it is an ID instead of a plate
+    if (parseInt(plate)) {
+      car = await prisma.vehicle.findUnique({
+        where: {
+          idvehicle: parseInt(plate),
+        },
+        include: {
+          category: true,
+          specifications: true,
+          images: true,
+          model: {
+            include: {
+              brand: true,
+            },
+          },
+          dealer: true,
+        },
+      });
+    } else {
+      car = await prisma.vehicle.findUnique({
+        where: {
+          plate,
+        },
+        include: {
+          category: true,
+          specifications: true,
+          images: true,
+          model: {
+            include: {
+              brand: true,
+            },
           },
         },
-      },
-    });
+      });
+    }
 
     if (!car) {
       return NextResponse.json(
