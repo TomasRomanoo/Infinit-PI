@@ -19,7 +19,7 @@ export async function POST(request) {
     const vehicles = await prisma.vehicle.findMany({
       where: {
         dealer: {
-          city: { equals: body.city }, 
+          city: { equals: body.city },
         },
         reservation: {
           none: {
@@ -37,6 +37,20 @@ export async function POST(request) {
     console.error(error);
     return NextResponse.json(
       { message: "Error getting vehicles" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function GET() {
+  console.log("The GETALL function has been called.");
+  try {
+    const dealers = await prisma.dealer.findMany();
+    return NextResponse.json(dealers, { status: 200, data: dealers });
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json(
+      { message: "Error getting dealers" },
       { status: 500 }
     );
   }
