@@ -75,7 +75,12 @@ function ConfirmationPage({ params }) {
         return differenceInDays;
     }
 
+    let widthWindow 
 
+    if (typeof window !== 'undefined') {
+        widthWindow = window.innerWidth;
+      }
+    
     const settings = {
         customPaging: function (i) {
             return (
@@ -88,6 +93,8 @@ function ConfirmationPage({ params }) {
         dotsClass: "slick-dots slick-thumb",
         infinite: true,
         speed: 500,
+        // adaptiveHeight: true,
+        fade: true,
         slidesToShow: 1,
         slidesToScroll: 1,
         autoplay: true,
@@ -99,9 +106,9 @@ function ConfirmationPage({ params }) {
             {saved === false ? (<div>
                 <h1 className="m-5 text-3xl font-bold">Rental Confirmation</h1>
                 <div className="shadow-lg p-10 bg-white rounded-xl">
-                    <h2 className="m-5 text-xl">This is the last step. Check if the information is correct before confirming!</h2>
-                    <div className="flex justify-around my-12">
-                        <div className="w-5/12">
+                    <h2 className="m-5 text-xl md:text-left text-center">This is the last step. Check if the information is correct before confirming!</h2>
+                    <div className="flex lg:flex-row flex-col-reverse justify-around my-12 items-center">
+                        <div className="lg:w-5/12 w-full">
                             <div className="p-4 my-3" >
                                 <h1 className="font-bold text-lg mb-2">Reservator data</h1>
                                 <div>
@@ -124,15 +131,15 @@ function ConfirmationPage({ params }) {
                                         <div className="my-4">
                                             <div className="flex justify-between my-2">
                                                 <p>Location: </p>
-                                                <p> {vehicle.dealer?.address + ', ' + vehicle.dealer?.city + ', ' + vehicle.dealer?.state}</p>
+                                                <p className="pl-5 text-right"> {vehicle.dealer?.address + ', ' + vehicle.dealer?.city + ', ' + vehicle.dealer?.state}</p>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
                                 <hr className=" rounded border-2" />
-                                <div className="flex w-full justify-around my-10">
-                                    <div className="flex items-center" >
+                                <div className="flex w-full justify-around my-10 calendars-containers">
+                                    <div className="flex items-center first-calendar" >
                                         <HiCalendarDays className="text-5xl text-primary" />
                                         <div className="ml-2 font-medium text-primary text-sm">
                                             <div className="opacity-60">From Date</div>
@@ -141,19 +148,20 @@ function ConfirmationPage({ params }) {
                                                     {`${reservation.start.split("-")[2].split("T")[0]}`}
                                                 </span>
                                                 <span>
-                                                    {` ${getMonthName(reservation.start.split("-")[1])}`}
+                                                    { widthWindow >= 550 ? ` ${getMonthName(reservation.start.split("-")[1])} ` : `/${reservation.start.split("-")[1]}/`}
                                                 </span>
                                                 <span>
-                                                    {` ${reservation.start.split("-")[0]}`}
+                                                    {`${reservation.start.split("-")[0]}`}
                                                 </span>
 
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div class=" h-12 border-2 border-slate-300 self-center mx-2 rounded"></div>
+                                    <div class=" h-12 border-2 border-slate-300 self-center mx-3 rounded hr-ver-calendars"></div>
+                                    <hr className="hidden rounded w-1/3 my-4 border-2 hr-hor-calendars" />
 
-                                    <div className="flex items-center mr-10 opacity-80" >
+                                    <div className="flex items-center md:mr-5 mr-3 opacity-80 second-calendar" >
                                         <HiCalendarDays className="text-5xl text-primary" />
                                         <div className="ml-2 font-medium text-primary text-sm">
                                             <div className="opacity-60">To Date</div>
@@ -162,10 +170,10 @@ function ConfirmationPage({ params }) {
                                                     {`${reservation.end.split("-")[2].split("T")[0]}`}
                                                 </span>
                                                 <span>
-                                                    {` ${getMonthName(reservation.end.split("-")[1])}`}
+                                                    {widthWindow >= 550 ? ` ${getMonthName(reservation.end.split("-")[1]) } ` : `/${reservation.end.split("-")[1]}/`}
                                                 </span>
                                                 <span>
-                                                    {` ${reservation.end.split("-")[0]}`}
+                                                    {`${reservation.end.split("-")[0]}`}
                                                 </span>
 
                                             </div>
@@ -177,22 +185,22 @@ function ConfirmationPage({ params }) {
                             <hr className=" rounded border-2" />
 
                             <div className="flex flex-col my-5 items-center">
-                                <p className="font-extrabold text-6xl text-primary my-5"> Total ${(calculateDateDifference(reservation.start, reservation.end)) * vehicle.price_per_day} </p>
-                                <p className="text-slate-500"> (For {asd} days reserve)</p>
+                                <p className="font-extrabold text-6xl text-primary my-5 text-center"> Total ${(calculateDateDifference(reservation.start, reservation.end)) * vehicle.price_per_day} </p>
+                                <p className="text-slate-500 text-center"> (For {asd} days reserve)</p>
                             </div>
 
-                            <div className="self-center">
-                                        <button className="bg-primary text-white font-bold rounded-xl  w-full py-3 m-4"
+                            <div className="w-full flex justify-center">
+                                        <button className="bg-primary text-white font-bold rounded-xl w-10/12 py-3"
                                             onClick={handleReservationClick}>   Confirm
                                         </button>
                                     </div>
                         </div>
-                        <div className="w-5/12">
+                        <div className="lg:w-5/12 w-full lg:m-0 mb-10">
                             <div className=" flex flex-col rounded-xl" style={{boxShadow: '0px 0px 10px 1px rgba(0,0,0,0.2)'}}>
                             
                                 <div className="flex flex-col ">
-                                    <div className="my-5 self-center font-bold text-xl tracking-wider">
-                                        <p>{vehicle.model?.brand?.name.toUpperCase()} {vehicle.model?.name.toUpperCase()}</p>
+                                    <div className="my-7 self-center font-bold text-xl tracking-wider">
+                                        <p className="px-5 text-center">{vehicle.model?.brand?.name.toUpperCase()} {vehicle.model?.name.toUpperCase()}</p>
                                     </div>
                                     <hr className="border-2 rounded w-4/5 self-center" />
 

@@ -267,3 +267,20 @@ div.react-datepicker__input-container.react-datepicker__view-calendar-icon input
   border-radius: 10px;
   /* height: 54px; */
 }
+@media screen and (max-width: 400px) {
+  .calendars-containers {
+    flex-direction: column;
+    align-items: center;
+  }
+  .hr-ver-calendars{
+    display: none;
+  }
+  .hr-hor-calendars{
+    display: flex;
+  }
+  .second-calendar, .first-calendar{
+    margin-right:20px;
+  }
+}
+
+
