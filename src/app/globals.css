@@ -252,5 +252,18 @@ div.react-datepicker__input-container.react-datepicker__view-calendar-icon input
     /* Cambia el color de fondo a tu elección */
   /* Otras propiedades de estilo si las necesitas */
 }
-.px-calendar{
+
+.slick-dots.slick-thumb li {
+  border:#f3f3f3 2px solid;
+  box-shadow: #333 0px 1px 3px;
+  border-radius: 10px;
+  background-color: #f3f3f3;
+  width: 65px ;
+  height: auto;
+  bottom: 30px;
+}
+
+.slick-dots.slick-thumb img {
+  border-radius: 10px;
+  /* height: 54px; */
 }
