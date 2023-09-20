@@ -264,14 +264,18 @@ export const Form = () => {
                       models: selectedBrand.models,
                     }));
                   }}
-                  className="block w-full cursor-pointer rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 focus:outline-none sm:text-sm sm:leading-6 transition ease-in-out duration-300"
+                  className="block w-full  cursor-pointer rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 focus:outline-none sm:text-sm sm:leading-6 transition ease-in-out duration-300"
                 >
-                  <option value="" disabled selected>
+                  <option value="" className="" disabled selected>
                     Select some brand
                   </option>
                   {brands.map((brand) => {
                     return (
-                      <option value={JSON.stringify(brand)} key={brand.idbrand}>
+                      <option
+                        className="uppercase"
+                        value={JSON.stringify(brand)}
+                        key={brand.idbrand}
+                      >
                         {brand.name}
                       </option>
                     );
@@ -384,41 +388,40 @@ export const Form = () => {
                                     "
                     onChange={handleFileChange}
                   />
-                
                 </label>
 
                 <div>
-                    {images.map((file, index) => (
-                      <div key={index} className="mt-2">
-                        <span>{file.name}</span>
+                  {images.map((file, index) => (
+                    <div key={index} className="mt-2">
+                      <span>{file.name}</span>
+                      <button
+                        type="button"
+                        onClick={() => handleDelete(index)}
+                        className="ml-2 text-red-500"
+                      >
+                        Delete
+                      </button>
+                      {index > 0 && (
                         <button
                           type="button"
-                          onClick={() => handleDelete(index)}
-                          className="ml-2 text-red-500"
+                          onClick={() => handleRearrange(index, index - 1)}
+                          className="ml-2 text-blue-500"
                         >
-                          Delete
+                          Move Up
                         </button>
-                        {index > 0 && (
-                          <button
-                            type="button"
-                            onClick={() => handleRearrange(index, index - 1)}
-                            className="ml-2 text-blue-500"
-                          >
-                            Move Up
-                          </button>
-                        )}
-                        {index < images.length - 1 && (
-                          <button
-                            type="button"
-                            onClick={() => handleRearrange(index, index + 1)}
-                            className="ml-2 text-blue-500"
-                          >
-                            Move Down
-                          </button>
-                        )}
-                      </div>
-                    ))}
-                  </div>
+                      )}
+                      {index < images.length - 1 && (
+                        <button
+                          type="button"
+                          onClick={() => handleRearrange(index, index + 1)}
+                          className="ml-2 text-blue-500"
+                        >
+                          Move Down
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>

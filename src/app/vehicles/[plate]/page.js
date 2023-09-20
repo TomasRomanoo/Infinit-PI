@@ -18,6 +18,11 @@ import peugeot2 from "@/assets/images/peugeot-2.jpg";
 import peugeot3 from "@/assets/images/peugeot-3.jpg";
 import peugeot4 from "@/assets/images/peugeot-4.jpg";
 import peugeot5 from "@/assets/images/peugeot-5.jpg";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFacebook } from '@fortawesome/free-brands-svg-icons';
+import { faWhatsapp } from '@fortawesome/free-brands-svg-icons';
+import { faSquareShareNodes } from "@fortawesome/free-solid-svg-icons";
+
 
 import { MdOutlineLocationOn, MdMyLocation } from "react-icons/md";
 import { BiDirections } from "react-icons/bi";
@@ -30,6 +35,7 @@ import Characterist from "./characterist";
 import AvailabilityCalendar from "./AvailabilityCalendar";
 
 
+import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
@@ -44,7 +50,7 @@ const Detail = ({ params }) => {
   const handleShowMessage = (message) => {
     setMessageContent(message);
     setShowMessage(true);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
   const handleCloseMessage = () => {
     setShowMessage(false);
@@ -72,25 +78,25 @@ const Detail = ({ params }) => {
     if (!res.data.images || !res.data.images.length) {
       res.data.images = [
         {
-          url: peugeot
+          url: peugeot,
         },
         {
-          url: peugeot2
+          url: peugeot2,
         },
         {
-          url: peugeot3
+          url: peugeot3,
         },
         {
-          url: peugeot4
+          url: peugeot4,
         },
         {
-          url: peugeot5
+          url: peugeot5,
         },
-      ]
+      ];
     }
     setVehicle(res.data);
-
   };
+  console.log("idVehicle>>", vehicle.idvehicle);
 
   useEffect(() => {
     fetchVehicle();
@@ -104,8 +110,34 @@ const Detail = ({ params }) => {
   const closeGalleryModal = () => {
     setGalleryOpen(false);
   };
+
+
+  const [menuVisible, setMenuVisible] = useState(false);
+
+  const toggleMenu = () => {
+    setMenuVisible(!menuVisible);
+  };
+
+  const shareOnFacebook = () => {
+    const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+      window.location.href
+    )}`;
+    window.open(facebookUrl, "_blank");
+    setMenuVisible(false)
+  };
+
+  const shareOnWhatsApp = () => {
+    const textToShare =
+      "¡Mira este vehículo en alquiler! " +
+      window.location.href;
+    const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(
+      textToShare
+    )}`;
+    window.open(whatsappUrl, "_blank");
+    setMenuVisible(false)
+  };
   return (
-    <div >
+    <div>
       {isGalleryOpen && (
         <GalleryModal
           images={vehicle.images}
@@ -114,12 +146,55 @@ const Detail = ({ params }) => {
         />
       )}
       <div
-        className={`flex flex-col gap-4 ${isGalleryOpen ? "opacity-10" : "opacity-100"
-          }`}
+        className={`flex flex-col gap-4 ${
+          isGalleryOpen ? "opacity-10" : "opacity-100"
+        }`}
         id="detail"
       >
         <div className="flex items-center justify-between">
-          <p className="text-2xl font-poppins font-semibold capitalize">{vehicle.model?.brand?.name + '  ' + vehicle.model?.name + '  ' + vehicle.plate}</p>
+          <p className="text-2xl font-poppins font-semibold capitalize">
+            {vehicle.model?.brand?.name +
+              "  " +
+              vehicle.model?.name +
+              "  " +
+              vehicle.plate}
+          </p>
+
+          <div className="ml-auto" style={{ position: "relative" }}>
+  <button
+    className="bg-primary text-white p-2 rounded-md hover:bg-secondary transition-all duration-200 fixed-share-button"
+    onClick={toggleMenu}
+    style={{ fontSize: "0.8rem" }}
+  >
+
+ <span style={{ marginRight: "0.5rem" }}>
+      <FontAwesomeIcon icon={faSquareShareNodes} />
+    </span>
+   Share
+  </button>
+
+  {menuVisible && (
+    <div
+      className="flex items-end"
+      style={{ position: "absolute", top: "100%", left: "0" }}
+    >
+      <button
+        onClick={shareOnFacebook}
+        className="bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 "
+      >
+        <FontAwesomeIcon icon={faFacebook} className="mr-1" />
+      </button>
+      <button
+        onClick={shareOnWhatsApp}
+        className="bg-green-400 hover:bg-green-500 text-white px-2 py-1 "
+      >
+        <FontAwesomeIcon icon={faWhatsapp} className="mr-1" />
+      </button>
+    </div>
+  )}
+</div>
+
+
           {/* <button
             onClick={() => {
               router.back();
@@ -168,69 +243,120 @@ const Detail = ({ params }) => {
           <div>
             <div className="flex justify-end space-x-4">
               <button
-                onClick={() => handleShowMessage(<div className="policy-list">
-                  <div className="relative flex flex-col justify-center content-center" tabIndex="-1">
-                    <button
-                      onClick={() => setShowMessage(false)}
-                      className=" absolute right-0 top-0"
-                    >
-                      <AiOutlineClose className="w-10 h-10" />
-                    </button>
-                    <h2 className="policy-title m-5">PRODUCT POLICES</h2>
-                    <div
-                      className=" p-5 flex flex-row flex-wrap justify-around"
-                    >
-                      <div className="policy">
-                        <h3 className="policy-subtitle">Extended warranty:</h3>
-                        <p className="policy-description">
-                          High-end cars often come with an extended warranty that covers mechanical and electronic components for a longer period than standard vehicles. This can provide homeowners peace of mind and cover costly repairs.
-                        </p>
-                      </div>
-                      <div className="policy">
-                        <h3 className="policy-subtitle">Roadside Assistance Programs:  </h3>
-                        <p className="policy-description">
-                          High-end cars often come with roadside assistance programs that provide help in the event of problems such as a dead battery, flat tires, or the need to tow.
-                        </p>
-                      </div>
-                      <div className="policy">
-                        <h3 className="policy-subtitle">Genuine Parts Replacement Policy: </h3>
-                        <p className="policy-description">
-                          Some manufacturers offer service packages that cover regular maintenance for the first few years of ownership. This can include oil changes, inspections, and other maintenance tasks, making life easier for the owner and ensuring the vehicle is kept in top condition.
-                        </p>
-                      </div>
-                      <div className="policy">
-                        <h3 className="policy-subtitle">Access to Exclusive Events: </h3>
-                        <p className="policy-description">
-                          High-end car owners can receive invitations to exclusive events such as new model launches, track driving events, and other brand-related events.
-                        </p>
-                      </div>
-                      <div className="policy">
-                        <h3 className="policy-subtitle">Premium Customer Service:</h3>
-                        <p className="policy-description">
-                          High-end brands often offer a higher level of customer service, including more personalized treatment and access to dedicated service representatives.
-                        </p>
-                      </div>
-                      <div className="policy">
-                        <h3 className="policy-subtitle">Special Financing Programs:  </h3>
-                        <p className="policy-description">
-                          Some manufacturers offer preferential interest rates or exclusive financing programs for high-end vehicles.
-                        </p>
-                      </div>
-                      <div className="policy">
-                        <h3 className="policy-subtitle">Continuous Upgrade Program:  </h3>
-                        <p className="policy-description">
-                          In an effort to keep our high-end vehicles at the forefront of technology and performance, we offer a continuous upgrade program. This allows owners to trade in their current models for the latest versions with an attractive discount. We want you to always drive the latest and the best.
-                        </p>
-                      </div>
-                      <div className="policy">
-                        <h3 className="policy-subtitle">Exclusive Driving Experience:  </h3>
-                        <p className="policy-description">
-                          As the owner of a high-end luxury car from our brand, you will have exclusive access to unique driving experiences. This includes track driving events, exclusive scenic routes, and the opportunity to test drive our newest models before anyone else. We want you to fully enjoy your driving experience.
-                        </p>
+                onClick={() =>
+                  handleShowMessage(
+                    <div className="policy-list">
+                      <div
+                        className="relative flex flex-col justify-center content-center"
+                        tabIndex="-1"
+                      >
+                        <button
+                          onClick={() => setShowMessage(false)}
+                          className=" absolute right-0 top-0"
+                        >
+                          <AiOutlineClose className="w-10 h-10" />
+                        </button>
+                        <h2 className="policy-title m-5">PRODUCT POLICES</h2>
+                        <div className=" p-5 flex flex-row flex-wrap justify-around">
+                          <div className="policy">
+                            <h3 className="policy-subtitle">
+                              Extended warranty:
+                            </h3>
+                            <p className="policy-description">
+                              High-end cars often come with an extended warranty
+                              that covers mechanical and electronic components
+                              for a longer period than standard vehicles. This
+                              can provide homeowners peace of mind and cover
+                              costly repairs.
+                            </p>
+                          </div>
+                          <div className="policy">
+                            <h3 className="policy-subtitle">
+                              Roadside Assistance Programs:{" "}
+                            </h3>
+                            <p className="policy-description">
+                              High-end cars often come with roadside assistance
+                              programs that provide help in the event of
+                              problems such as a dead battery, flat tires, or
+                              the need to tow.
+                            </p>
+                          </div>
+                          <div className="policy">
+                            <h3 className="policy-subtitle">
+                              Genuine Parts Replacement Policy:{" "}
+                            </h3>
+                            <p className="policy-description">
+                              Some manufacturers offer service packages that
+                              cover regular maintenance for the first few years
+                              of ownership. This can include oil changes,
+                              inspections, and other maintenance tasks, making
+                              life easier for the owner and ensuring the vehicle
+                              is kept in top condition.
+                            </p>
+                          </div>
+                          <div className="policy">
+                            <h3 className="policy-subtitle">
+                              Access to Exclusive Events:{" "}
+                            </h3>
+                            <p className="policy-description">
+                              High-end car owners can receive invitations to
+                              exclusive events such as new model launches, track
+                              driving events, and other brand-related events.
+                            </p>
+                          </div>
+                          <div className="policy">
+                            <h3 className="policy-subtitle">
+                              Premium Customer Service:
+                            </h3>
+                            <p className="policy-description">
+                              High-end brands often offer a higher level of
+                              customer service, including more personalized
+                              treatment and access to dedicated service
+                              representatives.
+                            </p>
+                          </div>
+                          <div className="policy">
+                            <h3 className="policy-subtitle">
+                              Special Financing Programs:{" "}
+                            </h3>
+                            <p className="policy-description">
+                              Some manufacturers offer preferential interest
+                              rates or exclusive financing programs for high-end
+                              vehicles.
+                            </p>
+                          </div>
+                          <div className="policy">
+                            <h3 className="policy-subtitle">
+                              Continuous Upgrade Program:{" "}
+                            </h3>
+                            <p className="policy-description">
+                              In an effort to keep our high-end vehicles at the
+                              forefront of technology and performance, we offer
+                              a continuous upgrade program. This allows owners
+                              to trade in their current models for the latest
+                              versions with an attractive discount. We want you
+                              to always drive the latest and the best.
+                            </p>
+                          </div>
+                          <div className="policy">
+                            <h3 className="policy-subtitle">
+                              Exclusive Driving Experience:{" "}
+                            </h3>
+                            <p className="policy-description">
+                              As the owner of a high-end luxury car from our
+                              brand, you will have exclusive access to unique
+                              driving experiences. This includes track driving
+                              events, exclusive scenic routes, and the
+                              opportunity to test drive our newest models before
+                              anyone else. We want you to fully enjoy your
+                              driving experience.
+                            </p>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </div>)}
+                  )
+                }
                 className="w-36 bg-primary text-white p-4 rounded-md hover:bg-secondary transition-all duration-200 mx-auto  autoFocus"
               >
                 Policy product
@@ -240,18 +366,12 @@ const Detail = ({ params }) => {
               <>
                 <div className=" fixed left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 opacity-50 bg-black w-screen h-screen z-30" />
 
-                <div
-                  className=" absolute left-1/2 -translate-x-1/2 -top-1/2 translate-y-1/3 my-32 w-11/12 h-auto p-5 flex items-center justify-center  bg-white rounded-xl drop-shadow-lg  z-40"
-                >
-                  <div
-                    className="w-full"
-                  >
-                    {messageContent}
-                  </div>
+                <div className=" absolute left-1/2 -translate-x-1/2 -top-1/2 translate-y-1/3 my-32 w-11/12 h-auto p-5 flex items-center justify-center  bg-white rounded-xl drop-shadow-lg  z-40">
+                  <div className="w-full">{messageContent}</div>
                 </div>
               </>
             )}
-          </div >
+          </div>
         </div>
       </div>
     </div>
@@ -275,27 +395,28 @@ const Gallery = ({
         >
           <Image
             className="object-contain rounded-lg"
-            src={images[0]?.url}
-            width={100}
-            height={100}
+            width={500}
+            height={500}
+            src={images[1]?.url}
             alt="spec"
           />
         </div>
 
         <div className="flex flex-col gap-4 w-full lg:w-3/4">
           <div className="lg:grid flex flex-row items-center lg:grid-cols-2 lg:grid-row-2 gap-4 justify-center w-full">
-            {images?.slice(1, 5).map((image, key) => (
+            {images?.slice(2, 6).map((image, key) => (
               <div
-                className=" flex justify-center items-center hover:brightness-75 transition-all duration-200 cursor-pointer"
+                className=" flex  justify-center items-center hover:brightness-75 transition-all duration-200 cursor-pointer"
                 onClick={() => openGalleryModal(image.id)}
               >
                 <Image
                   key={key}
-                  className=" rounded-lg object-contain"
+                  className=" rounded-lg object-cover"
+                  width={500}
+                  objectFit="cover"
+                  height={500}
                   src={image.url}
                   alt={`Image ${image.id}`}
-                  width={100}
-                  height={100}
                 />
               </div>
             ))}
@@ -307,11 +428,8 @@ const Gallery = ({
             See more
           </button>
         </div>
-
       </div>
-
     </div>
-
   );
 };
 
@@ -347,9 +465,9 @@ const GalleryModal = ({ selectedImageId, images, close }) => {
                 <Image
                   className=" pointer-events-none object-cover md:aspect-auto h-screen md:h-full"
                   src={image.url}
+                  width={500}
+                  height={500}
                   alt="spec"
-                  width={100}
-                  height={100}
                 />
               </SwiperSlide>
             );
@@ -366,9 +484,12 @@ const Specs = ({ specifications }) => {
       {specifications?.map((spec, index) => {
         return (
           <div className="flex items-center gap-4" key={index}>
-            <Image src={spec.image} alt="spec"
-              width={100}
-              height={100} />
+            <Image
+              src={spec.image}
+              alt="spec"
+              layout="fill"
+              objectFit="contain"
+            />
             <p className="font-poppins text-lg">{spec.description}</p>
           </div>
         );

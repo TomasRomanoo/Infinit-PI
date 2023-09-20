@@ -13,27 +13,48 @@ export async function GET(request) {
         { status: 400 }
       );
     }
+    let car;
 
-    const car = await prisma.vehicle.findUnique({
-      where: {
-        plate,
-      },
-      include: {
-        category: true,
-        specifications: true,
-        images: true,
-        ratings: {
-          include: {
-            user: true,
-          }
+    //This means it is an ID instead of a plate
+    if (parseInt(plate)) {
+      car = await prisma.vehicle.findUnique({
+        where: {
+          idvehicle: parseInt(plate),
         },
-        model: {
-          include: {
-            brand: true,
+        include: {
+          category: true,
+          specifications: true,
+          images: true,
+          model: {
+            include: {
+              brand: true,
+            },
+          },
+          dealer: true,
+        },
+      });
+    } else {
+      car = await prisma.vehicle.findUnique({
+        where: {
+          plate,
+        },
+        include: {
+          category: true,
+          specifications: true,
+          images: true,
+          ratings: {
+            include: {
+              user: true,
+            }
+          },
+          model: {
+            include: {
+              brand: true,
+            },
           },
         },
-      },
-    });
+      });
+    }
 
     if (!car) {
       return NextResponse.json(
