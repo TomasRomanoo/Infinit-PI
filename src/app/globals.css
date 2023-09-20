@@ -328,7 +328,7 @@ div.react-datepicker__input-container.react-datepicker__view-calendar-icon input
   height: auto;
   line-height: 50px;
   font-size: auto;
-  margin: 10px 10px 10px 0px ;
+  margin: 30px 10px 20px 10px ;
 }
 
 .ratingModal label {
@@ -393,3 +393,6 @@ div.react-datepicker__input-container.react-datepicker__view-calendar-icon input
 /* --------------------------- Fin Estilos Rating --------------------------- */
 
 
+.slider-rating{
+  box-shadow: inset 0px -1px 29px -20px rgba(0,0,0,0.47) ; 
+}
