@@ -397,6 +397,7 @@ const Gallery = ({
             className="object-contain rounded-lg"
             width={500}
             height={500}
+            objectFit="cover"
             src={images[1]?.url}
             alt="spec"
           />

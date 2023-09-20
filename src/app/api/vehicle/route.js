@@ -8,10 +8,6 @@ export async function POST(request) {
   try {
     const body = await request.json();
 
-    console.log('body :>> ', body);
-
-
-
     /*   if (!plate || !model || !price_per_day || price_per_day <= 0) {
       return NextResponse.json(
         {
@@ -34,6 +30,12 @@ export async function POST(request) {
       where: { name: body.category.name },
     });
 
+    const dealer = await prisma.dealer.findUnique({
+      where: {
+        iddealer: body.dealer.iddealer,
+      },
+    });
+
     const car = await prisma.vehicle.create({
       data: {
         name: `${brand.name} ${model.name} ${body.year}`,
@@ -42,6 +44,11 @@ export async function POST(request) {
           connect: {
             idmodel: model.idmodel,
             brand: { idbrand: brand.idbrand },
+          },
+        },
+        dealer: {
+          connect: {
+            iddealer: dealer.iddealer,
           },
         },
         category: {

@@ -68,6 +68,14 @@ export const Form = () => {
         setCategoryErr(false);
         document.querySelector("#categoryInput").classList.remove("errInput");
       }
+
+      if (!dealer) {
+        setDealerError(true);
+        document.querySelector("#dealerInput").classList.add("errInput");
+      } else {
+        setDealerError(false);
+        document.querySelector("#dealerInput").classList.remove("errInput");
+      }
     }
 
     if (
@@ -139,6 +147,8 @@ export const Form = () => {
 
     let parsModel = JSON.parse(model);
 
+    let parsDealer = JSON.parse(dealer);
+
     const formData = new FormData();
     Array.from(images).forEach((file) => {
       formData.append("images", file);
@@ -159,6 +169,14 @@ export const Form = () => {
         name: parsCategory.name,
         url: parsCategory.url,
         deleted: false,
+      },
+      dealer: {
+        iddealer: parsDealer.iddealer,
+        address: parsDealer.address,
+        state: parsDealer.state,
+        city: parsDealer.city,
+        country: parsDealer.country,
+        zip_code: parsDealer.zip_code,
       },
       images: response.data,
       model: {
@@ -196,6 +214,7 @@ export const Form = () => {
   const [detail, setDetail] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
+  const [dealer, setDealer] = useState({});
 
   //* Error States
   const [brandErr, setBrandErr] = useState(false);
@@ -207,9 +226,11 @@ export const Form = () => {
   const [detailErr, setDetailErr] = useState(false);
   const [descriptionErr, setDescriptionErr] = useState(false);
   const [categoryErr, setCategoryErr] = useState(false);
+  const [dealerErr, setDealerError] = useState(false);
 
   const [brands, setBrands] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [dealers, setDealers] = useState([]);
 
   const fetchBrands = async () => {
     const res = await axios("/api/brand");
@@ -221,18 +242,25 @@ export const Form = () => {
     setCategories(res.data);
   };
 
+  const fetchDealers = async () => {
+    const res = await axios("/api/dealer");
+    console.log("res.data :>> ", res.data);
+    setDealers(res.data);
+  };
+
   useEffect(() => {
     fetchCategories();
   }, [showCategory]);
 
   useEffect(() => {
-    fetchBrands();
-    fetchCategories();
-  }, []);
+    console.log("dealer :>> ", dealer);
+  }, [dealer]);
 
   useEffect(() => {
-    console.log("images :>> ", images);
-  }, [images]);
+    fetchBrands();
+    fetchCategories();
+    fetchDealers();
+  }, []);
 
   return (
     <>
@@ -563,6 +591,44 @@ export const Form = () => {
               {categoryErr ? (
                 <span className="flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1">
                   You must choose the category of your car
+                </span>
+              ) : (
+                <></>
+              )}
+            </div>
+
+            <div className="m-3">
+              <label className="block text-sm font-medium leading-6 text-gray-900">
+                Dealer
+              </label>
+              <div className="flex items-center	mt-2">
+                <select
+                  id="dealerInput"
+                  value={dealer}
+                  onChange={(e) => {
+                    setDealer(e.target.value);
+                  }}
+                  type="text"
+                  className="block  w-full cursor-pointer rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 focus:outline-none sm:text-sm sm:leading-6 transition ease-in-out duration-300"
+                >
+                  <option value="" disabled selected>
+                    Select some dealer
+                  </option>
+                  {dealers.map((dealer) => {
+                    return (
+                      <option
+                        value={JSON.stringify(dealer)}
+                        key={dealer.iddealer}
+                      >
+                        {dealer.city}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
+              {dealerErr ? (
+                <span className="flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1">
+                  You must choose a dealer of your car
                 </span>
               ) : (
                 <></>
