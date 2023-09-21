@@ -17,11 +17,10 @@ import peugeot2 from "@/assets/images/peugeot-2.jpg";
 import peugeot3 from "@/assets/images/peugeot-3.jpg";
 import peugeot4 from "@/assets/images/peugeot-4.jpg";
 import peugeot5 from "@/assets/images/peugeot-5.jpg";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFacebook } from '@fortawesome/free-brands-svg-icons';
-import { faWhatsapp } from '@fortawesome/free-brands-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFacebook } from "@fortawesome/free-brands-svg-icons";
+import { faWhatsapp } from "@fortawesome/free-brands-svg-icons";
 import { faSquareShareNodes } from "@fortawesome/free-solid-svg-icons";
-
 
 import { MdOutlineLocationOn, MdMyLocation } from "react-icons/md";
 import { BiDirections } from "react-icons/bi";
@@ -88,7 +87,6 @@ const Detail = ({ params }) => {
     setGalleryOpen(false);
   };
 
-
   const [menuVisible, setMenuVisible] = useState(false);
 
   const toggleMenu = () => {
@@ -100,18 +98,17 @@ const Detail = ({ params }) => {
       window.location.href
     )}`;
     window.open(facebookUrl, "_blank");
-    setMenuVisible(false)
+    setMenuVisible(false);
   };
 
   const shareOnWhatsApp = () => {
     const textToShare =
-      "¡Mira este vehículo en alquiler! " +
-      window.location.href;
+      "¡Look this incredible vehicle to rent! " + window.location.href;
     const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(
       textToShare
     )}`;
     window.open(whatsappUrl, "_blank");
-    setMenuVisible(false)
+    setMenuVisible(false);
   };
   return (
     <div>
@@ -138,39 +135,37 @@ const Detail = ({ params }) => {
           </p>
 
           <div className="ml-auto" style={{ position: "relative" }}>
-  <button
-    className="bg-primary text-white p-2 rounded-md hover:bg-secondary transition-all duration-200 fixed-share-button"
-    onClick={toggleMenu}
-    style={{ fontSize: "0.8rem" }}
-  >
- 
- <span style={{ marginRight: "0.5rem" }}>
-      <FontAwesomeIcon icon={faSquareShareNodes} />
-    </span>
-   Share
-  </button>
-  
-  {menuVisible && (
-    <div
-      className="flex items-end" 
-      style={{ position: "absolute", top: "100%", left: "0" }}
-    >
-      <button
-        onClick={shareOnFacebook}
-        className="bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 "
-      >
-        <FontAwesomeIcon icon={faFacebook} className="mr-1" />
-      </button>
-      <button
-        onClick={shareOnWhatsApp}
-        className="bg-green-400 hover:bg-green-500 text-white px-2 py-1 "
-      >
-        <FontAwesomeIcon icon={faWhatsapp} className="mr-1" />
-      </button>
-    </div>
-  )}
-</div>
+            <button
+              className="bg-primary text-white p-2 rounded-md hover:bg-secondary transition-all duration-200 fixed-share-button"
+              onClick={toggleMenu}
+              style={{ fontSize: "0.8rem" }}
+            >
+              <span style={{ marginRight: "0.5rem" }}>
+                <FontAwesomeIcon icon={faSquareShareNodes} />
+              </span>
+              Share
+            </button>
 
+            {menuVisible && (
+              <div
+                className="flex items-end"
+                style={{ position: "absolute", top: "100%", left: "0" }}
+              >
+                <button
+                  onClick={shareOnFacebook}
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 "
+                >
+                  <FontAwesomeIcon icon={faFacebook} className="mr-1" />
+                </button>
+                <button
+                  onClick={shareOnWhatsApp}
+                  className="bg-green-400 hover:bg-green-500 text-white px-2 py-1 "
+                >
+                  <FontAwesomeIcon icon={faWhatsapp} className="mr-1" />
+                </button>
+              </div>
+            )}
+          </div>
 
           {/* <button
             onClick={() => {
@@ -197,7 +192,9 @@ const Detail = ({ params }) => {
           <div className="flex flex-col items-start gap-6">
             <p className="text-poppins text-2xl mt-10">Description</p>
 
-            <p className="text-gray-400 text-xl">{vehicle.long_description}</p>
+            <p className="text-gray-400 text-xl capitalize">
+              {vehicle.long_description}
+            </p>
           </div>
 
           <Characterist />
