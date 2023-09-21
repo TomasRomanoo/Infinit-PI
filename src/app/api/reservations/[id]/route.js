@@ -10,13 +10,17 @@ export async function GET(req, context) {
   const id = parseInt(context.params.id); 
 
   try {
+    
     const reservations = await prisma.reservation.findMany({
       where: { userIduser: id }, 
       include: {
         user: true,
         vehicle: true
+        
       },
-    });
+      
+    }
+    );
 
     return NextResponse.json({ reservations });
   } catch (error) {

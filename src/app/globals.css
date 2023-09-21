@@ -254,3 +254,8 @@ div.react-datepicker__input-container.react-datepicker__view-calendar-icon input
 }
 .px-calendar{
 }
+
+.shadow-lg {
+  --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 85%), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+ 
+}

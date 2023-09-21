@@ -54,23 +54,3 @@ export async function POST(request) {
 
 
 
-// Método GET para obtener todas las reservas
-export async function GET(request) {
-  console.log("The GET function has been called.");
-  try {
-    const reservations = await prisma.reservation.findMany({
-      include: {
-        user: true, 
-        vehicle: true, 
-      },
-    });
-
-    return NextResponse.json(
-      { reservations },
-      { status: 200 }
-    );
-  } catch (error) {
-    console.error(error);
-    return NextResponse.json({ Error: "Error" }, { status: 500 });
-  }
-}

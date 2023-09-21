@@ -1,59 +1,39 @@
-"use client";
-import React, { useState, useEffect } from 'react';
-import { PrismaClient } from '@prisma/client';
+"use client"
 
-const prisma = new PrismaClient();
 
-function ReservasHistorial() {
-  const [reservation, setReservation] = useState([]); // Cambio de 'reservas' a 'reservation'
+import React, { useEffect, useState } from 'react';
+import History from '@/components/History'; // Asegúrate de que la ruta sea correcta
+
+const HistoryPage = () => {
+  const [reservas, setReservas] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchReservas() {
-      try {
-        const userReservas = await prisma.reservation.findMany({
-          where: {
-            userIduser: 4, // Reemplaza con el ID real del usuario autenticado
-          },
-          include: {
-            vehicle: true,
-          },
-          orderBy: {
-            checkin_date: 'desc', // Ordena por fecha de check-in descendente.
-          },
-        });
 
-        setReservation(userReservas); // Cambio de 'setReservas' a 'setReservation'
+    fetch('/api/reservations/3') // Asegúrate de que la ruta sea correcta
+      .then((response) => response.json())
+      .then((data) => {
+        if (Array.isArray(data.reservations)) {
+          setReservas(data.reservations);
+        }
         setIsLoading(false);
-      } catch (error) {
-        console.error('Error al cargar las reservas:', error);
-      }
-    }
-
-    // Llama a la función para cargar las reservas cuando el componente se monta.
-    fetchReservas();
+      })
+      .catch((error) => {
+        console.error('Error al obtener datos de historial:', error);
+        setIsLoading(false);
+      });
   }, []);
 
   return (
     <div>
-      <h1>Mi Historial de Reservas</h1>
+      <h1></h1>
       {isLoading ? (
         <p>Cargando...</p>
       ) : (
-        <ul>
-          {reservation.map((reservation) => (
-            <li key={reservation.idreservation}>
-              <strong>Fecha de Check-in:</strong> {reservation.checkin_date}<br />
-              <strong>Fecha de Check-out:</strong> {reservation.checkout_date}<br />
-              <strong>Vehículo:</strong> {reservation.vehicle.name}<br />
-              {/* Otros detalles de la reserva si los tienes en tu modelo de datos */}
-              <hr />
-            </li>
-          ))}
-        </ul>
+        <History reservas={reservas} />
       )}
     </div>
   );
-}
+};
 
-export default ReservasHistorial;
+export default HistoryPage;
