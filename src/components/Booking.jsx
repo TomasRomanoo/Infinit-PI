@@ -14,6 +14,7 @@ import Swal from "sweetalert2/dist/sweetalert2.js";
 import "sweetalert2/src/sweetalert2.scss";
 import swiperConfig from "@/utils/swiperConfig";
 
+import honda from "../assets/images/honda-civic.png";
 
 export const Booking = () => {
   const [modal, setModal] = useState(false);
@@ -54,7 +55,6 @@ export const Booking = () => {
       .get(`/api/location/${searchQuery}`)
       .then((res) => {
         setLocations(res.data);
-
         if (res.data.length > 0) {
           setModal(true);
         } else {
@@ -117,15 +117,19 @@ export const Booking = () => {
       return;
     }
 
-    console.log("object :>> ", object);
-
     axios
       .post("/api/dealer", object)
       .then((res) => {
-        console.log("cars location >> ", res.data);
+        console.log("res.data.length :>> ", res.data.length);
+
         if (res.data.length > 0) {
           setVehicles(res.data);
           setVehiclesModal(true);
+        } else {
+          Toast.fire({
+            icon: "error",
+            title: "Cannot find vehicles in that location",
+          });
         }
       })
       .catch((error) => {
@@ -247,9 +251,9 @@ export const Booking = () => {
                     <div className="flex flex-row-reverse justify-between p-2 shadow-md rounded-lg gap-6">
                       <div>
                         <Image
-                          src={vehicle.images[0]}
-                          width={500}
-                          height={500}
+                          src={vehicle.images[0]?.url || honda}
+                          width={200}
+                          height={200}
                           className="w-full object-contain"
                         />
                       </div>
@@ -257,15 +261,15 @@ export const Booking = () => {
                       <div className="flex flex-col justify-between w-full items-start">
                         <div className="flex flex-col">
                           <div className="flex items-start gap-1 font-bold text-lg">
-                            <p className="text-start">
+                            <p className="text-start uppercase">
                               {vehicle.model?.brand?.name}
                             </p>
-                            <p>{vehicle.model?.name}</p>
+                            <p className="uppercase">{vehicle.model?.name}</p>
                             <p className="text-gray-400 font-semibold">
                               {vehicle.year}
                             </p>
                           </div>
-                          <p className="font-poppins">
+                          <p className="font-poppins capitalize">
                             {vehicle.long_description}
                           </p>
                         </div>
@@ -304,10 +308,10 @@ export const Booking = () => {
                 {vehicles.map((vehicle) => {
                   return (
                     <SwiperSlide className="">
-                      <div className="flex  w-screen flex-col justify-between p-2 shadow-md rounded-lg gap-6">
+                      <div className="flex w-screen flex-col justify-between p-2 shadow-md rounded-lg gap-6">
                         <div>
                           <Image
-                            src={vehicle.images[0]}
+                            src={vehicle.images[0]?.url || honda}
                             width={500}
                             height={500}
                             className="w-full object-contain"

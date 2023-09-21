@@ -30,6 +30,17 @@ export async function POST(request) {
           },
         },
       },
+      include: {
+        dealer: true,
+        category: true,
+        specifications: true,
+        images: true,
+        model: {
+          include: {
+            brand: true,
+          },
+        },
+      },
     });
 
     return NextResponse.json(vehicles, { status: 200 });
