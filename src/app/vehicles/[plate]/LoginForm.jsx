@@ -11,10 +11,12 @@ import { Infinit } from "@/components/Infinit";
 import { useRouter } from 'next/navigation';
 
 
-export default function Login() {
+export default function Login({idvehicle}) {
   const [userData, setUserData] = useState({ email: "", password: "" });
   const [submitted, setSubmitted] = useState(false);
   const userContext = useContext(UserContext);
+
+  console.log("Params>>", idvehicle);
 
   const { push } = useRouter();
 
@@ -36,7 +38,7 @@ export default function Login() {
           icon: "success",
           title: res.data.msg,
         }).then(() => {
-          push("/")
+          push(`/reservation/${idvehicle}`);         
         });
       })
       .catch((error) => {

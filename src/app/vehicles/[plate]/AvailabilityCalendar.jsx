@@ -76,7 +76,6 @@ import React, { useState, useEffect, useContext } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Swal from 'sweetalert2';
-// import { UserContext } from "./UserContext";
 import { UserContext } from "@/components/context/UserContext";
 import LoginForm from "./LoginForm";
 
@@ -85,8 +84,7 @@ const AvailabilityCalendar = ({ idvehicle }) => {
   const { user } = useContext(UserContext); 
   const [isError, setIsError] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false); // Controla la visibilidad del modal
-  const [AvailableDates, setAvailableDates] = useState();
-    
+  const [AvailableDates, setAvailableDates] = useState();    
 
     const fetchAvailability = async () => {
     try {
@@ -156,6 +154,7 @@ const AvailabilityCalendar = ({ idvehicle }) => {
               <DatePicker
                 excludeDateIntervals={AvailableDates}
                 monthsShown={2}
+                minDate={new Date()}
                 withPortal
                 showIcon
                 placeholderText="Show availability"
@@ -177,6 +176,7 @@ const AvailabilityCalendar = ({ idvehicle }) => {
     <div className="modal" style={{ backgroundColor: 'white', width: '50%',height: '70%', padding: '2px', borderRadius: '8px' }}>
       <div className="modal-content">
         <LoginForm
+          idvehicle={idvehicle}
           onLoginSuccess={() => {
             setShowLoginModal(false);
             window.location.href = `/reservation/${idvehicle}`;
