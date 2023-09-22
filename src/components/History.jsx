@@ -36,8 +36,8 @@ const History = ({ reservas }) => {
             </div>
             <div className="mb-2">
               <p className="font-semibold ">Reservation data:</p>
-              <p className='bg-black text-white'>Start date: {new Date(reservation.checkin_date).toLocaleDateString()}</p>
-              <p p className='bg-black text-white mt-1'>End date: {new Date(reservation.checkout_date).toLocaleDateString()}</p>
+              <p className='bg-primary text-white p-1'>Start date: {new Date(reservation.checkin_date).toLocaleDateString()}</p>
+              <p p className='bg-primary text-white mt-1 p-1'>End date: {new Date(reservation.checkout_date).toLocaleDateString()}</p>
               <p>Location: {getLocationString(reservation.vehicle)}</p>
             </div>
             <div className="mb-2">
@@ -55,7 +55,7 @@ const History = ({ reservas }) => {
                 <p>Model: N/A</p>
               )}
             </div>
-            <div className="flex items-center justify-between mt-4">
+            <div className="flex items-center justify-between">
               <div className="text-blue-500 font-semibold">
                 Price: ${reservation.vehicle?.price_per_day || 'N/A'} per day
               </div>
