@@ -13,7 +13,7 @@ export const DashCard = (props) => {
             width={500}
             height={300}
             alt="card"
-            src={image}
+            src={props.vehicle.images[0]?.url}
           />
         </div>
         <div className="flex flex-col items-end">
