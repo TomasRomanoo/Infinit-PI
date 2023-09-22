@@ -40,6 +40,7 @@ import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import { UserContext } from "@/components/context/UserContext";
 import { Hidden } from "@mui/material";
+import { toast } from "sonner";
 
 const Detail = ({ params }) => {
   const [vehicle, setVehicle] = useState({});
@@ -48,6 +49,8 @@ const Detail = ({ params }) => {
   const [selectedImageId, setSelectedImageId] = useState(null);
   const [showMessage, setShowMessage] = useState(false);
   const [messageContent, setMessageContent] = useState("");
+  const { getUser } = useContext(UserContext)
+
   const handleShowMessage = (message) => {
     setMessageContent(message);
     setShowMessage(true);
@@ -56,22 +59,9 @@ const Detail = ({ params }) => {
   const handleCloseMessage = () => {
     setShowMessage(false);
   };
-  const [ratingAverage, setRatingAverage] = useState(0)
 
-  useEffect(() => {
-    let totalRating = 0
-    if (!(vehicle.ratings === undefined) && vehicle.ratings.length >= 1) {
-      vehicle.ratings.forEach((rate) => {
-        totalRating += rate.rate
-      })
-      setRatingAverage(totalRating / vehicle.ratings.length)
-      console.log(vehicle.ratings);
-      const radioElement = document.querySelector(`input[type="radio"][name="stars-main"][value="${Math.floor(totalRating / vehicle.ratings.length)}"]`);
-      if (radioElement) {
-        radioElement.checked = true;
-      }
-    }
-  }, [vehicle])
+
+
 
   const fetchVehicle = async () => {
     const res = await axios("/api/vehicle/" + params.plate);
@@ -97,11 +87,57 @@ const Detail = ({ params }) => {
     }
     setVehicle(res.data);
   };
-  console.log("idVehicle>>", vehicle.idvehicle);
+
+
+  const [reservations, setReservations] = useState([])
+  const [hasReserved, setHasReserved] = useState(false)
+
+  const fetchReservations = async () => {
+    axios.get(`/api/reservations/${getUser().id}`)
+      .then(res => {
+        setReservations(res.data.reservations)
+      })
+      .catch(err => console.log('Error trayendo reservations'));
+  }
+
+  useEffect(() => userBooked(), [reservations]);
+
+  const userBooked = () => {
+    if (reservations.length >= 1) {
+      reservations.forEach(reserv => {
+        if (reserv.userIduser === getUser().id && reserv.vehicle.plate == params.plate) {
+          console.log(reserv );
+          setHasReserved(true)
+        }
+        return null;
+      })
+    }
+  }
 
   useEffect(() => {
     fetchVehicle();
+    fetchReservations()
   }, []);
+
+
+  const [ratingAverage, setRatingAverage] = useState(0)
+
+  useEffect(() => {
+    let totalRating = 0
+    if (!(vehicle.ratings === undefined) && vehicle.ratings.length >= 1) {
+      vehicle.ratings.forEach((rate) => {
+        totalRating += rate.rate
+      })
+      setRatingAverage(totalRating / vehicle.ratings.length)
+      const radioElement = document.querySelector(`input[type="radio"][name="stars-main"][value="${Math.floor(totalRating / vehicle.ratings.length)}"]`);
+      if (radioElement) {
+        radioElement.checked = true;
+      }
+    }
+  }, [vehicle])
+
+
+  /* ----------------------------- Handlers policy ---------------------------- */
 
   const openGalleryModal = (imageId) => {
     setSelectedImageId(imageId);
@@ -223,7 +259,7 @@ const Detail = ({ params }) => {
 
           <Characterist />
 
-          <Rating ratingAverage={ratingAverage} ratingsVehicle={vehicle.ratings || []} idvehicle={vehicle.idvehicle || []} />
+          <Rating ratingAverage={ratingAverage} ratingsVehicle={vehicle.ratings || []} idvehicle={vehicle.idvehicle || []} hasReserved={hasReserved} />
 
           <div className="flex justify-end">
             <button
@@ -497,15 +533,15 @@ const Specs = ({ specifications }) => {
   );
 };
 
-const Rating = ({ ratingAverage, ratingsVehicle, idvehicle }) => {
+const Rating = ({ ratingAverage, ratingsVehicle, idvehicle, hasReserved }) => {
   const { getUser } = useContext(UserContext)
 
-  const [ratings, setRatings] = useState(ratingsVehicle) 
+  const [ratings, setRatings] = useState(ratingsVehicle)
   useEffect(() => {
     setRatings(ratingsVehicle)
-  },[ratingsVehicle])
+  }, [ratingsVehicle])
 
-  let [totalAverage, setTotalAverage] = useState(ratingAverage || 0) 
+  let [totalAverage, setTotalAverage] = useState(ratingAverage || 0)
 
 
   const user = getUser()
@@ -527,10 +563,10 @@ const Rating = ({ ratingAverage, ratingsVehicle, idvehicle }) => {
     setCount3Star(ratings?.filter(rate => rate.rate === 3).length)
     setCount4Star(ratings?.filter(rate => rate.rate === 4).length)
     setCount5Star(ratings?.filter(rate => rate.rate === 5).length)
-    setRatingObj(ratings.find((rat)=> rat.iduser === user.id))
-    setTotalAverage(ratingObj? (ratingAverage !== 0?(ratingAverage + ratingObj.rate)/2 :ratingObj.rate ) : ratingAverage )
+    setRatingObj(ratings.find((rat) => rat.iduser === user.id))
+    setTotalAverage(ratingObj ? (ratingAverage !== 0 ? (ratingAverage + ratingObj.rate) / 2 : ratingObj.rate) : ratingAverage)
 
-    setAnyOtherRv((ratings.find((rat)=> rat.iduser !== user.id)) ? true : false)
+    setAnyOtherRv((ratings.find((rat) => rat.iduser !== user.id)) ? true : false)
 
   }, [ratings])
 
@@ -564,25 +600,25 @@ const Rating = ({ ratingAverage, ratingsVehicle, idvehicle }) => {
   return (
     <div className="flex flex-col">
       <h3 className="text-xl font-semibold mb-4">Rating</h3>
-      <ModalRate showModal={showModal} setShowModal={setShowModal} userRating={userRatingSelected} vehicleID={idvehicle} setRatingObj={setRatingObj} setRatings={setRatings} ratings={ratings}/>
+      <ModalRate showModal={showModal} setShowModal={setShowModal} userRating={userRatingSelected} vehicleID={idvehicle} setRatingObj={setRatingObj} setRatings={setRatings} ratings={ratings} />
       <div className="flex justify-around lg:flex-row flex-col ">
         <div className="lg:w-5/12 w-full 2xl:p-5 p-4 shadow-xl rounded-xl">
           <div>
             <div className="flex items-center my-4 text-center sm:text-left">
               <p className="text-7xl font-bold mr-4">{totalAverage}</p>
               <div>
-              <div className="flex lg:my-4 my-2">
+                <div className="flex lg:my-4 my-2">
                   {(() => {
                     const stars = [];
                     let counterStars = totalAverage
                     for (let i = 0; i < 5; i++) {
-                      if(counterStars>1){
-                        counterStars --
+                      if (counterStars > 1) {
+                        counterStars--
                         stars.push(<BsStarFill className='text-yellow-300 text-2xl ' key={i} />);
-                      }else if(counterStars >= 0.1 && counterStars <= 0.9 ){
+                      } else if (counterStars >= 0.1 && counterStars <= 0.9) {
                         counterStars = Math.floor(counterStars)
                         stars.push(<BsStarHalf className='text-yellow-300 text-2xl ' key={i} />);
-                      }else{
+                      } else {
                         stars.push(<BsStar className='text-yellow-300 text-2xl' key={i} />);
                       }
                     }
@@ -602,7 +638,7 @@ const Rating = ({ ratingAverage, ratingsVehicle, idvehicle }) => {
                 </span>
               </div>
               <div className="w-full  rounded-full h-2.5 bg-secondary">
-                <div className="bg-primary h-2.5 rounded-full" style={{ width: `${(count1Star * 100) / ratings.length ? ratings.length : 0}%` }}></div>
+                <div className="bg-primary h-2.5 rounded-full" style={{ width: `${(count1Star * 100) / ratings.length || 0}%` }}></div>
               </div>
             </div>
             <div className="mb-3">
@@ -667,72 +703,75 @@ const Rating = ({ ratingAverage, ratingsVehicle, idvehicle }) => {
                       <p>{oneRating.description}</p>
                     </div>
                   )
-                } 
+                }
               })}
-              
+
             </>
-            }
-            {(!anyOtherRv && ratingObj) && <div className='text-center justify-center content-center w-full p-10 font-medium text-xl opacity-50'> Others have not yet shared their experiences!</div> }
-            {(!anyOtherRv && !ratingObj) && <div className={`text-center justify-center content-center w-full p-10 font-medium text-xl opacity-50`}> Be the first to share your review!</div>}
+          }
+          {(!anyOtherRv && ratingObj) && <div className='text-center justify-center content-center w-full p-10 font-medium text-xl opacity-50'> Others have not yet shared their experiences!</div>}
+          {(!anyOtherRv && !ratingObj && hasReserved) && <div className={`text-center justify-center content-center w-full p-10 font-medium text-xl opacity-50`}> Be the first to share your review!</div>}
+          {(!anyOtherRv && !ratingObj && !hasReserved) && <div className={`text-center justify-center content-center w-full p-10 font-medium text-xl opacity-50`}> Not qualified yet :(</div>}
         </Slider>
       </div>
-      <div className="w-full lg:w-11/12 p-8 shadow-xl rounded-xl self-center mt-10">
-        { !(ratingObj === undefined)
-        ?
-          <div>
-            <div className="relative  p-5 rounded-xl lg:text-xl text-lg ">
-              <p className="absolute right-5 top-5 text-sm text-slate-500 ">{ratingObj.date?.slice(0, 10)}</p>
-              <h1 className="text-black font-bold my-2">{user?.name}</h1>
-              <div className="flex lg:my-4 my-2">
-                {(() => {
-                  const stars = [];
-                  for (let i = 0; i < ratingObj.rate; i++) {
-                    stars.push(<BsStarFill className='text-yellow-300' key={i} />);
-                  }
-                  return stars
-                })()}
+
+      {hasReserved &&
+        <div className="w-full lg:w-11/12 p-8 shadow-xl rounded-xl self-center mt-10">
+          {!(ratingObj === undefined)
+            ?
+            <div>
+              <div className="relative  p-5 rounded-xl lg:text-xl text-lg ">
+                <p className="absolute right-5 top-5 text-sm text-slate-500 ">{ratingObj.date?.slice(0, 10)}</p>
+                <h1 className="text-black font-bold my-2">{user?.name}</h1>
+                <div className="flex lg:my-4 my-2">
+                  {(() => {
+                    const stars = [];
+                    for (let i = 0; i < ratingObj.rate; i++) {
+                      stars.push(<BsStarFill className='text-yellow-300' key={i} />);
+                    }
+                    return stars
+                  })()}
+                </div>
+                <p>{ratingObj.description}</p>
               </div>
-              <p>{ratingObj.description}</p>
             </div>
-          </div>
-          :
-          <div className="flex flex-col w-full ">
-            <h3 className="font-medium text-lg">Rate your experience!</h3>
-            <form className={`rating self-center my-2 sm:text-5xl text-4xl`}>
-              <label>
-                <input type="radio" name="stars-main" value="1" onClick={() => { handlerRating(1) }} />
-                <span className="icon"><BsStarFill /></span>
-              </label>
-              <label>
-                <input type="radio" name="stars-main" value="2" onClick={() => { handlerRating(2) }} />
-                <span className="icon"><BsStarFill /></span>
-                <span className="icon"><BsStarFill /></span>
-              </label>
-              <label>
-                <input type="radio" name="stars-main" value="3" onClick={() => { handlerRating(3) }} />
-                <span className="icon"><BsStarFill /></span>
-                <span className="icon"><BsStarFill /></span>
-                <span className="icon"><BsStarFill /></span>
-              </label>
-              <label>
-                <input type="radio" name="stars-main" value="4" onClick={() => { handlerRating(4) }} />
-                <span className="icon"><BsStarFill /></span>
-                <span className="icon"><BsStarFill /></span>
-                <span className="icon"><BsStarFill /></span>
-                <span className="icon"><BsStarFill /></span>
-              </label>
-              <label>
-                <input type="radio" name="stars-main" value="5" onClick={() => { handlerRating(5) }} />
-                <span className="icon"><BsStarFill /></span>
-                <span className="icon"><BsStarFill /></span>
-                <span className="icon"><BsStarFill /></span>
-                <span className="icon"><BsStarFill /></span>
-                <span className="icon"><BsStarFill /></span>
-              </label>
-            </form>
-          </div>
-      }
-      </div>
+            :
+            <div className="flex flex-col w-full ">
+              <h3 className="font-medium text-lg">Rate your experience!</h3>
+              <form className={`rating self-center my-2 sm:text-5xl text-4xl`}>
+                <label>
+                  <input type="radio" name="stars-main" value="1" onClick={() => { handlerRating(1) }} />
+                  <span className="icon"><BsStarFill /></span>
+                </label>
+                <label>
+                  <input type="radio" name="stars-main" value="2" onClick={() => { handlerRating(2) }} />
+                  <span className="icon"><BsStarFill /></span>
+                  <span className="icon"><BsStarFill /></span>
+                </label>
+                <label>
+                  <input type="radio" name="stars-main" value="3" onClick={() => { handlerRating(3) }} />
+                  <span className="icon"><BsStarFill /></span>
+                  <span className="icon"><BsStarFill /></span>
+                  <span className="icon"><BsStarFill /></span>
+                </label>
+                <label>
+                  <input type="radio" name="stars-main" value="4" onClick={() => { handlerRating(4) }} />
+                  <span className="icon"><BsStarFill /></span>
+                  <span className="icon"><BsStarFill /></span>
+                  <span className="icon"><BsStarFill /></span>
+                  <span className="icon"><BsStarFill /></span>
+                </label>
+                <label>
+                  <input type="radio" name="stars-main" value="5" onClick={() => { handlerRating(5) }} />
+                  <span className="icon"><BsStarFill /></span>
+                  <span className="icon"><BsStarFill /></span>
+                  <span className="icon"><BsStarFill /></span>
+                  <span className="icon"><BsStarFill /></span>
+                  <span className="icon"><BsStarFill /></span>
+                </label>
+              </form>
+            </div>
+          }
+        </div>}
     </div>
   )
 }
@@ -742,7 +781,7 @@ const ModalRate = ({ showModal, setShowModal, userRating, vehicleID, setRatingOb
   const [selectedRating, setSelectedRating] = useState(userRating);
   useEffect(() => {
     setSelectedRating(userRating);
-  },[userRating])
+  }, [userRating])
 
   const [detail, setDetail] = useState('')
   const { getUser } = useContext(UserContext)
@@ -766,28 +805,43 @@ const ModalRate = ({ showModal, setShowModal, userRating, vehicleID, setRatingOb
     return formattedDate;
   }
 
+  const [errDetail, setErrDetail] = useState(false)
   const hanlderPostReview = async (e) => {
     e.preventDefault()
     console.log(selectedRating);
 
-    // axios.post(`/api/rating/${user.id}/vehicle/${vehicleID}`, {
-    //   rate: selectedRating,
-    //   date: getFormattedDateAndTime(),
-    //   description: detail
-    // }).then(function (response) {
-    // })
 
-      let objetRating = {
-        date: getFormattedDateAndTime(),
-        description: detail,
+    let objetRating = {
+      date: getFormattedDateAndTime(),
+      description: detail,
+      iduser: user.id,
+      rate: +selectedRating,
+      user: {
         iduser: user.id,
-        rate: +selectedRating,
-        user: {iduser: user.id,
-              name: user.name}}
+        name: user.name
+      }
+    }
 
-      setRatings([...ratings,objetRating])
-      setRatingObj(objetRating)
-      setShowModal(false)
+    if(detail.length >= 1 && detail){
+    toast.promise(axios.post(`/api/rating/${user.id}/vehicle/${vehicleID}`, {
+      rate: selectedRating,
+      date: getFormattedDateAndTime(),
+      description: detail
+    }),{
+      loading: "Loading...",
+      success: (data) => {
+
+        setErrDetail(false)
+        setRatings([...ratings, objetRating])
+        setRatingObj(objetRating)
+        setShowModal(false)
+  
+        return `Post has been created successfully`;
+      },
+      error: "Error while creating post"}
+      )}else{
+      setErrDetail(true)
+    }
   }
 
   useEffect(() => {
@@ -851,11 +905,12 @@ const ModalRate = ({ showModal, setShowModal, userRating, vehicleID, setRatingOb
               <div className="w-full max-w-sm mx-auto">
                 <textarea
                   id="detailInput"
-                  className=" block mt-2 h-full w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 focus:outline-none sm:text-sm sm:leading-6 transition ease-in-out duration-300"
+                  className= {`block mt-2 h-full w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 ${errDetail?'ring-red-500':''} focus:ring-inset focus:ring-indigo-600 focus:outline-none sm:text-sm sm:leading-6 transition ease-in-out duration-300 `}
                   placeholder="Write here..."
                   value={detail}
                   onChange={() => setDetail(event.target.value)}
                 ></textarea>
+              {errDetail&&<span className="flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1"> It can't be empty!</span>}
               </div>
             </div>
             <button className="bg-primary text-white font-medium rounded-xl py-2 mt-6 w-full  " onClick={hanlderPostReview}>Post Review</button>
