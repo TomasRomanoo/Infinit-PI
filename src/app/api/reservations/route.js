@@ -1,10 +1,20 @@
 import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
+import nodemailer from "nodemailer";
 const prisma = new PrismaClient();
 
-// Método POST
+const transporter = nodemailer.createTransport({
+  pool: true,
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false,
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+});
+
 export async function POST(request) {
-  console.log("The POST function has been called.");
   try {
     const body = await request.json();
 
@@ -15,7 +25,7 @@ export async function POST(request) {
     });
     if (!user) {
       return NextResponse.json(
-          { error: "Invalid user selected" },
+          { error: "Usuario inválido seleccionado" },
           { status: 404 }
       );
     }
@@ -24,7 +34,7 @@ export async function POST(request) {
     });
     if (!vehicle) {
       return NextResponse.json(
-          { error: "Invalid vehicle selected" },
+          { error: "Vehículo inválido seleccionado" },
           { status: 404 }
       );
     }
@@ -42,15 +52,51 @@ export async function POST(request) {
       },
     });
 
+
+    const userEmail = user.email; 
+    const emailOptions = {
+      from: "noreply@infinit.com",
+      to: userEmail,
+      subject: "Confirmación de reserva",
+      text: `Hola ${userEmail}, tu reserva ha sido confirmada con éxito.`,
+      html: `<div style="background-color: #f0f0f0; padding: 20px;">
+        <h1 style="color: #333333; font-family: Arial, sans-serif;">Confirmación de reserva</h1>
+        <p style="color: #333333; font-family: Arial, sans-serif;">Hola <strong>${userEmail}</strong>, tu reserva ha sido confirmada con éxito.</p>
+        <p style="color: #333333; font-family: Arial, sans-serif;">Detalles de la reserva:</p>
+        <ul>
+          <li>Fecha de check-in: ${formatDate(body.startDate)}</li>
+          <li>Fecha de check-out: ${formatDate(body.endDate)}</li>
+          <!-- Otros detalles de la reserva aquí -->
+        </ul>
+        <p style="color: #333333; font-family: Arial, sans-serif;">¡Gracias por elegir INFINIT!</p>
+      </div>`,
+    };
+    
+    function formatDate(dateString) {
+      const options = { year: 'numeric', month: 'long', day: 'numeric' };
+      return new Date(dateString).toLocaleDateString('es-ES', options);
+    }
+    
+    transporter.sendMail(emailOptions).then(() => {
+      console.log("Reservation confirmation email sent");
+    }).catch((error) => {
+      console.error("Error sending email:", error);
+    });
+
     return NextResponse.json(
-      { message: "Reservation registered successfully", reservation },
-      { status: 200 }
+      {
+        message: "Reserva registrada con éxito",
+        reservation,
+      },
+      {
+        status: 200,
+      }
     );
   } catch (error) {
-    console.error(error);
-    return NextResponse.json({ Error: "Error" }, { status: 500 });
-  }
+    console.error("Error creating reservation:", error);
+    return NextResponse.json(
+      { Error: "Error al crear la reserva" },
+      { status: 500 }
+    );
+  }
 }
-
-
-
