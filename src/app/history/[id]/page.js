@@ -8,7 +8,9 @@ import axios from 'axios';
 const HistoryPage = ({params}) => {
   const [reservas, setReservas] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [model, setModel] = useState()
+  const [name, setName] = useState()
+  const [lastName,setLastName] = useState()
+  const [email, setEmail] = useState()
   
   const userID= params.id
   console.log("userID>>>", userID);
@@ -20,6 +22,9 @@ const HistoryPage = ({params}) => {
       .then((data) => {
         if (Array.isArray(data.reservations)) {
           setReservas(data.reservations);
+          setName(data.reservations[0].user.first_name)
+          setLastName(data.reservations[0].user.last_name)
+          setEmail(data.reservations[0].user.email)
         }
         setIsLoading(false);
       })
@@ -34,9 +39,9 @@ const HistoryPage = ({params}) => {
       fetchHistory()    
   }, [userID]);
 
-  console.log("reservas>>>", reservas);
-  
-  
+  console.log("reservas>>>", reservas); 
+  console.log("nombre", name,lastName,email);
+ 
 
   return (
     <div>
@@ -44,7 +49,7 @@ const HistoryPage = ({params}) => {
       {isLoading ? (
         <p>Cargando...</p>
       ) : (
-        <History reservas={reservas} />
+        <History reservas={reservas} name={name} lastName={lastName} email={email}/>
       )}
     </div>
   );
