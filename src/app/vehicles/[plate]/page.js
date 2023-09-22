@@ -93,12 +93,14 @@ const Detail = ({ params }) => {
   const [hasReserved, setHasReserved] = useState(false)
 
   const fetchReservations = async () => {
-    axios.get(`/api/reservations/${getUser().id}`)
+    let user = (getUser() ||{})
+    if(JSON.stringify(user) !== '{}'){
+    axios.get(`/api/reservations/${user.id}`)
       .then(res => {
         setReservations(res.data.reservations)
       })
       .catch(err => console.log('Error trayendo reservations'));
-  }
+  }}
 
   useEffect(() => userBooked(), [reservations]);
 
@@ -544,7 +546,7 @@ const Rating = ({ ratingAverage, ratingsVehicle, idvehicle, hasReserved }) => {
   let [totalAverage, setTotalAverage] = useState(ratingAverage || 0)
 
 
-  const user = getUser()
+  const user = (getUser()||{})
 
   const [count1Star, setCount1Star] = useState(0)
   const [count2Star, setCount2Star] = useState(0)
