@@ -14,6 +14,7 @@ function ReservationPage({params}) {
     const userContext = useContext(UserContext);
     let user = userContext.getUser()
     const [needsUpdate, setNeedsUpdate] = useState(false);
+    const [userName,setUserName] = useState();    
     
     const idvehicle= params.id
     const [dateRange, setDateRange] = useState([null, null]);
@@ -28,6 +29,7 @@ function ReservationPage({params}) {
         if (user) {
             await axios.get(`/api/user/${user.email}`).then(function(response) {
                 console.log(response.data)
+                setUserName(response.data.first_name)
                 setCompleteUser(response.data)
                 if (!response.data.first_name
                     || !response.data.last_name
@@ -102,35 +104,37 @@ function ReservationPage({params}) {
     }
     
     return (
-        <div className="availability-calendar-container">
-            <div className="availability-calendar">
-                <div className="calendar-label" >
-                    <p className='mx-1'>
-                    Display of availability and busy dates:
-                        </p>                     
-
-                        <DatePicker className='px-calendar'
-                            excludeDateIntervals={AvailableDates}
-                            selectsRange={true}
-                            startDate={startDate}
-                            endDate={endDate}
-                            onChange={(update) => {
-                                setDateRange(update);
-                            }}   
-                            minDate={new Date()}  
-                            dateFormat="dd/MM/yyyy"             
-                            monthsShown={2}  
-                            isClearable={true}                  
-                            showIcon
-                            placeholderText="Select a date range"
-                        />
-                    <button className="bg-white text-black rounded-xl px-2 py-2 m-2"
-                            onClick={checkUserData}>Continue
-                    </button>
-            
+        <>
+            <h1 className='text-black mx-1 font-semibold text-3xl text-center'>
+                Hi {userName}, Welcome to reservation service 
+            </h1>  
+            <div className="availability-calendar-container2">
+                <div className="availability-calendar">
+                    <div className="calendar-label2" >                                  
+                            
+                            <DatePicker className='px-calendar2'
+                                excludeDateIntervals={AvailableDates}
+                                selectsRange={true}
+                                startDate={startDate}
+                                endDate={endDate}
+                                onChange={(update) => {
+                                    setDateRange(update);
+                                }}   
+                                minDate={new Date()}  
+                                dateFormat="dd/MM/yyyy"             
+                                monthsShown={2}  
+                                isClearable={true}                  
+                                showIcon
+                                placeholderText="Select a date range"
+                            />
+                
+                        <button className="bg-white text-black font-semibold rounded-xl px-2 ml-6"
+                                onClick={checkUserData}>Continue
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
+        </>
     );
     }
 export default ReservationPage;
