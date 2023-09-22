@@ -26,6 +26,7 @@ model vehicle {
   reservation        reservation[]
   availabilityPeriod availabilityPeriod[]
   favorites          favorite[]
+  ratings            rating[]
   deleted            Boolean
 }
 
@@ -73,6 +74,7 @@ model user {
   idrole         Int           @default(2)
   reservation    reservation[]
   favorites      favorite[]
+  ratings        rating[]
   deleted        Boolean
   order          order[]
 }
@@ -118,6 +120,16 @@ model favorite {
   @@id([iduser, idvehicle])
 }
 
+model rating {
+  vehicle          vehicle @relation(fields: [idvehicle], references: [idvehicle], onDelete: Cascade)
+  idvehicle        Int
+  user             user @relation(fields: [iduser], references: [iduser], onDelete: Cascade)
+  iduser           Int
+  rate             Int
+  date             DateTime
+  description      String?
+  @@id([iduser, idvehicle])
+}
 
 model reservation {
   idreservation    Int      @id @default(autoincrement())

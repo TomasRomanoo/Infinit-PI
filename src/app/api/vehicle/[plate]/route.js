@@ -43,6 +43,11 @@ export async function GET(request) {
           category: true,
           specifications: true,
           images: true,
+          ratings: {
+            include: {
+              user: true,
+            }
+          },
           model: {
             include: {
               brand: true,
