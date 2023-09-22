@@ -204,7 +204,9 @@ h2.policy-title {
 }
 
 /* Estilos para el calendario de disponibilidad */
-.availability-calendar {  
+.availability-calendar { 
+  
+  
   margin-top: 20px; /* Espacio superior */
   font-size: 23px;
   padding: 17px;
@@ -216,7 +218,7 @@ h2.policy-title {
 /* Estilos para la etiqueta "Available Dates" */
 
 /* .calendar-label input { color: black; margin-left: 20px; padding: 5px; border-radius: 10px;} */
-.calendar-label {
+.calendar-label { 
   
   font-size: 20px;
   font-weight: bold;
@@ -224,7 +226,7 @@ h2.policy-title {
   margin: 5px 0 5px 0; /* Espacio inferior */
 }
 svg.react-datepicker__calendar-icon{ 
-  margin-top: 14px;
+  margin-top: 5px;
   margin-left: 5px;
   font-size: 37px;
   align-content: center;
@@ -237,23 +239,38 @@ div.react-datepicker__input-container.react-datepicker__view-calendar-icon input
   padding: 0.5rem;
   font-size: inherit;
   text-align:center ;
-  margin-top: 10px;
+  /* margin-top: 10px; */
   /* padding: 8px 8px;   */
   border-radius: 10px;
-  width: 320px;
+  width: 330px;
   cursor: pointer ;
   color: black;
 }
 
 .availability-calendar-container {
   
-  background-color: #00243f; 
+  background-color: #00243f;
   border-radius: 10px;
-    /* Cambia el color de fondo a tu elección */
+  
+  /* Cambia el color de fondo a tu elección */
   /* Otras propiedades de estilo si las necesitas */
 }
-.px-calendar{
+.availability-calendar-container2{  
+  
+  margin: 20px;
+  background-color: #00243f;
+  border-radius: 10px;
+  display: flex;  
+  flex-wrap: wrap;
+  justify-content: space-evenly;
 }
+.calendar-label2{
+  display: flex;
+}
+.px-calendar2{
+  width: auto;
+}
+
 .pop{
   top: 0px !important;
 }
