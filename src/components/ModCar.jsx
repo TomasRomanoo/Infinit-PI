@@ -9,11 +9,10 @@ import { UserContext } from "./context/UserContext";
 import { MdEdit } from "react-icons/md";
 import { Category } from "./Category";
 
-
 export const ModCar = ({ vehicles, firstIndex, lastIndex }) => {
   const apiUrl = "http://localhost:3000/api/vehicle/";
   const [showModal, setShowModal] = useState(false);
-  const { isAdmin } = useContext(UserContext)
+  const { isAdmin } = useContext(UserContext);
 
   //* Controled inputs states
   const [id, setId] = useState("");
@@ -27,6 +26,10 @@ export const ModCar = ({ vehicles, firstIndex, lastIndex }) => {
   const [detail, setDetail] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
+  const [dealerCity, setDealerCity] = useState("");
+  const [images, setImages] = useState([]);
+
+  const [dealer, setDealer] = useState("");
 
   //* Error States
   const [priceErr, setPriceErr] = useState(false);
@@ -36,24 +39,59 @@ export const ModCar = ({ vehicles, firstIndex, lastIndex }) => {
   const [detailErr, setDetailErr] = useState(false);
   const [descriptionErr, setDescriptionErr] = useState(false);
   const [categoryErr, setCategoryErr] = useState(false);
-
-
+  const [dealerErr, setDealerErr] = useState(false);
 
   const [categories, setCategories] = useState([]);
+  const [dealers, setDealers] = useState([]);
+
+  const handleFileChange = (e) => {
+    const newImages = [...images];
+    const files = e.target.files;
+
+    for (let i = 0; i < files.length; i++) {
+      newImages.push(files[i]);
+    }
+
+    setImages(newImages);
+  };
+
+  const handleDelete = (index) => {
+    const newImages = [...images];
+    newImages.splice(index, 1);
+    setImages(newImages);
+  };
+
+  const handleRearrange = (fromIndex, toIndex) => {
+    const newImages = [...images];
+    const [movedItem] = newImages.splice(fromIndex, 1);
+    newImages.splice(toIndex, 0, movedItem);
+    setImages(newImages);
+  };
+
   const fetchCategories = async () => {
     const res = await axios("/api/category");
     setCategories(res.data);
   };
 
-  const [showCategory, setShowCategory] = useState(false)
-  const categoryHandler = (e) => {
-    e.preventDefault()
-    setShowCategory(!showCategory)
-  }
+  const fetchDealers = async () => {
+    const res = await axios("/api/dealer");
+    setDealers(res.data);
+  };
 
+  const [showCategory, setShowCategory] = useState(false);
+  const categoryHandler = (e) => {
+    e.preventDefault();
+    setShowCategory(!showCategory);
+  };
 
   useEffect(() => {
+    console.log("vehicles :>> ", vehicles);
     fetchCategories();
+    fetchDealers();
+
+    vehicles.map((vehicle) => {
+      console.log("vehicle.images :>> ", vehicle.images[0]);
+    });
   }, []);
   useEffect(() => {
     fetchCategories();
@@ -61,12 +99,17 @@ export const ModCar = ({ vehicles, firstIndex, lastIndex }) => {
 
   const handlerModal = (vehicle, plate) => {
     axios.get(`/api/vehicle/${plate}`).then(function (response) {
+      console.log("response.data :>> ", response.data);
       setId(response.data.idvehcle);
       setBrand(JSON.stringify(response.data.model.brand));
-      setBrandName(response.data.model?.brand?.name)
+      setBrandName(response.data.model?.brand?.name);
+      setDealer(JSON.stringify(response.data.dealer));
+      setDealerCity(response.data.dealer.city);
 
       setModel(JSON.stringify(response.data.model));
-      setModelName(response.data.model.name)
+      setModelName(response.data.model.name);
+
+      setImages(response.data.images);
 
       setPrice(response.data.price_per_day);
       setPlate(response.data.plate);
@@ -77,7 +120,6 @@ export const ModCar = ({ vehicles, firstIndex, lastIndex }) => {
     });
     setShowModal(!showModal);
   };
-
 
   const handlerEdit = (e) => {
     e.preventDefault();
@@ -117,10 +159,9 @@ export const ModCar = ({ vehicles, firstIndex, lastIndex }) => {
       setCategoryErr(true);
       document.querySelector("#categoryInput").classList.add("errInput");
     } else {
-      setCategoryErr(false)
+      setCategoryErr(false);
       document.querySelector("#categoryInput").classList.remove("errInput");
     }
-
 
     if (
       year &&
@@ -134,54 +175,61 @@ export const ModCar = ({ vehicles, firstIndex, lastIndex }) => {
     ) {
       if (isAdmin) {
         if (category) {
-          handlerSubmit()
+          handlerSubmit();
           setShowModal(!showModal);
         }
       } else {
-        handlerSubmit()
+        handlerSubmit();
         setShowModal(!showModal);
       }
     }
   };
 
   const handlerSubmit = async () => {
-
-    let parsCategory
+    let parsCategory;
     if (category) {
-      parsCategory = JSON.parse(category)
+      parsCategory = JSON.parse(category);
     }
-    let parsModel = JSON.parse(model)
-    let parsBrand = JSON.parse(brand)
-
+    let parsModel = JSON.parse(model);
+    let parsBrand = JSON.parse(brand);
+    let parsDealer = JSON.parse(dealer);
 
     toast.promise(
-      axios.put((apiUrl + plate), {
-        "name": "",
-        "plate": plate,
-        "detail": detail,
-        "year": +year,
-        "price_per_day": +price,
-        "long_description": description,
-        "deleted": false,
-        "category": {
-          "idcategory": parsCategory.idcategory,
-          "name": parsCategory.name,
-          "url": parsCategory.url,
-          "deleted": false
+      axios.put(apiUrl + plate, {
+        name: "",
+        plate: plate,
+        detail: detail,
+        year: +year,
+        price_per_day: +price,
+        long_description: description,
+        deleted: false,
+        category: {
+          idcategory: parsCategory.idcategory,
+          name: parsCategory.name,
+          url: parsCategory.url,
+          deleted: false,
         },
-        "images": [],
-        "model": {
-          "idmodel": parsModel.idmodel,
-          "name": parsModel.name,
-          "brandIdbrand": parsModel.brandIdbrand,
-          "deleted": false,
-          "brand": {
-            "idbrand": parsBrand.idbrand,
-            "name": parsBrand.name,
-            "url": parsBrand.url,
-            "deleted": false
-          }
-        }
+        images: [],
+        dealer: {
+          iddealer: parsDealer.iddealer,
+          address: parsDealer.address,
+          state: parsDealer.state,
+          city: parsDealer.city,
+          country: parsDealer.country,
+          zip_code: parsDealer.zip_code,
+        },
+        model: {
+          idmodel: parsModel.idmodel,
+          name: parsModel.name,
+          brandIdbrand: parsModel.brandIdbrand,
+          deleted: false,
+          brand: {
+            idbrand: parsBrand.idbrand,
+            name: parsBrand.name,
+            url: parsBrand.url,
+            deleted: false,
+          },
+        },
       }),
       {
         loading: "Loading...",
@@ -194,9 +242,7 @@ export const ModCar = ({ vehicles, firstIndex, lastIndex }) => {
         error: "Error while editing",
       }
     );
-
-
-  }
+  };
 
   return (
     <>
@@ -207,9 +253,11 @@ export const ModCar = ({ vehicles, firstIndex, lastIndex }) => {
               <div className="flex items-center justify-between p-4">
                 <div className="w-1/2">
                   <Image
-                    className="w-full object-contain"
-                    src={image}
+                    className="w-full h-full aspect-video mix-blend-darken object-contain"
+                    src={vehicle.images[0]?.url || image}
                     alt="mod-car"
+                    width={500}
+                    height={300}
                   />
                 </div>
                 <div className="flex flex-col items-end">
@@ -247,14 +295,16 @@ export const ModCar = ({ vehicles, firstIndex, lastIndex }) => {
 
       {/* ------------------------------- EDIT MODAL ------------------------------- */}
       <div
-        className={`fixed inset-0 z-30 bg-gray-500 bg-opacity-75 transition-opacity ${showModal ? "flex" : "hidden"
-          }`}
+        className={`fixed inset-0 z-30 bg-gray-500 bg-opacity-75 transition-opacity ${
+          showModal ? "flex" : "hidden"
+        }`}
         id="modalBg"
       ></div>
       <div
         id="modal"
-        className={` z-50 min-h-full  justify-center items-center p-0 fixed inset-0  ${showModal ? "flex" : "hidden"
-          }`}
+        className={` z-50 min-h-full  justify-center items-center p-0 fixed inset-0  ${
+          showModal ? "flex" : "hidden"
+        }`}
       >
         <div className="flex flex-col m-5 px-10 pt-5 max-w-2xl flex-auto overflow-hidden rounded-3xl bg-white text-sm leading-6 shadow-lg ring-1 ring-gray-900/5">
           <button
@@ -353,7 +403,48 @@ export const ModCar = ({ vehicles, firstIndex, lastIndex }) => {
 
                 <hr className="mt-5 mb-5" />
 
-                <div className="m-3  ">
+                {isAdmin ? (
+                  <div className="m-3">
+                    <label className="block text-sm font-medium leading-6 text-gray-900">
+                      Dealer
+                    </label>
+                    <div className="flex items-center	mt-2">
+                      <select
+                        id="dealerInput"
+                        /*    value={dealer.city} */
+                        onChange={(e) => {
+                          setDealer(e.target.value);
+                          console.log("dealer :>> ", dealer);
+                        }}
+                        type="text"
+                        className="block mt-2 w-full cursor-pointer rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 focus:outline-none sm:text-sm sm:leading-6 transition ease-in-out duration-300"
+                      >
+                        <option value="" disabled selected>
+                          Select some dealer
+                        </option>
+                        {dealers.map((dealer) => {
+                          return (
+                            <option
+                              value={JSON.stringify(dealer)}
+                              key={dealer.iddealer}
+                            >
+                              {dealer.city}
+                            </option>
+                          );
+                        })}
+                      </select>
+                    </div>
+                    {dealerErr && (
+                      <span className="flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1">
+                        You must choose the dealer of your car
+                      </span>
+                    )}
+                  </div>
+                ) : (
+                  <></>
+                )}
+
+                {/*    <div className="m-3">
                   <label className="block mb-2 text-sm font-medium leading-6 text-gray-900">
                     Upload multiple photos
                   </label>
@@ -372,15 +463,44 @@ export const ModCar = ({ vehicles, firstIndex, lastIndex }) => {
                                     file:bg-primary file:text-white
                                     hover:file:bg-secondary file:transition-all duration-200 ease-in-out
                                     "
+                        onChange={handleFileChange}
                       />
                     </label>
+                    <div>
+                      {images.map((file, index) => (
+                        <div key={index} className="mt-2">
+                          <span>{file.url}</span>
+                          <button
+                            type="button"
+                            onClick={() => handleDelete(index)}
+                            className="ml-2 text-red-500"
+                          >
+                            Delete
+                          </button>
+                          {index > 0 && (
+                            <button
+                              type="button"
+                              onClick={() => handleRearrange(index, index - 1)}
+                              className="ml-2 text-blue-500"
+                            >
+                              Move Up
+                            </button>
+                          )}
+                          {index < images.length - 1 && (
+                            <button
+                              type="button"
+                              onClick={() => handleRearrange(index, index + 1)}
+                              className="ml-2 text-blue-500"
+                            >
+                              Move Down
+                            </button>
+                          )}
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                  {/* 
-                            {modelErr?                             
-                            <span className="flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1">
-                                The model can't be blank    
-                            </span> : <></>} */}
-                </div>
+                
+                </div> */}
               </div>
 
               <div>
@@ -479,9 +599,8 @@ export const ModCar = ({ vehicles, firstIndex, lastIndex }) => {
                   )}
                 </div>
 
-                {isAdmin
-                  ?
-                  (<div className="m-3">
+                {isAdmin ? (
+                  <div className="m-3">
                     <label className="block text-sm font-medium leading-6 text-gray-900">
                       Category
                     </label>
@@ -506,12 +625,14 @@ export const ModCar = ({ vehicles, firstIndex, lastIndex }) => {
                               key={category.categoryId}
                             >
                               {category.name}
-
                             </option>
                           );
                         })}
                       </select>
-                      <button onClick={categoryHandler} className="bg-primary text-neutral-50 rounded-xl p-2 ml-2">
+                      <button
+                        onClick={categoryHandler}
+                        className="bg-primary text-neutral-50 rounded-xl p-2 ml-2"
+                      >
                         <MdEdit />
                       </button>
                     </div>
@@ -521,10 +642,9 @@ export const ModCar = ({ vehicles, firstIndex, lastIndex }) => {
                       </span>
                     )}
                   </div>
-                  )
-                  :
+                ) : (
                   <></>
-                }
+                )}
               </div>
             </div>
 
@@ -536,14 +656,21 @@ export const ModCar = ({ vehicles, firstIndex, lastIndex }) => {
           </form>
 
           <div
-            className={`fixed inset-0 z-30 bg-gray-500 bg-opacity-75 transition-opacity ${showCategory ? "flex" : "hidden"
-              }`}
+            className={`fixed inset-0 z-30 bg-gray-500 bg-opacity-75 transition-opacity ${
+              showCategory ? "flex" : "hidden"
+            }`}
             id="modalBg"
           ></div>
-          <div id="categoryModal"
-            className={` z-50 min-h-full  justify-center items-center p-0 fixed inset-0 ${showCategory ? "flex" : "hidden"
-              }`} >
-            <Category categories={categories} setShowCategory={() => setShowCategory()} />
+          <div
+            id="categoryModal"
+            className={` z-50 min-h-full  justify-center items-center p-0 fixed inset-0 ${
+              showCategory ? "flex" : "hidden"
+            }`}
+          >
+            <Category
+              categories={categories}
+              setShowCategory={() => setShowCategory()}
+            />
           </div>
         </div>
       </div>

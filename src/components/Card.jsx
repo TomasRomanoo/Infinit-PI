@@ -36,10 +36,10 @@ export const Card = (props) => {
             <></>
           )}
           <div className="flex items-start gap-1 font-bold text-lg">
-            <p className="text-start truncate capitalize ">
+            <p className="text-start truncate uppercase ">
               {props.vehicle.model?.brand?.name}
             </p>
-            <p>{props.vehicle.model?.name}</p>
+            <p className="uppercase">{props.vehicle.model?.name}</p>
           </div>
           <p className="text-gray-400 font-semibold">{props.vehicle.year}</p>
         </div>

@@ -21,12 +21,24 @@ export async function POST(request) {
         dealer: {
           city: { equals: body.city },
         },
+        deleted: false,
         reservation: {
           none: {
             AND: [
               { checkout_date: { gte: new Date(startDate) } },
               { checkin_date: { lte: new Date(endDate) } },
             ],
+          },
+        },
+      },
+      include: {
+        dealer: true,
+        category: true,
+        specifications: true,
+        images: true,
+        model: {
+          include: {
+            brand: true,
           },
         },
       },

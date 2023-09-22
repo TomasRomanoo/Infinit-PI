@@ -22,6 +22,7 @@ export async function GET(request) {
           idvehicle: parseInt(plate),
         },
         include: {
+          dealer: true,
           category: true,
           specifications: true,
           images: true,
@@ -30,7 +31,6 @@ export async function GET(request) {
               brand: true,
             },
           },
-          dealer: true,
         },
       });
     } else {
@@ -39,6 +39,7 @@ export async function GET(request) {
           plate,
         },
         include: {
+          dealer: true,
           category: true,
           specifications: true,
           images: true,
@@ -138,33 +139,47 @@ export async function DELETE(request) {
 
 export async function PUT(request) {
   try {
-    const urlParts = request.url.split('/');
+    const urlParts = request.url.split("/");
     const plate = urlParts[urlParts.length - 1];
 
     const requestData = await request.json();
 
-    const { brand, model, category, specifications, images, ...otherData } = requestData;
+    const {
+      brand,
+      model,
+      category,
+      specifications,
+      images,
+      dealer,
+      ...otherData
+    } = requestData;
 
     const updatedBrand = brand
-      ? { connect: { idbrand: brand.idbrand } } 
+      ? { connect: { idbrand: brand.idbrand } }
       : undefined;
 
-  
     const updatedModel = model
-      ? { connect: { idmodel: model.idmodel } } 
+      ? { connect: { idmodel: model.idmodel } }
       : undefined;
 
-  
     const updatedCategory = category
-      ? { connect: { idcategory: category.idcategory } } 
+      ? { connect: { idcategory: category.idcategory } }
       : undefined;
 
     const updatedSpecifications = specifications
-      ? { connect: specifications.map(spec => ({ idspecification: spec.idspecification })) }
+      ? {
+          connect: specifications.map((spec) => ({
+            idspecification: spec.idspecification,
+          })),
+        }
       : undefined;
 
     const updatedImages = images
-      ? { create: images.map(img => ({ url: img.url })) }
+      ? { create: images.map((img) => ({ url: img.url })) }
+      : undefined;
+
+    const updatedDealer = dealer
+      ? { connect: { iddealer: dealer.iddealer } }
       : undefined;
 
     const updatedCar = await prisma.vehicle.update({
@@ -172,12 +187,13 @@ export async function PUT(request) {
         plate,
       },
       data: {
-        ...otherData, 
+        ...otherData,
         brand: updatedBrand,
         model: updatedModel,
         category: updatedCategory,
         specifications: updatedSpecifications,
         images: updatedImages,
+        dealer: updatedDealer,
       },
     });
 
@@ -185,7 +201,7 @@ export async function PUT(request) {
   } catch (error) {
     console.error(error);
     return NextResponse.json(
-      { Error: "Error al modificar el auto" },
+      { Error: "Error when trying to modify the car" },
       { status: 500 }
     );
   }
