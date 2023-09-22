@@ -45,7 +45,7 @@ function ConfirmationPage({ params }) {
             endDate: searchParams.get("end")
         }
         axios
-            .post("/api/reservation", body)
+            .post("/api/reservations", body)
             .then((res) => {
                 console.log("res :>> ", res);
                 setSaved(true)
