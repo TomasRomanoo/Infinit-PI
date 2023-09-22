@@ -300,6 +300,9 @@ div.react-datepicker__input-container.react-datepicker__view-calendar-icon input
 }
 .calendar-label2{
   display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+  
 }
 .px-calendar2{
   width: auto;

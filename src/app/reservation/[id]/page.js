@@ -128,7 +128,7 @@ function ReservationPage({params}) {
                                 placeholderText="Select a date range"
                             />
                 
-                        <button className="bg-white text-black font-semibold rounded-xl px-2 ml-6"
+                        <button className="bg-white text-black font-semibold rounded-xl px-3 ml-6"
                                 onClick={checkUserData}>Continue
                         </button>
                     </div>
