@@ -13,27 +13,31 @@ const getLocationString = (vehicle) => {
   }
 };
 
-const History = ({ reservas }) => {
+const History = ({ reservas, name, lastName, email }) => {
   console.log('Reservas:', reservas);
 
   return (
     <div>    
-        <h1 className="flex flex-wrap justify-center mb-24 items-center text-2xl font-semibold h-[108px] bg-[#00243f] text-white">My Reservations</h1>
-  
-      <div className="gap-4 flex flex-row flex-wrap items-center justify-evenly mb-40">
+        <h1 className="flex flex-wrap justify-center mb-10 items-center text-3xl font-semibold h-[108px] bg-[#00243f] text-white">My Reservations</h1>
+
+      <div className="mb-8 p-2 text-center bg-primary text-white items-center">
+              <p className="font-semibold text-xl">Reservator data:</p>
+              <div className=''>
+                <p>Name: {name} {lastName}</p>
+                <p>Email: {email}</p>
+
+              </div>
+      </div>
+      <div className="gap-3 flex flex-row flex-wrap items-center justify-evenly mb-40">
         {Array.isArray(reservas) && reservas.map((reservation) => (
           <div
             key={reservation.idreservation}
-            className="bg-white p-4 rounded shadow-lg flex flex-col flex-wrap content-start items-start h-[365px] w-[340px]"
+            className="bg-white p-4 rounded shadow-lg flex flex-col flex-wrap content-center items-center h-[300px] w-[280px] mb-2"
           >
             <h2 className="text-xl font-semibold mb-2">
               Reserva ID: {reservation.idreservation}
             </h2>
-            <div className="mb-2">
-              <p className="font-semibold ">Reservator data:</p>
-              <p>Name: {reservation.user?.first_name} {reservation.user?.last_name}</p>
-              <p>Email: {reservation.user?.email}</p>
-            </div>
+            
             <div className="mb-2">
               <p className="font-semibold ">Reservation data:</p>
               <p className='bg-primary text-white p-1'>Start date: {new Date(reservation.checkin_date).toLocaleDateString()}</p>

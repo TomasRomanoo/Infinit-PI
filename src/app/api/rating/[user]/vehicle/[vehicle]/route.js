@@ -32,3 +32,30 @@ export async function POST(request) {
     }
 }
 
+export async function DELETE(request) {
+    try {
+        const urlParts = request.nextUrl.pathname.split("/");
+        const userId = urlParts[3]
+        const vehicleId = urlParts[5]
+
+        await prisma.rating.delete({
+            where: {
+                iduser_idvehicle: {
+                    iduser: parseInt(userId),
+                    idvehicle: parseInt(vehicleId),
+                }
+            },
+        });
+
+        return NextResponse.json(
+            { message: "rating eliminado correctamente" },
+            { status: 200 }
+        );
+    } catch (error) {
+        console.error(error);
+        return NextResponse.json(
+            { Error: "Error al eliminar el rating" },
+            { status: 500 }
+        );
+    }
+}

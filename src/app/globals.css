@@ -289,6 +289,7 @@ div.react-datepicker__input-container.react-datepicker__view-calendar-icon input
 }
 
 
+<<<<<<< HEAD
 
 /* -------------------------------------------------------------------------- */
 /*                           Estilos para el rating                           */
@@ -301,6 +302,25 @@ div.react-datepicker__input-container.react-datepicker__view-calendar-icon input
   line-height: 50px;
   font-size: auto;
   margin: 10px 10px 10px 0px ;
+=======
+.availability-calendar-container2{  
+  
+  margin: 20px;
+  background-color: #00243f;
+  border-radius: 10px;
+  display: flex;  
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+.calendar-label2{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+  
+}
+.px-calendar2{
+  width: auto;
+>>>>>>> 6b862a91e13b317ca4a4f755b9d7343f8eee225c
 }
 
 .rating label {

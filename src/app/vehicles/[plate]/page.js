@@ -26,7 +26,7 @@ import { faSquareShareNodes } from "@fortawesome/free-solid-svg-icons";
 import { MdOutlineLocationOn, MdMyLocation } from "react-icons/md";
 import { BiDirections } from "react-icons/bi";
 import { BsCalendar3 } from "react-icons/bs";
-import { AiOutlineClose } from "react-icons/ai";
+import { AiFillDelete, AiOutlineClose } from "react-icons/ai";
 
 import Calendar from "react-calendar";
 import { Booking } from "@/components/Booking";
@@ -582,6 +582,15 @@ const Rating = ({ ratingAverage, ratingsVehicle, idvehicle, hasReserved }) => {
     setUserRatingSelected(value)
   }
 
+  const handlerDelete = () => {
+    axios.delete(`/api/rating/${user.id}/vehicle/${idvehicle}`).then((response) => {
+      setTimeout(() => {
+        location.reload()
+      }, 300);
+    })
+
+    
+  }
   /* -------------------------------------------------------------------------- */
   /*                              paged for ratings                             */
   /* -------------------------------------------------------------------------- */
@@ -718,7 +727,7 @@ const Rating = ({ ratingAverage, ratingsVehicle, idvehicle, hasReserved }) => {
         <div className="w-full lg:w-11/12 p-8 shadow-xl rounded-xl self-center mt-10">
           {!(ratingObj === undefined)
             ?
-            <div>
+            <div className="relative">
               <div className="relative  p-5 rounded-xl lg:text-xl text-lg ">
                 <p className="absolute right-5 top-5 text-sm text-slate-500 ">{ratingObj.date?.slice(0, 10)}</p>
                 <h1 className="text-black font-bold my-2">{user?.name}</h1>
@@ -733,6 +742,7 @@ const Rating = ({ ratingAverage, ratingsVehicle, idvehicle, hasReserved }) => {
                 </div>
                 <p>{ratingObj.description}</p>
               </div>
+              <AiFillDelete className="absolute bottom-0 right-0 text-xl text-primary" onClick={handlerDelete}/>
             </div>
             :
             <div className="flex flex-col w-full ">
