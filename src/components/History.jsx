@@ -45,7 +45,7 @@ const History = ({ reservas, name, lastName, email }) => {
               {/* <p>Location: {getLocationString(reservation.vehicle)}</p> */}
             </div>
             <div className="mb-2">
-              <p className="font-semibold">Brand: {reservation.vehicle.modelIdmodel}</p>
+           {/*    <p className="font-semibold">Brand: {reservation.vehicle.modelIdmodel}</p> */}
               <p>Year: {reservation.vehicle.year }</p>
               {
                 // <div>

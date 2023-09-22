@@ -15,8 +15,7 @@ export async function GET(req, context) {
       where: { userIduser: id }, 
       include: {
         user: true,
-        vehicle: true
-        
+        vehicle: true,
       },
       
     }

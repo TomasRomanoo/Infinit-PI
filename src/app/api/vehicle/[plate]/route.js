@@ -149,6 +149,8 @@ export async function PUT(request) {
       ...otherData
     } = requestData;
 
+    console.log('requestData :>> ', requestData);
+
     const updatedBrand = brand
       ? { connect: { idbrand: brand.idbrand } }
       : undefined;
