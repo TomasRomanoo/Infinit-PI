@@ -8,12 +8,12 @@ import axios from 'axios';
 const HistoryPage = ({params}) => {
   const [reservas, setReservas] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [model, setModel] = useState()
   
   const userID= params.id
   console.log("userID>>>", userID);
 
   const fetchHistory = ()=> {
-
 
     fetch('/api/reservations/'+userID) // Asegúrate de que la ruta sea correcta
       .then((response) => response.json())
@@ -26,24 +26,17 @@ const HistoryPage = ({params}) => {
       .catch((error) => {
         console.error('Error al obtener datos de historial:', error);
         setIsLoading(false);
-      });
-      
-      // try{
-      // const reservations = await axios.get(`/api/reservations/${userID}`)// Asegúrate de que la ruta sea correcta
-            
-      //     setReservas(reservations.data);         
-            
-      //     setIsLoading(false);
-      // }catch(error) {
-      //     console.error('Error al obtener datos de historial:', error);
-      //     setIsLoading(false);
-      // }
+      });    
 
-  }
-  useEffect(() => {
+  }  
+
+  useEffect(() => { 
       fetchHistory()    
   }, [userID]);
+
   console.log("reservas>>>", reservas);
+  
+  
 
   return (
     <div>

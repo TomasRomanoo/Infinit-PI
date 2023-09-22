@@ -38,22 +38,21 @@ const History = ({ reservas }) => {
               <p className="font-semibold ">Reservation data:</p>
               <p className='bg-primary text-white p-1'>Start date: {new Date(reservation.checkin_date).toLocaleDateString()}</p>
               <p p className='bg-primary text-white mt-1 p-1'>End date: {new Date(reservation.checkout_date).toLocaleDateString()}</p>
-              <p>Location: {getLocationString(reservation.vehicle)}</p>
+              {/* <p>Location: {getLocationString(reservation.vehicle)}</p> */}
             </div>
             <div className="mb-2">
-              <p className="font-semibold">Brand: {reservation.vehicle.model?.brand?.name || 'N/A'}</p>
-              {reservation.vehicle.model ? (
-                <div>
-                  <p>Model: {reservation.vehicle.model.name || 'N/A'}</p>
-                  <p>Year: {reservation.vehicle.year || 'N/A'}</p>
-                  <p>Plate: {reservation.vehicle.plate || 'N/A'}</p>
-                  <p>Price: ${reservation.vehicle.price_per_day || 'N/A'} per day</p>
-                  <p>Detail: {reservation.vehicle.detail || 'N/A'}</p>
-                  <p>Long Description: {reservation.vehicle.long_description || 'N/A'}</p>
-                </div>
-              ) : (
-                <p>Model: N/A</p>
-              )}
+              <p className="font-semibold">Brand: {reservation.vehicle.modelIdmodel}</p>
+              {
+                // <div>
+                //   {/* <p>Model: {reservation.vehicle.model}</p> */}
+                //   <p>Year: {reservation.vehicle.year }</p>
+                //   <p>Plate: {reservation.vehicle.plate }</p>
+                //   <p>Price: ${reservation.vehicle.price_per_day } per day</p>
+                //   <p>Detail: {reservation.vehicle.detail }</p>                  
+                // </div>
+              // ) : (
+                // <p>Model: N/A</p>
+              }
             </div>
             <div className="flex items-center justify-between">
               <div className="text-blue-500 font-semibold">
