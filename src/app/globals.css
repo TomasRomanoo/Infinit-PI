@@ -255,7 +255,6 @@ div.react-datepicker__input-container.react-datepicker__view-calendar-icon input
   /* Cambia el color de fondo a tu elección */
   /* Otras propiedades de estilo si las necesitas */
 }
-<<<<<<< HEAD
 
 .slick-dots.slick-thumb li {
   border:#f3f3f3 2px solid;
@@ -290,7 +289,6 @@ div.react-datepicker__input-container.react-datepicker__view-calendar-icon input
 }
 
 
-=======
 .availability-calendar-container2{  
   
   margin: 20px;
@@ -318,4 +316,3 @@ div.react-datepicker__input-container.react-datepicker__view-calendar-icon input
     width: 270px;
   }     
 }
->>>>>>> 8b1b3a4d3f6050bb7a85855a9feeb4b29d1f53d3
