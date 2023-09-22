@@ -25,6 +25,11 @@ export const Navbar = () => {
   const [sideMenu, isSideMenuOpen] = useState(false);
   const [MngmntOpen, isMngmntOpen] = useState(false);
   const [MngmntMobileOpen, isMngmntMobileOpen] = useState(false);
+  const [userId, setUserId] = useState();
+  const userContext = useContext(UserContext);
+  let user2 = userContext.getUser();
+  
+  console.log("userID2: ");
 
   const openSidebar = () => {
     isSideMenuOpen(!sideMenu);
@@ -119,11 +124,17 @@ export const Navbar = () => {
             <li className="text-lg link-item">
               <Link href="/favorites">Favorites</Link>
             </li>
-          )}
-
+          )}  
+          
           <li className="text-lg link-item">
             <Link href="/about">About</Link>
           </li>
+          {user && (
+            <li className="text-lg link-item">
+              <Link href={`/history/${user2.id}`}>History</Link>
+            </li>
+          )}
+
           {isAdmin === true ? (
             <li className="">
               <div className="relative  ">
