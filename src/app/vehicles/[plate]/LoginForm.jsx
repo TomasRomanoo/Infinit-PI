@@ -11,7 +11,7 @@ import { Infinit } from "@/components/Infinit";
 import { useRouter } from 'next/navigation';
 
 
-export default function Login({idvehicle}) {
+export default function Login({idvehicle,setShowLoginModal}) {
   const [userData, setUserData] = useState({ email: "", password: "" });
   const [submitted, setSubmitted] = useState(false);
   const userContext = useContext(UserContext);
@@ -68,13 +68,21 @@ export default function Login({idvehicle}) {
     fetchUser();
   };
 
+  const handleButton = () => {    
+    setShowLoginModal(false);
+  }
+
   return (
     <div className="flex  flex-col  bg-white justify-around">
+      <button  className="absolute top-48 right-96 m-2 p-2 text-black rounded-full hover:bg-primary hover:text-white w-10" 
+      onClick={handleButton}
+    >
+      X
+    </button>
       <div className="flex min-h-full flex-1 flex-col items-center px-6 py-12 lg:px-8">
         <Link href="/">
           <Infinit />
-        </Link>
-
+        </Link>        
         <p className="text-lg sm:text-2xl worksans-regular mt-10 border-b-primary border-b-4 pb-2 ">
           Sign in to your account
         </p>

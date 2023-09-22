@@ -107,6 +107,7 @@ const AvailabilityCalendar = ({ idvehicle }) => {
       <div className="modal-content">
         <LoginForm
           idvehicle={idvehicle}
+          setShowLoginModal={setShowLoginModal}
           onLoginSuccess={() => {
             setShowLoginModal(false);
             window.location.href = `/reservation/${idvehicle}`;
