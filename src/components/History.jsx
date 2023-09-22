@@ -42,6 +42,7 @@ const History = ({ reservas }) => {
             </div>
             <div className="mb-2">
               <p className="font-semibold">Brand: {reservation.vehicle.modelIdmodel}</p>
+              <p>Year: {reservation.vehicle.year }</p>
               {
                 // <div>
                 //   {/* <p>Model: {reservation.vehicle.model}</p> */}
