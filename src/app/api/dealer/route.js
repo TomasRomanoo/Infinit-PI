@@ -21,6 +21,7 @@ export async function POST(request) {
         dealer: {
           city: { equals: body.city },
         },
+        deleted: false,
         reservation: {
           none: {
             AND: [
