@@ -274,3 +274,11 @@ div.react-datepicker__input-container.react-datepicker__view-calendar-icon input
 .pop{
   top: 0px !important;
 }
+
+@media (max-width: 460px) {
+  
+  div.react-datepicker__input-container.react-datepicker__view-calendar-icon input {
+  
+    width: 270px;
+  }     
+}

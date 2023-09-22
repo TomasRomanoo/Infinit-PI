@@ -74,7 +74,7 @@ const AvailabilityCalendar = ({ idvehicle }) => {
 
           Display of availability and busy dates:
           </p>
-          <div className="flex flex-wrap justify-between">
+          <div className="flex flex-wrap justify-between gap-3 w-auto">
 
             {isError ? (
               <p className="bg-white text-gray-400 w-60 rounded-lg mt-2 py-2 px-3">
@@ -90,7 +90,7 @@ const AvailabilityCalendar = ({ idvehicle }) => {
                 placeholderText="Show availability"
               />
             )}
-            <button className="bg-white text-black rounded-xl p-2"
+            <button className="bg-white text-black rounded-xl p-2 "
             onClick={handleReservationClick}>Go Reservation
             </button>
 
