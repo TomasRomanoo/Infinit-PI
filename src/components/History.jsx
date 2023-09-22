@@ -17,13 +17,11 @@ const History = ({ reservas }) => {
   console.log('Reservas:', reservas);
 
   return (
-    <div>
-
-    
+    <div>    
         <h1 className="flex flex-wrap justify-center mb-24 items-center text-2xl font-semibold h-[108px] bg-[#00243f] text-white">My Reservations</h1>
   
       <div className="gap-4 flex flex-row flex-wrap items-center justify-evenly mb-40">
-        {reservas.map((reservation) => (
+        {Array.isArray(reservas) && reservas.map((reservation) => (
           <div
             key={reservation.idreservation}
             className="bg-white p-4 rounded shadow-lg flex flex-col flex-wrap content-start items-start h-[365px] w-[340px]"
