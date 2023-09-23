@@ -8,11 +8,11 @@ const s3Client = new S3Client({
   region: "us-east-1",
 });
 
-export const config = {
+/*export const config = {
   api: {
     bodyParser: false,
   },
-};
+};*/
 
 export async function POST(req, context) {
   try {
